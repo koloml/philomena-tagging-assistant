@@ -1,4 +1,4 @@
-# Philomena Tagging Assistant
+# Furbooru Tagging Assistant
 
-This is s browser extension written for the [Philomena](https://github.com/derpibooru/philomena)-based boorus. It gives
-you the ability to tag the images more easily and quickly.
+This is a browser extension written for the [Furbooru](https://furbooru.org) image-board. It gives you the ability to
+tag the images more easily and quickly.
