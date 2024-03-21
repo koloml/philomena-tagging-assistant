@@ -1,0 +1,11 @@
+@use '../colors';
+
+input {
+  background: colors.$input-background;
+  border: 1px solid colors.$input-border;
+  color: colors.$text;
+
+  font-family: monospace;
+  padding: 0 6px;
+  line-height: 26px;
+}

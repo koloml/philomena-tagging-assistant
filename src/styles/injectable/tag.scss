@@ -1,0 +1,17 @@
+@use '../colors';
+
+.tag {
+  background: colors.$tag-background;
+  line-height: 28px;
+  color: colors.$tag-text;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 0 4px;
+  display: flex;
+
+  .remove {
+    content: "x";
+    margin-left: 6px;
+    cursor: pointer;
+  }
+}

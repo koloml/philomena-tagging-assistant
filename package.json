@@ -1,0 +1,26 @@
+{
+  "name": "furbooru-tagging-assistant",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "build": "npm run build:popup && npm run build:extension",
+    "build:popup": "vite build",
+    "build:extension": "vite build --config vite.config.extension.js",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json --watch"
+  },
+  "devDependencies": {
+    "@sveltejs/adapter-auto": "^3.0.0",
+    "@sveltejs/adapter-static": "^3.0.1",
+    "@sveltejs/kit": "^2.0.0",
+    "@sveltejs/vite-plugin-svelte": "^3.0.0",
+    "@types/chrome": "^0.0.262",
+    "cheerio": "^1.0.0-rc.12",
+    "sass": "^1.71.0",
+    "svelte": "^4.2.7",
+    "svelte-check": "^3.6.0",
+    "typescript": "^5.0.0",
+    "vite": "^5.0.3"
+  },
+  "type": "module"
+}

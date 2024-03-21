@@ -1,0 +1,12 @@
+@use '../colors';
+@import "input";
+
+tags-editor {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+
+  input {
+    width: 180px;
+  }
+}

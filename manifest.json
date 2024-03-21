@@ -1,0 +1,14 @@
+{
+  "name": "Furbooru Tagging Assistant (Rewrite)",
+  "version": "0.0.1",
+  "manifest_version": 3,
+  "host_permissions": [
+    "*://*.furbooru.org/"
+  ],
+  "action": {
+    "default_popup": "index.html"
+  },
+  "permissions": [
+    "storage"
+  ]
+}

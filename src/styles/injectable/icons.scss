@@ -1,0 +1,39 @@
+@mixin insert-icon($icon_src) {
+  mask-image: url($icon_src);
+  -webkit-mask-image: url($icon_src);
+}
+
+.icon {
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+}
+
+.icon.icon-tag {
+  @include insert-icon('/img/tag.svg');
+}
+
+.icon.icon-paint-brush {
+  @include insert-icon('/img/paint-brush.svg');
+}
+
+.icon.icon-arrow-left {
+  @include insert-icon('/img/arrow-left.svg');
+}
+
+.icon.icon-info-circle {
+  @include insert-icon('/img/info-circle.svg');
+}
+
+.icon.icon-wrench {
+  @include insert-icon('/img/wrench.svg');
+}
+
+.icon.icon-globe {
+  @include insert-icon('/img/globe.svg');
+}
+
+.icon.icon-plus {
+  @include insert-icon('/img/plus.svg');
+}

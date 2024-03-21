@@ -1,0 +1,35 @@
+@use './colors';
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+html, body {
+  background-color: colors.$background;
+  color: colors.$text;
+  font-size: 16px;
+  min-width: 320px;
+  max-height: min(100vh, 320px);
+  font-family: verdana, arial, helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: colors.$link;
+  text-decoration: none;
+
+  &:hover, &:focus {
+    color: colors.$link-hover;
+  }
+}
+
+@import "injectable/tags-editor";
+@import "injectable/tag";
+@import "injectable/icons";
