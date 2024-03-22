@@ -1,17 +1,17 @@
 <script>
-  import "../styles/popup.scss";
-  import Header from "$components/layout/Header.svelte";
-  import Footer from "$components/layout/Footer.svelte";
+    import "../styles/popup.scss";
+    import Header from "$components/layout/Header.svelte";
+    import Footer from "$components/layout/Footer.svelte";
 </script>
 
 <Header/>
 <main>
-	<slot/>
+    <slot/>
 </main>
 <Footer/>
 
 <style lang="scss" global>
-  main {
-    padding: .5em 24px;
-  }
+    main {
+        padding: .5em 24px;
+    }
 </style>

@@ -1,11 +1,11 @@
 <form>
-	<slot></slot>
+    <slot></slot>
 </form>
 
 <style lang="scss">
-  form {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 6px;
-  }
+    form {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 6px;
+    }
 </style>
