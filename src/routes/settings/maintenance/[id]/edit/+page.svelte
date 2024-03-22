@@ -57,6 +57,16 @@
         await goto('/settings/maintenance/' + targetProfile.id);
     }
 
+    async function deleteProfile() {
+        if (!targetProfile) {
+            console.warn('Attempting to delete the profile, but the profile is not loaded yet.');
+            return;
+        }
+
+        await targetProfile.delete();
+        await goto('/settings/maintenance');
+    }
+
     onDestroy(unsubscribeFromProfiles);
 </script>
 
@@ -77,4 +87,7 @@
 <Menu>
     <hr>
     <MenuLink href="#" on:click={saveProfile}>Save Profile</MenuLink>
+    {#if profileId !== 'new'}
+        <MenuLink href="#" on:click={deleteProfile}>Delete Profile</MenuLink>
+    {/if}
 </Menu>
