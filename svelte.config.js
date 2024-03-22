@@ -17,7 +17,7 @@ const config = {
       "$components": "./src/components",
       "$styles": "./src/styles",
       "$stores": "./src/stores",
-      "$entities": "./src/lib/api/entities",
+      "$entities": "./src/lib/extension/entities",
     },
   },
   preprocess: [
