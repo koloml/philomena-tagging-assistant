@@ -2,10 +2,10 @@ root = true
 
 [*]
 charset = utf-8
-end_of_line = crlf
+end_of_line = lf
 indent_size = 4
-indent_style = tab
-insert_final_newline = false
+indent_style = space
+insert_final_newline = true
 max_line_length = 120
 tab_width = 4
 ij_continuation_indent_size = 8
@@ -17,7 +17,6 @@ ij_visual_guides =
 ij_wrap_on_typing = false
 
 [*.css]
-indent_style = space
 ij_css_align_closing_brace_with_properties = false
 ij_css_blank_lines_around_nested_selector = 1
 ij_css_blank_lines_between_blocks = 1
@@ -39,7 +38,6 @@ ij_css_value_alignment = do_not_align
 
 [*.scss]
 indent_size = 2
-indent_style = space
 ij_scss_align_closing_brace_with_properties = false
 ij_scss_blank_lines_around_nested_selector = 1
 ij_scss_blank_lines_between_blocks = 1
@@ -63,7 +61,6 @@ ij_scss_value_alignment = 0
 
 [{*.cjs,*.js,.sequelizerc}]
 indent_size = 2
-indent_style = space
 tab_width = 2
 ij_continuation_indent_size = 2
 ij_javascript_align_imports = false
