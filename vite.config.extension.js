@@ -25,6 +25,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "$lib": path.resolve(__dirname, 'src/lib'),
+      "$entities": path.resolve(__dirname, 'src/lib/extension/entities'),
       "$styles": path.resolve(__dirname, 'src/styles'),
     }
   },
