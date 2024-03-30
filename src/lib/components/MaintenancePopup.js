@@ -38,6 +38,7 @@ export class MaintenancePopup {
   init() {
     MaintenancePopup.#watchActiveProfile(activeProfile => {
       this.#activeProfile = activeProfile;
+      this.#container.classList.toggle('is-active', activeProfile !== null);
       this.#refreshTagsList();
     });
   }
