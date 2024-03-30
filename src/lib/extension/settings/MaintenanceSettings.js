@@ -81,7 +81,9 @@ export default class MaintenanceSettings {
    */
   static subscribe(callback) {
     return MaintenanceSettings.#controller.subscribeToChanges(settings => {
-
+      callback({
+        activeProfileId: settings.activeProfile || null,
+      });
     });
   }
 }
