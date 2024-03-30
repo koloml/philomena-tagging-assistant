@@ -5,6 +5,22 @@
     "host_permissions": [
         "*://*.furbooru.org/"
     ],
+    "content_scripts": [
+        {
+            "matches": [
+                "*://*.furbooru.org/",
+                "*://*.furbooru.org/images?*",
+                "*://*.furbooru.org/search?*",
+                "*://*.furbooru.org/tags/*"
+            ],
+            "js": [
+                "src/content/listing.js"
+            ],
+            "css": [
+                "src/styles/content/listing.scss"
+            ]
+        }
+    ],
     "action": {
         "default_popup": "index.html"
     },
