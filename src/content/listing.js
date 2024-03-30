@@ -1,9 +1,5 @@
-import "$styles/content/listing.scss";
-
-import "$lib/web-components/MaintenancePopupComponent.js";
+import {createMaintenancePopup} from "$lib/components/MaintenancePopup.js";
 
 document.querySelectorAll('.media-box').forEach(mediaBoxElement => {
-  mediaBoxElement.appendChild(
-    document.createElement('maintenance-popup')
-  );
+  mediaBoxElement.appendChild(createMaintenancePopup());
 });
