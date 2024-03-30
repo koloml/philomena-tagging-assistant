@@ -41,5 +41,7 @@ activeProfileStore.subscribe(profileId => {
     return;
   }
 
+  lastActiveProfileId = profileId;
+
   void maintenanceSettings.setActiveProfileId(profileId);
 })
