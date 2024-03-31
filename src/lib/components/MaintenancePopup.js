@@ -1,10 +1,9 @@
 import MaintenanceSettings from "$lib/extension/settings/MaintenanceSettings.js";
 import MaintenanceProfile from "$entities/MaintenanceProfile.js";
+import {maintenanceToolsEvents} from "$lib/components/MaintenanceTools.js";
+import {BaseComponent} from "$lib/components/base/BaseComponent.js";
 
-export class MaintenancePopup {
-  /** @type {HTMLElement} */
-  #container;
-
+export class MaintenancePopup extends BaseComponent {
   /** @type {HTMLElement} */
   #tagsListElement;
 
@@ -14,33 +13,46 @@ export class MaintenancePopup {
   /** @type {MaintenanceProfile|null} */
   #activeProfile = null;
 
-  /**
-   * @param {HTMLElement} container
-   */
-  constructor(container) {
-    this.#container = container;
-  }
+  /** @type {import('MaintenanceTools.js').MaintenanceTools|null} */
+  #parentTools = null;
 
+  /**
+   * @protected
+   */
   build() {
-    this.#container.innerHTML = '';
-    this.#container.classList.add('maintenance-popup');
+    this.container.innerHTML = '';
+    this.container.classList.add('maintenance-popup');
 
     this.#tagsListElement = document.createElement('div');
     this.#tagsListElement.classList.add('tags-list');
 
-    this.#container.append(
+    this.container.append(
       this.#tagsListElement,
     );
-
-    return this;
   }
 
+  /**
+   * @protected
+   */
   init() {
-    MaintenancePopup.#watchActiveProfile(activeProfile => {
-      this.#activeProfile = activeProfile;
-      this.#container.classList.toggle('is-active', activeProfile !== null);
-      this.#refreshTagsList();
-    });
+    this.once(maintenanceToolsEvents.init, this.#onToolsContainerInitialized.bind(this));
+    MaintenancePopup.#watchActiveProfile(this.#onActiveProfileChanged.bind(this));
+  }
+
+  /**
+   * @param {import('MaintenanceTools.js').MaintenanceTools} toolsInstance
+   */
+  #onToolsContainerInitialized(toolsInstance) {
+    this.#parentTools = toolsInstance;
+  }
+
+  /**
+   * @param {MaintenanceProfile|null} activeProfile
+   */
+  #onActiveProfileChanged(activeProfile) {
+    this.#activeProfile = activeProfile;
+    this.container.classList.toggle('is-active', activeProfile !== null);
+    this.#refreshTagsList();
   }
 
   #refreshTagsList() {
@@ -63,6 +75,13 @@ export class MaintenancePopup {
   }
 
   /**
+   * @return {boolean}
+   */
+  get isActive() {
+    return this.container.classList.contains('is-active');
+  }
+
+  /**
    * @param {string} tagName
    * @return {HTMLElement}
    */
@@ -70,6 +89,7 @@ export class MaintenancePopup {
     const tagElement = document.createElement('span');
     tagElement.classList.add('tag');
     tagElement.innerText = tagName;
+    tagElement.dataset.name = tagName;
 
     return tagElement;
   }
@@ -124,9 +144,7 @@ export class MaintenancePopup {
 export function createMaintenancePopup() {
   const container = document.createElement('div');
 
-  new MaintenancePopup(container)
-    .build()
-    .init();
+  new MaintenancePopup(container);
 
   return container;
 }
