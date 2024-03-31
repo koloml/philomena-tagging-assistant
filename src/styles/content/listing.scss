@@ -1,3 +1,5 @@
+@use '../colors';
+
 .media-box {
   position: relative;
   overflow: initial !important;
@@ -10,8 +12,23 @@
     left: -50%;
     right: -50%;
     z-index: 8;
-    background: #1d1924;
-    border: 1px solid #311e49;
+    background: colors.$footer;
+    border: 1px solid colors.$media-box-border;
+
+    .tags-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+
+      .tag {
+        margin: 0;
+      }
+    }
+
+    .tag {
+      padding: 0 6px;
+    }
   }
 
   &:hover .maintenance-popup.is-active {
