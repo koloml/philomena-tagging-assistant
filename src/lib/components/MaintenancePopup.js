@@ -1,11 +1,10 @@
 import MaintenanceSettings from "$lib/extension/settings/MaintenanceSettings.js";
 import MaintenanceProfile from "$entities/MaintenanceProfile.js";
-import {maintenanceToolsEvents} from "$lib/components/MaintenanceTools.js";
 import {BaseComponent} from "$lib/components/base/BaseComponent.js";
 
 export class MaintenancePopup extends BaseComponent {
   /** @type {HTMLElement} */
-  #tagsListElement;
+  #tagsListElement = null;
 
   /** @type {HTMLElement[]} */
   #tagsList = [];
@@ -13,7 +12,7 @@ export class MaintenancePopup extends BaseComponent {
   /** @type {MaintenanceProfile|null} */
   #activeProfile = null;
 
-  /** @type {import('MaintenanceTools.js').MaintenanceTools|null} */
+  /** @type {import('$lib/components/MediaBoxToolsEvents.js').MediaBoxTools|null} */
   #parentTools = null;
 
   /**
@@ -35,15 +34,16 @@ export class MaintenancePopup extends BaseComponent {
    * @protected
    */
   init() {
-    this.once(maintenanceToolsEvents.init, this.#onToolsContainerInitialized.bind(this));
+    this.once('tools-init', this.#onToolsContainerInitialized.bind(this));
     MaintenancePopup.#watchActiveProfile(this.#onActiveProfileChanged.bind(this));
   }
 
   /**
-   * @param {import('MaintenanceTools.js').MaintenanceTools} toolsInstance
+   * @param {import('$lib/components/MediaBoxToolsEvents.js').MediaBoxTools} toolsInstance
    */
   #onToolsContainerInitialized(toolsInstance) {
     this.#parentTools = toolsInstance;
+    this.emit('active-profile-changed', this.#activeProfile);
   }
 
   /**
@@ -53,6 +53,7 @@ export class MaintenancePopup extends BaseComponent {
     this.#activeProfile = activeProfile;
     this.container.classList.toggle('is-active', activeProfile !== null);
     this.#refreshTagsList();
+    this.emit('active-profile-changed', activeProfile);
   }
 
   #refreshTagsList() {
@@ -144,7 +145,7 @@ export class MaintenancePopup extends BaseComponent {
 export function createMaintenancePopup() {
   const container = document.createElement('div');
 
-  new MaintenancePopup(container);
+  new MaintenancePopup(container).initialize();
 
   return container;
 }

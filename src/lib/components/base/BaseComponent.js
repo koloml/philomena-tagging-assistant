@@ -7,6 +7,8 @@ export class BaseComponent {
   /** @type {HTMLElement} */
   #container;
 
+  #isInitialized = false;
+
   /**
    * @param {HTMLElement} container
    */
@@ -14,6 +16,14 @@ export class BaseComponent {
     this.#container = container;
 
     bindComponent(container, this);
+  }
+
+  initialize() {
+    if (this.#isInitialized) {
+      throw new Error('The component is already initialized.');
+    }
+
+    this.#isInitialized = true;
 
     this.build();
     this.init();
@@ -47,7 +57,15 @@ export class BaseComponent {
    * @param {any} [detail] The event detail. Can be omitted.
    */
   emit(event, detail = undefined) {
-    this.#container.dispatchEvent(new CustomEvent(event, {detail}));
+    this.#container.dispatchEvent(
+      new CustomEvent(
+        event,
+        {
+          detail,
+          bubbles: true
+        }
+      )
+    );
   }
 
   /**

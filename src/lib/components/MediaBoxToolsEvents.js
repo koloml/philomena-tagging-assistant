@@ -2,11 +2,7 @@ import {BaseComponent} from "$lib/components/base/BaseComponent.js";
 import {getComponent} from "$lib/components/base/ComponentUtils.js";
 import {MaintenancePopup} from "$lib/components/MaintenancePopup.js";
 
-export const maintenanceToolsEvents = {
-  init: 'maintenance-tools-init'
-}
-
-export class MaintenanceTools extends BaseComponent {
+export class MediaBoxTools extends BaseComponent {
   /** @type {MaintenancePopup|null} */
   #maintenancePopup = null;
 
@@ -22,8 +18,17 @@ export class MaintenanceTools extends BaseComponent {
         this.#maintenancePopup = component;
       }
 
-      component.emit(maintenanceToolsEvents.init, this);
+      component.emit('tools-init', this);
     }
+
+    this.on('active-profile-changed', this.#onActiveProfileChanged.bind(this));
+  }
+
+  /**
+   * @param {MaintenanceProfile|null} activeProfile
+   */
+  #onActiveProfileChanged(activeProfile) {
+    this.container.classList.toggle('has-active-profile', activeProfile !== null);
   }
 
   /**
@@ -39,7 +44,7 @@ export class MaintenanceTools extends BaseComponent {
  * @param {HTMLElement} childrenElements List of children elements to append to the component.
  * @return {HTMLElement} The maintenance popup element.
  */
-export function createMaintenanceTools(...childrenElements) {
+export function createMediaBoxTools(...childrenElements) {
   const mediaBoxToolsContainer = document.createElement('div');
   mediaBoxToolsContainer.classList.add('media-box-tools');
 
@@ -47,8 +52,7 @@ export function createMaintenanceTools(...childrenElements) {
     mediaBoxToolsContainer.append(...childrenElements);
   }
 
-  new MaintenanceTools(mediaBoxToolsContainer)
-    .init();
+  new MediaBoxTools(mediaBoxToolsContainer).initialize();
 
   return mediaBoxToolsContainer;
 }
