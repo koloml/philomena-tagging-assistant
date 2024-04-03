@@ -51,6 +51,7 @@ export class MaintenancePopup extends BaseComponent {
     this.#mediaBoxTools = mediaBoxTools;
 
     MaintenancePopup.#watchActiveProfile(this.#onActiveProfileChanged.bind(this));
+    this.#tagsListElement.addEventListener('click', this.#handleTagClick.bind(this));
   }
 
   /**
@@ -88,6 +89,33 @@ export class MaintenancePopup extends BaseComponent {
         tagElement.classList.toggle('is-missing', !isPresent);
         tagElement.classList.toggle('is-aliased', isPresent && currentPostTags.get(tagName) !== tagName);
       });
+  }
+
+  /**
+   * Detect and process clicks made directly to the tags.
+   * @param {MouseEvent} event
+   */
+  #handleTagClick(event) {
+    /** @type {HTMLElement} */
+    let tagElement = event.target;
+
+    if (!tagElement.classList.contains('tag')) {
+      tagElement = tagElement.closest('.tag');
+    }
+
+    if (!tagElement) {
+      return;
+    }
+
+    if (tagElement.classList.contains('is-present')) {
+      tagElement.classList.toggle('is-removed');
+    }
+
+    if (tagElement.classList.contains('is-missing')) {
+      tagElement.classList.toggle('is-added');
+    }
+
+    // TODO: Execute the submission on timeout or after user moved the mouse away from the popup.
   }
 
   /**
