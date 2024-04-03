@@ -13,7 +13,7 @@ export class MaintenancePopup extends BaseComponent {
   /** @type {MaintenanceProfile|null} */
   #activeProfile = null;
 
-  /** @type {import('$lib/components/MediaBoxToolsEvents.js').MediaBoxTools} */
+  /** @type {import('$lib/components/MediaBoxTools.js').MediaBoxTools} */
   #mediaBoxTools = null;
 
   /**
