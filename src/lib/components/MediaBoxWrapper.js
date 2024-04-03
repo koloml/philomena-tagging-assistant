@@ -9,7 +9,7 @@ export class MediaBoxWrapper extends BaseComponent {
   #tagsAndAliases = null;
 
   init() {
-    this.#thumbnailContainer = this.container.querySelector('.image-container.thumb');
+    this.#thumbnailContainer = this.container.querySelector('.image-container');
     this.#imageLinkElement = this.#thumbnailContainer.querySelector('a');
   }
 
