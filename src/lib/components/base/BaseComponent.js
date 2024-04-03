@@ -52,6 +52,15 @@ export class BaseComponent {
   }
 
   /**
+   * Check if the component is initialized already. If not checked, subsequent calls to the `initialize` method will
+   * throw an error.
+   * @return {boolean}
+   */
+  get isInitialized() {
+    return this.#isInitialized;
+  }
+
+  /**
    * Emit the custom event on the container element.
    * @param {keyof HTMLElementEventMap|string} event The event name.
    * @param {any} [detail] The event detail. Can be omitted.
