@@ -45,6 +45,9 @@ export class MediaBoxWrapper extends BaseComponent {
     return tagAliasesMap;
   }
 
+  /**
+   * @return {Map<string, string>|null}
+   */
   get tagsAndAliases() {
     if (!this.#tagsAndAliases) {
       this.#tagsAndAliases = this.#calculateMediaBoxTags();

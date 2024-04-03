@@ -13,7 +13,7 @@ export class MaintenancePopup extends BaseComponent {
   /** @type {MaintenanceProfile|null} */
   #activeProfile = null;
 
-  /** @type {import('$lib/components/MediaBoxToolsEvents.js').MediaBoxTools|null} */
+  /** @type {import('$lib/components/MediaBoxToolsEvents.js').MediaBoxTools} */
   #mediaBoxTools = null;
 
   /**
@@ -73,26 +73,21 @@ export class MaintenancePopup extends BaseComponent {
 
     this.#tagsList = new Array(activeProfileTagsList.length);
 
+    const currentPostTags = this.#mediaBoxTools.mediaBox.tagsAndAliases;
+
     activeProfileTagsList
       .sort((a, b) => a.localeCompare(b))
       .forEach((tagName, index) => {
         const tagElement = MaintenancePopup.#buildTagElement(tagName);
         this.#tagsList[index] = tagElement;
         this.#tagsListElement.appendChild(tagElement);
-      });
 
-    if (this.#mediaBoxTools) {
-      const tagsAndAliases = this.#mediaBoxTools.mediaBox.tagsAndAliases;
-
-      for (let tagElement of this.#tagsList) {
-        const tagName = tagElement.dataset.name;
-        const isPresent = tagsAndAliases.has(tagName);
+        const isPresent = currentPostTags.has(tagName);
 
         tagElement.classList.toggle('is-present', isPresent);
         tagElement.classList.toggle('is-missing', !isPresent);
-        tagElement.classList.toggle('is-aliased', isPresent && tagsAndAliases.get(tagName) !== tagName);
-      }
-    }
+        tagElement.classList.toggle('is-aliased', isPresent && currentPostTags.get(tagName) !== tagName);
+      });
   }
 
   /**
