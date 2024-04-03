@@ -3,10 +3,21 @@ import {getComponent} from "$lib/components/base/ComponentUtils.js";
 import {MaintenancePopup} from "$lib/components/MaintenancePopup.js";
 
 export class MediaBoxTools extends BaseComponent {
+  /** @type {import('MediaBoxWrapper.js').MediaBoxWrapper|null} */
+  #mediaBox;
+
   /** @type {MaintenancePopup|null} */
   #maintenancePopup = null;
 
   init() {
+    const mediaBoxElement = this.container.closest('.media-box');
+
+    if (!mediaBoxElement) {
+      throw new Error('Toolbox element initialized outside of the media box!');
+    }
+
+    this.#mediaBox = getComponent(mediaBoxElement);
+
     for (let childElement of this.container.children) {
       const component = getComponent(childElement);
 
@@ -14,11 +25,13 @@ export class MediaBoxTools extends BaseComponent {
         continue;
       }
 
+      if (!component.isInitialized) {
+        component.initialize();
+      }
+
       if (!this.#maintenancePopup && component instanceof MaintenancePopup) {
         this.#maintenancePopup = component;
       }
-
-      component.emit('tools-init', this);
     }
 
     this.on('active-profile-changed', this.#onActiveProfileChanged.bind(this));
@@ -37,6 +50,13 @@ export class MediaBoxTools extends BaseComponent {
   get maintenancePopup() {
     return this.#maintenancePopup;
   }
+
+  /**
+   * @return {import('MediaBoxWrapper.js').MediaBoxWrapper|null}
+   */
+  get mediaBox() {
+    return this.#mediaBox;
+  }
 }
 
 /**
@@ -52,7 +72,7 @@ export function createMediaBoxTools(...childrenElements) {
     mediaBoxToolsContainer.append(...childrenElements);
   }
 
-  new MediaBoxTools(mediaBoxToolsContainer).initialize();
+  new MediaBoxTools(mediaBoxToolsContainer);
 
   return mediaBoxToolsContainer;
 }

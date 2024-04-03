@@ -1,6 +1,7 @@
 import MaintenanceSettings from "$lib/extension/settings/MaintenanceSettings.js";
 import MaintenanceProfile from "$entities/MaintenanceProfile.js";
 import {BaseComponent} from "$lib/components/base/BaseComponent.js";
+import {getComponent} from "$lib/components/base/ComponentUtils.js";
 
 export class MaintenancePopup extends BaseComponent {
   /** @type {HTMLElement} */
@@ -13,7 +14,7 @@ export class MaintenancePopup extends BaseComponent {
   #activeProfile = null;
 
   /** @type {import('$lib/components/MediaBoxToolsEvents.js').MediaBoxTools|null} */
-  #parentTools = null;
+  #mediaBoxTools = null;
 
   /**
    * @protected
@@ -34,16 +35,22 @@ export class MaintenancePopup extends BaseComponent {
    * @protected
    */
   init() {
-    this.once('tools-init', this.#onToolsContainerInitialized.bind(this));
-    MaintenancePopup.#watchActiveProfile(this.#onActiveProfileChanged.bind(this));
-  }
+    const mediaBoxToolsElement = this.container.closest('.media-box-tools');
 
-  /**
-   * @param {import('$lib/components/MediaBoxToolsEvents.js').MediaBoxTools} toolsInstance
-   */
-  #onToolsContainerInitialized(toolsInstance) {
-    this.#parentTools = toolsInstance;
-    this.emit('active-profile-changed', this.#activeProfile);
+    if (!mediaBoxToolsElement) {
+      throw new Error('Maintenance popup initialized outside of the media box tools!');
+    }
+
+    /** @type {MediaBoxTools|null} */
+    const mediaBoxTools = getComponent(mediaBoxToolsElement);
+
+    if (!mediaBoxTools) {
+      throw new Error('Media box tools component not found!');
+    }
+
+    this.#mediaBoxTools = mediaBoxTools;
+
+    MaintenancePopup.#watchActiveProfile(this.#onActiveProfileChanged.bind(this));
   }
 
   /**
@@ -73,6 +80,19 @@ export class MaintenancePopup extends BaseComponent {
         this.#tagsList[index] = tagElement;
         this.#tagsListElement.appendChild(tagElement);
       });
+
+    if (this.#mediaBoxTools) {
+      const tagsAndAliases = this.#mediaBoxTools.mediaBox.tagsAndAliases;
+
+      for (let tagElement of this.#tagsList) {
+        const tagName = tagElement.dataset.name;
+        const isPresent = tagsAndAliases.has(tagName);
+
+        tagElement.classList.toggle('is-present', isPresent);
+        tagElement.classList.toggle('is-missing', !isPresent);
+        tagElement.classList.toggle('is-aliased', isPresent && tagsAndAliases.get(tagName) !== tagName);
+      }
+    }
   }
 
   /**
@@ -145,7 +165,7 @@ export class MaintenancePopup extends BaseComponent {
 export function createMaintenancePopup() {
   const container = document.createElement('div');
 
-  new MaintenancePopup(container).initialize();
+  new MaintenancePopup(container);
 
   return container;
 }
