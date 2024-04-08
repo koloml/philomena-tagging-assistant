@@ -38,10 +38,10 @@ export class MediaBoxTools extends BaseComponent {
   }
 
   /**
-   * @param {MaintenanceProfile|null} activeProfile
+   * @param {CustomEvent<MaintenanceProfile|null>} profileChangedEvent
    */
-  #onActiveProfileChanged(activeProfile) {
-    this.container.classList.toggle('has-active-profile', activeProfile !== null);
+  #onActiveProfileChanged(profileChangedEvent) {
+    this.container.classList.toggle('has-active-profile', profileChangedEvent.detail !== null);
   }
 
   /**
