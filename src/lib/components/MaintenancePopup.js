@@ -136,7 +136,7 @@ export class MaintenancePopup extends BaseComponent {
       if (isToBeRemoved) {
         this.#tagsToRemove.add(tagName);
       } else {
-        this.#tagsToRemove.remove(tagName);
+        this.#tagsToRemove.delete(tagName);
       }
     }
 
@@ -146,7 +146,7 @@ export class MaintenancePopup extends BaseComponent {
       if (isToBeAdded) {
         this.#tagsToAdd.add(tagName);
       } else {
-        this.#tagsToAdd.remove(tagName);
+        this.#tagsToAdd.delete(tagName);
       }
     }
 
