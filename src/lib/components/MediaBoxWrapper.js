@@ -1,5 +1,6 @@
 import {BaseComponent} from "$lib/components/base/BaseComponent.js";
 import {getComponent} from "$lib/components/base/ComponentUtils.js";
+import {buildTagsAndAliasesMap} from "$lib/booru/TagsUtils.js";
 
 export class MediaBoxWrapper extends BaseComponent {
   #thumbnailContainer = null;
@@ -11,6 +12,21 @@ export class MediaBoxWrapper extends BaseComponent {
   init() {
     this.#thumbnailContainer = this.container.querySelector('.image-container');
     this.#imageLinkElement = this.#thumbnailContainer.querySelector('a');
+
+    this.on('tags-updated', this.#onTagsUpdatedRefreshTagsAndAliases.bind(this));
+  }
+
+  /**
+   * @param {CustomEvent<Map<string,string>>} tagsUpdatedEvent
+   */
+  #onTagsUpdatedRefreshTagsAndAliases(tagsUpdatedEvent) {
+    const updatedMap = tagsUpdatedEvent.detail;
+
+    if (!(updatedMap instanceof Map)) {
+      throw new TypeError("Tags and aliases should be stored as Map!");
+    }
+
+    this.#tagsAndAliases = updatedMap;
   }
 
   #calculateMediaBoxTags() {
@@ -19,30 +35,7 @@ export class MediaBoxWrapper extends BaseComponent {
       tagAliases = this.#thumbnailContainer.dataset.imageTagAliases?.split(', ') || [],
       actualTags = this.#imageLinkElement.title.split(' | Tagged: ')[1]?.split(', ') || [];
 
-    /** @type {Map<string, string>} */
-    const tagAliasesMap = new Map();
-
-    for (let tagName of actualTags) {
-      tagAliasesMap.set(tagName, tagName);
-    }
-
-    let currentRealTagName = null;
-
-    for (let tagName of tagAliases) {
-      if (tagAliasesMap.has(tagName)) {
-        currentRealTagName = tagName;
-        continue;
-      }
-
-      if (!currentRealTagName) {
-        console.warn('No real tag found for the alias:', tagName);
-        continue;
-      }
-
-      tagAliasesMap.set(tagName, currentRealTagName);
-    }
-
-    return tagAliasesMap;
+    return buildTagsAndAliasesMap(tagAliases, actualTags);
   }
 
   /**
@@ -54,6 +47,12 @@ export class MediaBoxWrapper extends BaseComponent {
     }
 
     return this.#tagsAndAliases;
+  }
+
+  get imageId() {
+    return parseInt(
+      this.container.dataset.imageId
+    );
   }
 }
 

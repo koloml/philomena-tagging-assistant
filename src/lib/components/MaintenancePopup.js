@@ -2,6 +2,7 @@ import MaintenanceSettings from "$lib/extension/settings/MaintenanceSettings.js"
 import MaintenanceProfile from "$entities/MaintenanceProfile.js";
 import {BaseComponent} from "$lib/components/base/BaseComponent.js";
 import {getComponent} from "$lib/components/base/ComponentUtils.js";
+import ScrapedAPI from "$lib/booru/scraped/ScrapedAPI.js";
 
 export class MaintenancePopup extends BaseComponent {
   /** @type {HTMLElement} */
@@ -15,6 +16,21 @@ export class MaintenancePopup extends BaseComponent {
 
   /** @type {import('$lib/components/MediaBoxTools.js').MediaBoxTools} */
   #mediaBoxTools = null;
+
+  /** @type {Set<string>} */
+  #tagsToRemove = new Set();
+
+  /** @type {Set<string>} */
+  #tagsToAdd = new Set();
+
+  /** @type {boolean} */
+  #isPlanningToSubmit = false;
+
+  /** @type {boolean} */
+  #isSubmitting = false;
+
+  /** @type {number|null} */
+  #tagsSubmissionTimer = null;
 
   /**
    * @protected
@@ -52,6 +68,11 @@ export class MaintenancePopup extends BaseComponent {
 
     MaintenancePopup.#watchActiveProfile(this.#onActiveProfileChanged.bind(this));
     this.#tagsListElement.addEventListener('click', this.#handleTagClick.bind(this));
+
+    const mediaBox = this.#mediaBoxTools.mediaBox;
+
+    mediaBox.on('mouseout', this.#onMouseLeftArea.bind(this));
+    mediaBox.on('mouseover', this.#onMouseEnteredArea.bind(this));
   }
 
   /**
@@ -107,15 +128,84 @@ export class MaintenancePopup extends BaseComponent {
       return;
     }
 
+    const tagName = tagElement.dataset.name;
+
     if (tagElement.classList.contains('is-present')) {
-      tagElement.classList.toggle('is-removed');
+      const isToBeRemoved = tagElement.classList.toggle('is-removed');
+
+      if (isToBeRemoved) {
+        this.#tagsToRemove.add(tagName);
+      } else {
+        this.#tagsToRemove.remove(tagName);
+      }
     }
 
     if (tagElement.classList.contains('is-missing')) {
-      tagElement.classList.toggle('is-added');
+      const isToBeAdded = tagElement.classList.toggle('is-added');
+
+      if (isToBeAdded) {
+        this.#tagsToAdd.add(tagName);
+      } else {
+        this.#tagsToAdd.remove(tagName);
+      }
     }
 
-    // TODO: Execute the submission on timeout or after user moved the mouse away from the popup.
+    if (this.#tagsToAdd.size || this.#tagsToRemove.size) {
+      this.#isPlanningToSubmit = true;
+      this.emit('maintenance-state-change', 'waiting');
+    }
+  }
+
+  #onMouseEnteredArea() {
+    if (this.#tagsSubmissionTimer) {
+      clearTimeout(this.#tagsSubmissionTimer);
+    }
+  }
+
+  #onMouseLeftArea() {
+    if (this.#isPlanningToSubmit && !this.#isSubmitting) {
+      this.#tagsSubmissionTimer = setTimeout(
+        this.#onSubmissionTimerPassed.bind(this),
+        MaintenancePopup.#delayBeforeSubmissionMs
+      );
+    }
+  }
+
+  async #onSubmissionTimerPassed() {
+    if (!this.#isPlanningToSubmit || this.#isSubmitting) {
+      return;
+    }
+
+    this.#isPlanningToSubmit = false;
+    this.#isSubmitting = true;
+
+    this.emit('maintenance-state-change', 'processing');
+
+    const maybeTagsAndAliasesAfterUpdate = await MaintenancePopup.#scrapedAPI.updateImageTags(
+      this.#mediaBoxTools.mediaBox.imageId,
+      tagsList => {
+        for (let tagName of this.#tagsToRemove) {
+          tagsList.delete(tagName);
+        }
+
+        for (let tagName of this.#tagsToAdd) {
+          tagsList.add(tagName);
+        }
+
+        return tagsList;
+      }
+    );
+
+    if (maybeTagsAndAliasesAfterUpdate) {
+      this.emit('tags-updated', maybeTagsAndAliasesAfterUpdate);
+    }
+
+    this.emit('maintenance-state-change', 'complete');
+
+    this.#tagsToAdd.clear();
+    this.#tagsToRemove.clear();
+
+    this.#isSubmitting = false;
   }
 
   /**
@@ -183,6 +273,10 @@ export class MaintenancePopup extends BaseComponent {
       unsubscribeFromMaintenanceSettings();
     }
   }
+
+  static #scrapedAPI = new ScrapedAPI();
+
+  static #delayBeforeSubmissionMs = 500;
 }
 
 export function createMaintenancePopup() {
