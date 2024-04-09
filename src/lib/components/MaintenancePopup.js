@@ -205,6 +205,8 @@ export class MaintenancePopup extends BaseComponent {
     this.#tagsToAdd.clear();
     this.#tagsToRemove.clear();
 
+    this.#refreshTagsList();
+
     this.#isSubmitting = false;
   }
 
