@@ -36,6 +36,17 @@ export default class PostParser extends PageParser {
   }
 
   /**
+   * Resolve the tags and aliases mapping from the post page.
+   *
+   * @return {Promise<Map<string, string>|null>}
+   */
+  async resolveTagsAndAliases() {
+    return PostParser.resolveTagsAndAliasesFromPost(
+      await this.resolveFragment()
+    );
+  }
+
+  /**
    * Resolve the list of tags and aliases from the post content.
    *
    * @param {DocumentFragment} documentFragment Real content to parse the data from.

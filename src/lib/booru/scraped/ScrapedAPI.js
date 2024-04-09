@@ -8,8 +8,8 @@ export default class ScrapedAPI {
    * @return {Promise<Map<string,string>|null>} Updated tags and aliases list for updating internal cached state.
    */
   async updateImageTags(imageId, callback) {
-    const formData = await new PostParser(imageId)
-      .resolveTagEditorFormData();
+    const postParser = new PostParser(imageId);
+    const formData = await postParser.resolveTagEditorFormData();
 
     const tagsList = new Set(
       formData
@@ -29,13 +29,18 @@ export default class ScrapedAPI {
       Array.from(updateTagsList).join(', ')
     );
 
-    const tagsSubmittedResponse = await fetch(`/images/${imageId}/tags`, {
+    await fetch(`/images/${imageId}/tags`, {
       method: 'POST',
       body: formData,
     });
 
-    return PostParser.resolveTagsAndAliasesFromPost(
-      await PostParser.resolveFragmentFromResponse(tagsSubmittedResponse)
-    );
+    // We need to remove stored version of the document to request an updated version.
+    postParser.clear();
+
+    // Additional request to re-fetch the new list of tags and aliases. I couldn't find the way to request this list
+    // using official API.
+    // TODO Maybe it will be better to resolve aliases on the extension side somehow, maybe by requesting and caching
+    //      aliases in storage.
+    return await postParser.resolveTagsAndAliases();
   }
 }
