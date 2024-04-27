@@ -77,6 +77,10 @@
     right: 6px;
   }
 
+  .media-box-tools:not(.has-active-profile) .maintenance-status-icon {
+    display: none;
+  }
+
   &:hover {
     .media-box-tools.has-active-profile {
       &:before, &:after {
