@@ -16,34 +16,26 @@
         goto('/maintenance/profiles/new/edit');
     }
 
-    const unsubscribeFromProfiles = maintenanceProfilesStore.subscribe(profiles => {
-        const resolvedProfile = profiles.find(p => p.id === profileId);
+    $: {
+        const resolvedProfile = $maintenanceProfilesStore.find(profile => profile.id === profileId);
 
         if (resolvedProfile) {
             profile = resolvedProfile;
-            return;
+        } else {
+            console.warn(`Profile ${profileId} not found.`);
+            goto('/settings/maintenance');
         }
+    }
 
-        console.warn(`Profile ${profileId} not found.`);
-        goto('/settings/maintenance');
-    });
-
-    const unsubscribeFromActiveProfile = activeProfileStore.subscribe(activeProfileId => {
-        isActiveProfile = activeProfileId === profileId;
-    })
+    $: isActiveProfile = $activeProfileStore === profileId;
 
     function activateProfile() {
         if (isActiveProfile) {
             return;
         }
 
-        activeProfileStore.set(profileId);
+        $activeProfileStore = profileId;
     }
-
-    onDestroy(() => {
-        unsubscribeFromProfiles();
-        unsubscribeFromActiveProfile();
-    });
 </script>
 
 <Menu>

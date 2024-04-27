@@ -21,28 +21,19 @@
     /** @type {string[]} */
     let tagsList = [];
 
-    const unsubscribeFromProfiles = maintenanceProfilesStore.subscribe(profiles => {
-        if (profileId === 'new') {
-            targetProfile = new MaintenanceProfile(crypto.randomUUID(), {});
-            return;
-        }
+    if (profileId === 'new') {
+        targetProfile = new MaintenanceProfile(crypto.randomUUID(), {});
+    } else {
+        const maybeExistingProfile = $maintenanceProfilesStore.find(profile => profile.id === profileId);
 
-        const maybeProfile = profiles.find(p => p.id === profileId);
-
-        if (!maybeProfile) {
+        if (maybeExistingProfile) {
+            targetProfile = maybeExistingProfile;
+            profileName = targetProfile.settings.name;
+            tagsList = [...targetProfile.settings.tags];
+        } else {
             goto('/settings/maintenance');
-            return;
         }
-
-        targetProfile = maybeProfile;
-
-        profileName = targetProfile.settings.name;
-        tagsList = [...targetProfile.settings.tags];
-
-        queueMicrotask(() => {
-            unsubscribeFromProfiles();
-        })
-    });
+    }
 
     async function saveProfile() {
         if (!targetProfile) {
@@ -66,8 +57,6 @@
         await targetProfile.delete();
         await goto('/settings/maintenance');
     }
-
-    onDestroy(unsubscribeFromProfiles);
 </script>
 
 <Menu>
