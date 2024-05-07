@@ -5,7 +5,7 @@
     "scripts": {
         "build": "npm run build:popup && npm run build:extension",
         "build:popup": "vite build",
-        "build:extension": "vite build --config vite.config.extension.js",
+        "build:extension": "node build-extension.js",
         "check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json",
         "check:watch": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json --watch"
     },
