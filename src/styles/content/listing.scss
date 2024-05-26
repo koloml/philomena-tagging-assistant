@@ -1,5 +1,11 @@
 @use '../colors';
 
+// This will fix wierd misplacing of the modified media boxes in the listing.
+.js-resizable-media-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .media-box {
   position: relative;
   overflow: initial !important;
