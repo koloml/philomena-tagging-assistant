@@ -10,4 +10,9 @@ document.querySelectorAll('.media-box').forEach(mediaBoxElement => {
       createMaintenanceStatusIcon(),
     )
   ]);
+
+  // Attempt to fix misplacement of media boxes
+  requestAnimationFrame(() => {
+    window.dispatchEvent(new CustomEvent('resize'));
+  })
 });
