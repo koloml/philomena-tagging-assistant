@@ -244,7 +244,7 @@ export class MaintenancePopup extends BaseComponent {
    * @return {function(): void} Unsubscribe function. Call it to stop watching for changes.
    */
   static #watchActiveProfile(callback) {
-    let lastActiveProfileId = null;
+    let lastActiveProfileId;
 
     const unsubscribeFromProfilesChanges = MaintenanceProfile.subscribe(profiles => {
       if (lastActiveProfileId) {
