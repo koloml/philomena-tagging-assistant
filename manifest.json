@@ -1,6 +1,7 @@
 {
-    "name": "Furbooru Tagging Assistant (Rewrite)",
-    "version": "0.0.1",
+    "name": "Furbooru Tagging Assistant",
+    "description": "Experimental extension with a set of tools to make the tagging faster and easier. Made specifically for Furbooru.",
+    "version": "0.1.0",
     "icons": {
         "16": "icon16.png",
         "48": "icon48.png",

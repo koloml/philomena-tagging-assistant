@@ -1,6 +1,6 @@
 {
     "name": "furbooru-tagging-assistant",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "private": true,
     "scripts": {
         "build": "npm run build:popup && npm run build:extension",
