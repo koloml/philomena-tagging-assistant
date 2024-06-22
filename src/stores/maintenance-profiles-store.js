@@ -44,4 +44,11 @@ activeProfileStore.subscribe(profileId => {
   lastActiveProfileId = profileId;
 
   void maintenanceSettings.setActiveProfileId(profileId);
-})
+});
+
+// Watch the existence of the active profile on every change.
+MaintenanceProfile.subscribe(profiles => {
+  if (!profiles.find(profile => profile.id === lastActiveProfileId)) {
+    activeProfileStore.set(null);
+  }
+});
