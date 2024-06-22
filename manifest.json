@@ -1,6 +1,12 @@
 {
     "name": "Furbooru Tagging Assistant (Rewrite)",
     "version": "0.0.1",
+    "icons": {
+        "16": "icon16.png",
+        "48": "icon48.png",
+        "128": "icon128.png",
+        "256": "icon256.png"
+    },
     "manifest_version": 3,
     "host_permissions": [
         "*://*.furbooru.org/"
