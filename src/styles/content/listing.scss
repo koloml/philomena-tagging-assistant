@@ -83,6 +83,14 @@
     right: 6px;
   }
 
+  .media-box-show-fullscreen {
+    position: absolute;
+    bottom: 6px;
+    left: 6px;
+    display: none;
+    cursor: pointer;
+  }
+
   .media-box-tools:not(.has-active-profile) .maintenance-status-icon {
     display: none;
   }
@@ -97,5 +105,36 @@
     .maintenance-popup.is-active {
       display: block;
     }
+
+    .media-box-show-fullscreen {
+      display: block;
+    }
+  }
+}
+
+.fullscreen-viewer {
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  background-color: black;
+  transition: opacity 0.1s;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: stretch;
+  align-items: stretch;
+
+  img {
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+  }
+
+  &.shown {
+    opacity: 1;
+    pointer-events: initial;
   }
 }

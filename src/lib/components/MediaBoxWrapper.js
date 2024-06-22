@@ -54,6 +54,13 @@ export class MediaBoxWrapper extends BaseComponent {
       this.container.dataset.imageId
     );
   }
+
+  /**
+   * @return {ImageURIs}
+   */
+  get imageLinks() {
+    return JSON.parse(this.#thumbnailContainer.dataset.uris);
+  }
 }
 
 /**
@@ -70,3 +77,10 @@ export function initializeMediaBox(mediaBoxContainer, childComponentElements) {
     getComponent(childComponentElement)?.initialize();
   }
 }
+
+/**
+ * @typedef {Object} ImageURIs
+ * @property {string} full
+ * @property {string} large
+ * @property {string} small
+ */
