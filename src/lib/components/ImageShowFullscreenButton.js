@@ -61,6 +61,10 @@ export class ImageShowFullscreenButton extends BaseComponent {
       }
     });
 
+    element.addEventListener('click', () => {
+      element.classList.remove('shown');
+    });
+
     return element;
   }
 }
