@@ -24,10 +24,34 @@ export class ImageShowFullscreenButton extends BaseComponent {
 
   #onButtonClicked() {
     const imageViewer = ImageShowFullscreenButton.#resolveFullscreenViewer();
-    let imageElement = imageViewer.querySelector('img') ?? document.createElement('img');
+    const largeSourceUrl = this.#mediaBoxTools.mediaBox.imageLinks.large;
 
-    imageElement.src = this.#mediaBoxTools.mediaBox.imageLinks.large;
-    imageViewer.appendChild(imageElement);
+    let imageElement = imageViewer.querySelector('img');
+    let videoElement = imageViewer.querySelector('video');
+
+    if (imageElement) {
+      imageElement.remove();
+    }
+
+    if (videoElement) {
+      videoElement.remove();
+    }
+
+    if (largeSourceUrl.endsWith('.webm') || largeSourceUrl.endsWith('.mp4')) {
+      videoElement ??= document.createElement('video');
+      videoElement.src = largeSourceUrl;
+      videoElement.volume = 0;
+      videoElement.autoplay = true;
+      videoElement.loop = true;
+      videoElement.controls = true;
+
+      imageViewer.appendChild(videoElement);
+    } else {
+      imageElement ??= document.createElement('img');
+      imageElement.src = largeSourceUrl;
+
+      imageViewer.appendChild(imageElement);
+    }
 
     imageViewer.classList.add('shown');
   }
@@ -57,11 +81,37 @@ export class ImageShowFullscreenButton extends BaseComponent {
     document.addEventListener('keydown', event => {
       // When ESC pressed
       if (event.code === 'Escape' || event.code === 'Esc') {
-        element.classList.remove('shown');
+        this.#closeFullscreenViewer(element);
       }
     });
 
+    element.addEventListener('click', () => {
+      this.#closeFullscreenViewer(element);
+    });
+
     return element;
+  }
+
+  /**
+   * @param {HTMLElement} [viewerElement]
+   */
+  static #closeFullscreenViewer(viewerElement = null) {
+    viewerElement ??= this.#resolveFullscreenViewer();
+    viewerElement.classList.remove('shown');
+
+    /** @type {HTMLVideoElement} */
+    const videoElement = viewerElement.querySelector('video');
+
+    if (!videoElement) {
+      return;
+    }
+
+    // Stopping and muting the video
+    requestAnimationFrame(() => {
+      videoElement.volume = 0;
+      videoElement.pause();
+      videoElement.remove();
+    })
   }
 }
 
