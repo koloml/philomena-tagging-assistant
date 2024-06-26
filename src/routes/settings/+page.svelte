@@ -6,5 +6,5 @@
 <Menu>
     <MenuLink href="/">Back</MenuLink>
     <hr>
-    <MenuLink href="/settings/maintenance">Maintenance</MenuLink>
+    <MenuLink href="/settings/maintenance">Tagging Profiles</MenuLink>
 </Menu>

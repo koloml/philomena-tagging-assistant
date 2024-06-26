@@ -43,12 +43,12 @@
     <hr>
 </Menu>
 {#if profile}
-    <div>
-        <strong>Profile:</strong><br>
-        {profile.settings.name}
+    <div class="block">
+        <strong>Profile:</strong>
+        <div>{profile.settings.name}</div>
     </div>
-    <div>
-        <strong>Focused Tags:</strong>
+    <div class="block">
+        <strong>Tags:</strong>
         <div class="tags-list">
             {#each profile.settings.tags as tagName}
                 <span class="tag">{tagName}</span>
@@ -67,10 +67,20 @@
         {/if}
     </MenuLink>
 </Menu>
-<style>
+
+<style lang="scss">
     .tags-list {
         display: flex;
         flex-wrap: wrap;
         gap: 6px;
+    }
+
+    .block + .block {
+        margin-top: .5em;
+
+        strong {
+            display: block;
+            margin-bottom: .25em;
+        }
     }
 </style>

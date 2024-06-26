@@ -4,7 +4,7 @@
 </script>
 
 <Menu>
-    <MenuLink href="/settings/maintenance">Manual Tags Maintenance</MenuLink>
+    <MenuLink href="/settings/maintenance">Tagging Profiles</MenuLink>
     <hr>
     <MenuLink href="/about">About</MenuLink>
 </Menu>
