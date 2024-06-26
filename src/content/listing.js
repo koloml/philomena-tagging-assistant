@@ -1,10 +1,13 @@
 import {createMaintenancePopup} from "$lib/components/MaintenancePopup.js";
 import {createMediaBoxTools} from "$lib/components/MediaBoxTools.js";
-import {initializeMediaBox} from "$lib/components/MediaBoxWrapper.js";
+import {calculateMediaBoxesPositions, initializeMediaBox} from "$lib/components/MediaBoxWrapper.js";
 import {createMaintenanceStatusIcon} from "$lib/components/MaintenanceStatusIcon.js";
 import {createImageShowFullscreenButton} from "$lib/components/ImageShowFullscreenButton.js";
 
-document.querySelectorAll('.media-box').forEach(mediaBoxElement => {
+/** @type {NodeListOf<HTMLElement>} */
+const mediaBoxes = document.querySelectorAll('.media-box');
+
+mediaBoxes.forEach(mediaBoxElement => {
   initializeMediaBox(mediaBoxElement, [
     createMediaBoxTools(
       createMaintenancePopup(),
@@ -18,3 +21,5 @@ document.querySelectorAll('.media-box').forEach(mediaBoxElement => {
     window.dispatchEvent(new CustomEvent('resize'));
   })
 });
+
+calculateMediaBoxesPositions(mediaBoxes);
