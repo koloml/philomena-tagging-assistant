@@ -26,17 +26,6 @@
             "css": [
                 "src/styles/content/listing.scss"
             ]
-        },
-        {
-            "matches": [
-                "*://*.furbooru.org/*"
-            ],
-            "js": [
-                "src/content/header.js"
-            ],
-            "css": [
-                "src/styles/content/header.scss"
-            ]
         }
     ],
     "action": {
