@@ -38,7 +38,11 @@ export class MaintenanceStatusIcon extends BaseComponent {
         break;
 
       case "complete":
-        this.container.innerText = '✅'
+        this.container.innerText = '✅';
+        break;
+
+      case "failed":
+        this.container.innerText = '⚠️';
         break;
 
       default:
