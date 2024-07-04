@@ -151,6 +151,11 @@ export class MaintenancePopup extends BaseComponent {
     }
 
     if (this.#tagsToAdd.size || this.#tagsToRemove.size) {
+      // Notify only once, when first planning to submit
+      if (!this.#isPlanningToSubmit) {
+        MaintenancePopup.#notifyAboutPendingSubmission(true);
+      }
+
       this.#isPlanningToSubmit = true;
       this.emit('maintenance-state-change', 'waiting');
     }
@@ -181,20 +186,32 @@ export class MaintenancePopup extends BaseComponent {
 
     this.emit('maintenance-state-change', 'processing');
 
-    const maybeTagsAndAliasesAfterUpdate = await MaintenancePopup.#scrapedAPI.updateImageTags(
-      this.#mediaBoxTools.mediaBox.imageId,
-      tagsList => {
-        for (let tagName of this.#tagsToRemove) {
-          tagsList.delete(tagName);
-        }
+    let maybeTagsAndAliasesAfterUpdate;
 
-        for (let tagName of this.#tagsToAdd) {
-          tagsList.add(tagName);
-        }
+    try {
+      maybeTagsAndAliasesAfterUpdate = await MaintenancePopup.#scrapedAPI.updateImageTags(
+        this.#mediaBoxTools.mediaBox.imageId,
+        tagsList => {
+          for (let tagName of this.#tagsToRemove) {
+            tagsList.delete(tagName);
+          }
 
-        return tagsList;
-      }
-    );
+          for (let tagName of this.#tagsToAdd) {
+            tagsList.add(tagName);
+          }
+
+          return tagsList;
+        }
+      );
+    } catch (e) {
+      console.warn('Tags submission failed:', e);
+
+      MaintenancePopup.#notifyAboutPendingSubmission(false);
+      this.emit('maintenance-state-change', 'failed');
+      this.#isSubmitting = false;
+
+      return;
+    }
 
     if (maybeTagsAndAliasesAfterUpdate) {
       this.emit('tags-updated', maybeTagsAndAliasesAfterUpdate);
@@ -206,6 +223,7 @@ export class MaintenancePopup extends BaseComponent {
     this.#tagsToRemove.clear();
 
     this.#refreshTagsList();
+    MaintenancePopup.#notifyAboutPendingSubmission(false);
 
     this.#isSubmitting = false;
   }
@@ -276,9 +294,42 @@ export class MaintenancePopup extends BaseComponent {
     }
   }
 
+  /**
+   * Notify the frontend about new pending submission started.
+   * @param {boolean} isStarted True if started, false if ended.
+   */
+  static #notifyAboutPendingSubmission(isStarted) {
+    if (this.#pendingSubmissionCount === null) {
+      this.#pendingSubmissionCount = 0;
+      this.#initializeExitPromptHandler();
+    }
+
+    this.#pendingSubmissionCount += isStarted ? 1 : -1;
+  }
+
+  /**
+   * Subscribe to the global window closing event, show the prompt when there are pending submission.
+   */
+  static #initializeExitPromptHandler() {
+    window.addEventListener('beforeunload', event => {
+      if (!this.#pendingSubmissionCount) {
+        return;
+      }
+
+      event.preventDefault();
+      event.returnValue = true;
+    });
+  }
+
   static #scrapedAPI = new ScrapedAPI();
 
   static #delayBeforeSubmissionMs = 500;
+
+  /**
+   * Amount of pending submissions or NULL if logic was not yet initialized.
+   * @type {number|null}
+   */
+  static #pendingSubmissionCount = null;
 }
 
 export function createMaintenancePopup() {
