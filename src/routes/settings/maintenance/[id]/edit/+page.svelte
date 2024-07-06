@@ -1,6 +1,6 @@
 <script>
     import Menu from "$components/ui/menu/Menu.svelte";
-    import MenuLink from "$components/ui/menu/MenuLink.svelte";
+    import MenuItem from "$components/ui/menu/MenuItem.svelte";
     import TagsEditor from "$components/web-components/TagsEditor.svelte";
     import FormControl from "$components/ui/forms/FormControl.svelte";
     import TextField from "$components/ui/forms/TextField.svelte";
@@ -9,7 +9,6 @@
     import {goto} from "$app/navigation";
     import {maintenanceProfilesStore} from "$stores/maintenance-profiles-store.js";
     import MaintenanceProfile from "$entities/MaintenanceProfile.js";
-    import {onDestroy} from "svelte";
 
     /** @type {string} */
     let profileId = $page.params.id;
@@ -60,9 +59,9 @@
 </script>
 
 <Menu>
-    <MenuLink icon="arrow-left" href="/settings/maintenance{profileId === 'new' ? '' : '/' + profileId}">
+    <MenuItem icon="arrow-left" href="/settings/maintenance{profileId === 'new' ? '' : '/' + profileId}">
         Back
-    </MenuLink>
+    </MenuItem>
     <hr>
 </Menu>
 <FormContainer>
@@ -75,8 +74,8 @@
 </FormContainer>
 <Menu>
     <hr>
-    <MenuLink href="#" on:click={saveProfile}>Save Profile</MenuLink>
+    <MenuItem href="#" on:click={saveProfile}>Save Profile</MenuItem>
     {#if profileId !== 'new'}
-        <MenuLink href="#" on:click={deleteProfile}>Delete Profile</MenuLink>
+        <MenuItem href="#" on:click={deleteProfile}>Delete Profile</MenuItem>
     {/if}
 </Menu>

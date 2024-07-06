@@ -1,10 +1,10 @@
 <script>
     import Menu from "$components/ui/menu/Menu.svelte";
-    import MenuLink from "$components/ui/menu/MenuLink.svelte";
+    import MenuItem from "$components/ui/menu/MenuItem.svelte";
 </script>
 
 <Menu>
-    <MenuLink href="/">Back</MenuLink>
+    <MenuItem href="/">Back</MenuItem>
     <hr>
-    <MenuLink href="/settings/maintenance">Tagging Profiles</MenuLink>
+    <MenuItem href="/settings/maintenance">Tagging Profiles</MenuItem>
 </Menu>

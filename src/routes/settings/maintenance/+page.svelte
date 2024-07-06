@@ -1,6 +1,7 @@
 <script>
     import Menu from "$components/ui/menu/Menu.svelte";
-    import MenuLink from "$components/ui/menu/MenuLink.svelte";
+    import MenuItem from "$components/ui/menu/MenuItem.svelte";
+    import MenuRadioItem from "$components/ui/menu/MenuRadioItem.svelte";
     import {activeProfileStore, maintenanceProfilesStore} from "$stores/maintenance-profiles-store.js";
 
     /** @type {import('$lib/extension/entities/MaintenanceProfile.js').default[]} */
@@ -11,20 +12,34 @@
     function resetActiveProfile() {
         $activeProfileStore = null;
     }
+
+    /**
+     * @param {Event} event
+     */
+    function enableSelectedProfile(event) {
+        const target = event.target;
+
+        if (target instanceof HTMLInputElement && target.checked) {
+            activeProfileStore.set(target.value);
+        }
+    }
 </script>
 
 <Menu>
-    <MenuLink icon="arrow-left" href="/">Back</MenuLink>
-    <MenuLink icon="plus" href="/settings/maintenance/new/edit">Create New</MenuLink>
+    <MenuItem icon="arrow-left" href="/">Back</MenuItem>
+    <MenuItem icon="plus" href="/settings/maintenance/new/edit">Create New</MenuItem>
     {#if profiles.length}
         <hr>
     {/if}
     {#each profiles as profile}
-        <MenuLink href="/settings/maintenance/{profile.id}"
-                  icon="{$activeProfileStore === profile.id ? 'tag' : null}">
+        <MenuRadioItem href="/settings/maintenance/{profile.id}"
+                       name="active-profile"
+                       value="{profile.id}"
+                       checked="{$activeProfileStore === profile.id}"
+                       on:input={enableSelectedProfile}>
             {profile.settings.name}
-        </MenuLink>
+        </MenuRadioItem>
     {/each}
     <hr>
-    <MenuLink href="#" on:click={resetActiveProfile}>Reset Active Profile</MenuLink>
+    <MenuItem href="#" on:click={resetActiveProfile}>Reset Active Profile</MenuItem>
 </Menu>

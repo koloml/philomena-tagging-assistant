@@ -1,10 +1,10 @@
 <script>
     import Menu from "$components/ui/menu/Menu.svelte";
-    import MenuLink from "$components/ui/menu/MenuLink.svelte";
+    import MenuItem from "$components/ui/menu/MenuItem.svelte";
 </script>
 
 <Menu>
-    <MenuLink icon="arrow-left" href="/">Back</MenuLink>
+    <MenuItem icon="arrow-left" href="/">Back</MenuItem>
     <hr>
 </Menu>
 <h1>
@@ -16,10 +16,10 @@
 </p>
 <Menu>
     <hr>
-    <MenuLink icon="globe" href="https://furbooru.org" target="_blank">
+    <MenuItem icon="globe" href="https://furbooru.org" target="_blank">
         Visit Furbooru
-    </MenuLink>
-    <MenuLink icon="info-circle" href="https://github.com/koloml/furbooru-tagging-assistant" target="_blank">
+    </MenuItem>
+    <MenuItem icon="info-circle" href="https://github.com/koloml/furbooru-tagging-assistant" target="_blank">
         GitHub Repo
-    </MenuLink>
+    </MenuItem>
 </Menu>
