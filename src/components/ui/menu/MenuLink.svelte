@@ -1,8 +1,8 @@
 <script>
     /**
-     * @type {string}
+     * @type {string|null}
      */
-    export let href;
+    export let href = null;
 
     /**
      * @type {"tag"|"paint-brush"|"arrow-left"|"info-circle"|"wrench"|"globe"|"plus"|null}
@@ -15,19 +15,17 @@
     export let target = undefined;
 </script>
 
-{#if href}
-    <a {href} {target} on:click>
-        {#if icon}
-            <i class="icon icon-{icon}"></i>
-        {/if}
-        <slot></slot>
-    </a>
-{/if}
+<svelte:element this="{href ? 'a': 'span'}" class="menu-link" {href} {target} on:click role="link" tabindex="0">
+    {#if icon}
+        <i class="icon icon-{icon}"></i>
+    {/if}
+    <slot></slot>
+</svelte:element>
 
 <style lang="scss">
     @use '../../../styles/colors';
 
-    a {
+    .menu-link {
         display: flex;
         align-items: center;
 

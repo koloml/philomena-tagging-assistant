@@ -9,11 +9,11 @@
         display: flex;
         flex-direction: column;
 
-        & > :global(a) {
+        & > :global(.menu-link) {
             padding: 5px 24px;
         }
 
-        :global(a) {
+        :global(.menu-link) {
             color: colors.$text;
 
             &:hover {
