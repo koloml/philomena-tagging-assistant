@@ -15,7 +15,7 @@
     export let target = undefined;
 </script>
 
-<svelte:element this="{href ? 'a': 'span'}" class="menu-link" {href} {target} on:click role="link" tabindex="0">
+<svelte:element this="{href ? 'a': 'span'}" class="menu-item" {href} {target} on:click role="link" tabindex="0">
     {#if icon}
         <i class="icon icon-{icon}"></i>
     {/if}
@@ -25,7 +25,7 @@
 <style lang="scss">
     @use '../../../styles/colors';
 
-    .menu-link {
+    .menu-item {
         display: flex;
         align-items: center;
 
