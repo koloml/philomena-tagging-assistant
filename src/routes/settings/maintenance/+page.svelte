@@ -42,4 +42,5 @@
     {/each}
     <hr>
     <MenuItem href="#" on:click={resetActiveProfile}>Reset Active Profile</MenuItem>
+    <MenuItem href="/settings/maintenance/import">Import Profile</MenuItem>
 </Menu>
