@@ -28,6 +28,8 @@
     .menu-item {
         display: flex;
         align-items: center;
+        cursor: pointer;
+        user-select: none;
 
         i {
             width: 16px;
