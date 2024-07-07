@@ -5,12 +5,12 @@
     export let href = null;
 
     /**
-     * @type {"tag"|"paint-brush"|"arrow-left"|"info-circle"|"wrench"|"globe"|"plus"|null}
+     * @type {App.IconName|null}
      */
     export let icon = null;
 
     /**
-     * @type {"_blank"|"_self"|"_parent"|"_top"|undefined}
+     * @type {App.LinkTarget|undefined}
      */
     export let target = undefined;
 </script>
