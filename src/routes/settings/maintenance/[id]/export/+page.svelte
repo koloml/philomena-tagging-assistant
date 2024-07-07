@@ -5,6 +5,7 @@
     import Menu from "$components/ui/menu/Menu.svelte";
     import MenuItem from "$components/ui/menu/MenuItem.svelte";
     import FormContainer from "$components/ui/forms/FormContainer.svelte";
+    import FormControl from "$components/ui/forms/FormControl.svelte";
 
     const profileId = $page.params.id;
 
@@ -35,7 +36,9 @@
     <hr>
 </Menu>
 <FormContainer>
-    <textarea readonly rows="6">{isCompressedProfileShown ? compressedProfile : exportedProfile}</textarea>
+    <FormControl label="Export string">
+        <textarea readonly rows="6">{isCompressedProfileShown ? compressedProfile : exportedProfile}</textarea>
+    </FormControl>
 </FormContainer>
 <Menu>
     <hr>
@@ -48,9 +51,3 @@
         {/if}
     </MenuItem>
 </Menu>
-
-<style lang="scss">
-    textarea {
-        resize: vertical;
-    }
-</style>

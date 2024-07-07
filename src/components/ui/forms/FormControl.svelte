@@ -12,5 +12,14 @@
 </label>
 
 <style lang="scss">
+    .label {
+        margin-bottom: .5em;
+    }
 
+    .control {
+        :global(textarea) {
+            width: 100%;
+            resize: vertical;
+        }
+    }
 </style>
