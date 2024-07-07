@@ -5,7 +5,6 @@
     import Menu from "$components/ui/menu/Menu.svelte";
     import MenuItem from "$components/ui/menu/MenuItem.svelte";
     import FormContainer from "$components/ui/forms/FormContainer.svelte";
-    import {compressToEncodedURIComponent} from "lz-string";
 
     const profileId = $page.params.id;
 
@@ -22,14 +21,8 @@
     if (!profile) {
         goto('/settings/maintenance/');
     } else {
-        exportedProfile = JSON.stringify({
-            v: 1,
-            id: profileId,
-            name: profile?.settings.name,
-            tags: profile.settings.tags,
-        }, null, 2);
-
-        compressedProfile = compressToEncodedURIComponent(exportedProfile);
+        exportedProfile = profile.toJSON();
+        compressedProfile = profile.toCompressedJSON();
     }
 
     let isCompressedProfileShown = true;
@@ -40,19 +33,21 @@
         Back
     </MenuItem>
     <hr>
+</Menu>
+<FormContainer>
+    <textarea readonly rows="6">{isCompressedProfileShown ? compressedProfile : exportedProfile}</textarea>
+</FormContainer>
+<Menu>
+    <hr>
     <MenuItem on:click={() => isCompressedProfileShown = !isCompressedProfileShown}>
-        Export Format:
+        Switch Format:
         {#if isCompressedProfileShown}
             Base64-Encoded
         {:else}
             Raw JSON
         {/if}
     </MenuItem>
-    <hr>
 </Menu>
-<FormContainer>
-    <textarea readonly rows="6">{isCompressedProfileShown ? compressedProfile : exportedProfile}</textarea>
-</FormContainer>
 
 <style lang="scss">
     textarea {
