@@ -4,6 +4,7 @@
     import {page} from "$app/stores";
     import {goto} from "$app/navigation";
     import {activeProfileStore, maintenanceProfilesStore} from "$stores/maintenance-profiles-store.js";
+    import ProfileView from "$components/maintenance/ProfileView.svelte";
 
     const profileId = $page.params.id;
     /** @type {import('$lib/extension/entities/MaintenanceProfile.js').default|null} */
@@ -41,18 +42,7 @@
     <hr>
 </Menu>
 {#if profile}
-    <div class="block">
-        <strong>Profile:</strong>
-        <div>{profile.settings.name}</div>
-    </div>
-    <div class="block">
-        <strong>Tags:</strong>
-        <div class="tags-list">
-            {#each profile.settings.tags as tagName}
-                <span class="tag">{tagName}</span>
-            {/each}
-        </div>
-    </div>
+    <ProfileView {profile}/>
 {/if}
 <Menu>
     <hr>
@@ -64,21 +54,10 @@
             <span>Activate Profile</span>
         {/if}
     </MenuItem>
+    <MenuItem icon="file-export" href="/settings/maintenance/{profileId}/export">
+        Export Profile
+    </MenuItem>
 </Menu>
 
 <style lang="scss">
-    .tags-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-    }
-
-    .block + .block {
-        margin-top: .5em;
-
-        strong {
-            display: block;
-            margin-bottom: .25em;
-        }
-    }
 </style>
