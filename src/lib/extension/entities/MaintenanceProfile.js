@@ -93,6 +93,10 @@ class MaintenanceProfile extends StorageEntity {
     try {
       importedObject = JSON.parse(exportedString);
     } catch (e) {
+      // Error will be sent later, since empty string could be parsed as nothing without raising the error.
+    }
+
+    if (!importedObject) {
       throw new Error('Invalid JSON!');
     }
 
