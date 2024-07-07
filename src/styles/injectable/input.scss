@@ -1,6 +1,6 @@
 @use '../colors';
 
-input {
+input, textarea {
   background: colors.$input-background;
   border: 1px solid colors.$input-border;
   color: colors.$text;

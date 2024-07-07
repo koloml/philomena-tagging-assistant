@@ -64,6 +64,9 @@
             <span>Activate Profile</span>
         {/if}
     </MenuItem>
+    <MenuItem icon="file-export" href="/settings/maintenance/{profileId}/export">
+        Export Profile
+    </MenuItem>
 </Menu>
 
 <style lang="scss">
