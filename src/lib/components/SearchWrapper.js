@@ -156,19 +156,29 @@ export class SearchWrapper extends BaseComponent {
     }
 
     const propertyName = parsedResult.groups.name;
+    const propertyType = this.#properties.get(propertyName);
     const hasOperatorSyntax = Boolean(parsedResult.groups.op_syntax);
     const hasValueSyntax = Boolean(parsedResult.groups.value_syntax);
 
-
     // No suggestions for values for now, maybe could add suggestions for namespaces like my:*
     if (hasValueSyntax) {
+      if (this.#typeValues.has(propertyType)) {
+        const givenValue = parsedResult.groups.value;
+
+        for (let candidateValue of this.#typeValues.get(propertyType)) {
+          if (givenValue && !candidateValue.startsWith(givenValue)) {
+            continue;
+          }
+
+          suggestionsList.push(`${propertyName}${parsedResult.groups.op_syntax ?? ''}:${candidateValue}`);
+        }
+      }
+
       return suggestionsList;
     }
 
     // If at least one dot placed, start suggesting operators
     if (hasOperatorSyntax) {
-      const propertyType = this.#properties.get(propertyName);
-
       if (this.#typeOperators.has(propertyType)) {
         const operatorName = parsedResult.groups.op;
 
@@ -286,5 +296,16 @@ export class SearchWrapper extends BaseComponent {
   static #typeOperators = new Map([
     [SearchWrapper.#typeNumeric, SearchWrapper.#comparisonOperators],
     [SearchWrapper.#typeDate, SearchWrapper.#comparisonOperators],
+  ]);
+
+  static #typeValues = new Map([
+    [SearchWrapper.#typePersonal, [
+      'comments',
+      'faves',
+      'posts',
+      'uploads',
+      'upvotes',
+      'watched',
+    ]]
   ]);
 }
