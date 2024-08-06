@@ -9,6 +9,11 @@
     } from "$stores/search-preferences.js";
     import CheckboxField from "$components/ui/forms/CheckboxField.svelte";
     import SelectField from "$components/ui/forms/SelectField.svelte";
+
+    const propertiesPositions = {
+        start: "At the start of the list",
+        end: "At the end of the list",
+    }
 </script>
 
 <Menu>
@@ -18,10 +23,13 @@
 <FormContainer>
     <FormControl>
         <CheckboxField bind:checked={$searchPropertiesSuggestionsEnabled}>
-            Enable auto-completion for properties
+            Auto-complete properties
         </CheckboxField>
     </FormControl>
-    <FormControl label="Location of properties suggestions">
-        <SelectField bind:value={$searchPropertiesSuggestionsPosition} options="{['start', 'end']}"></SelectField>
-    </FormControl>
+    {#if $searchPropertiesSuggestionsEnabled}
+        <FormControl label="Show completed properties:">
+            <SelectField bind:value={$searchPropertiesSuggestionsPosition}
+                         options="{propertiesPositions}"></SelectField>
+        </FormControl>
+    {/if}
 </FormContainer>
