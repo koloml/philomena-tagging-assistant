@@ -1,6 +1,6 @@
 @use '../colors';
 
-input, textarea {
+input, textarea, select {
   background: colors.$input-background;
   border: 1px solid colors.$input-border;
   color: colors.$text;
@@ -8,4 +8,8 @@ input, textarea {
   font-family: monospace;
   padding: 0 6px;
   line-height: 26px;
+}
+
+select {
+  min-height: 28px;
 }

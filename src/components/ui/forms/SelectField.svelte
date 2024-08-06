@@ -32,3 +32,9 @@
         <option {value}>{label}</option>
     {/each}
 </select>
+
+<style lang="scss">
+    select {
+        width: 100%;
+    }
+</style>
