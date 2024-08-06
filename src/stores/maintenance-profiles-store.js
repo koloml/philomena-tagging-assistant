@@ -30,17 +30,17 @@ maintenanceSettings.resolveActiveProfileId().then(activeProfileId => {
   activeProfileStore.set(activeProfileId);
 });
 
-MaintenanceSettings.subscribe(settings => {
-  activeProfileStore.set(settings.activeProfileId || null);
+maintenanceSettings.subscribe(settings => {
+  activeProfileStore.set(settings.activeProfile || null);
 });
 
+/**
+ * Active profile ID stored locally. Used to reset active profile once the existing profile was removed.
+ * @type {string|null}
+ */
 let lastActiveProfileId = null;
 
 activeProfileStore.subscribe(profileId => {
-  if (profileId === lastActiveProfileId) {
-    return;
-  }
-
   lastActiveProfileId = profileId;
 
   void maintenanceSettings.setActiveProfileId(profileId);

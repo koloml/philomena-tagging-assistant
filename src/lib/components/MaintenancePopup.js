@@ -272,12 +272,12 @@ export class MaintenancePopup extends BaseComponent {
       }
     });
 
-    const unsubscribeFromMaintenanceSettings = MaintenanceSettings.subscribe(settings => {
-      if (settings.activeProfileId === lastActiveProfileId) {
+    const unsubscribeFromMaintenanceSettings = this.#maintenanceSettings.subscribe(settings => {
+      if (settings.activeProfile === lastActiveProfileId) {
         return;
       }
 
-      lastActiveProfileId = settings.activeProfileId;
+      lastActiveProfileId = settings.activeProfile;
 
       this.#maintenanceSettings
         .resolveActiveProfileAsObject()
