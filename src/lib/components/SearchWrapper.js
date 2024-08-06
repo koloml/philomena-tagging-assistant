@@ -1,5 +1,6 @@
 import {BaseComponent} from "$lib/components/base/BaseComponent.js";
 import {QueryLexer, QuotedTermToken, TermToken, Token} from "$lib/booru/search/QueryLexer.js";
+import SearchSettings from "$lib/extension/settings/SearchSettings.js";
 
 export class SearchWrapper extends BaseComponent {
   /** @type {HTMLInputElement|null} */
@@ -8,6 +9,10 @@ export class SearchWrapper extends BaseComponent {
   #lastParsedSearchValue = null;
   /** @type {Token[]} */
   #cachedParsedQuery = [];
+  #searchSettings = new SearchSettings();
+  #arePropertiesSuggestionsEnabled = false;
+  /** @type {"start"|"end"} */
+  #propertiesSuggestionsPosition = "start";
 
   build() {
     this.#searchField = this.container.querySelector('input[name=q]');
@@ -15,6 +20,16 @@ export class SearchWrapper extends BaseComponent {
 
   init() {
     this.#searchField.addEventListener('input', this.#onInputFindProperties.bind(this));
+
+    this.#searchSettings.resolvePropertiesSuggestionsEnabled()
+      .then(isEnabled => this.#arePropertiesSuggestionsEnabled = isEnabled);
+    this.#searchSettings.resolvePropertiesSuggestionsPosition()
+      .then(position => this.#propertiesSuggestionsPosition = position);
+
+    this.#searchSettings.subscribe(settings => {
+      this.#arePropertiesSuggestionsEnabled = settings.suggestProperties;
+      this.#propertiesSuggestionsPosition = settings.suggestPropertiesPosition;
+    });
   }
 
   /**
@@ -22,6 +37,11 @@ export class SearchWrapper extends BaseComponent {
    * @param {InputEvent} event Source event to find the input element from.
    */
   #onInputFindProperties(event) {
+    // Ignore events until option is enabled.
+    if (!this.#arePropertiesSuggestionsEnabled) {
+      return;
+    }
+
     const currentFragment = this.#findCurrentTagFragment();
 
     if (!currentFragment) {
@@ -111,7 +131,20 @@ export class SearchWrapper extends BaseComponent {
       }
 
       const listContainer = autocompleteContainer.querySelector('ul');
-      listContainer.prepend(...suggestedListItems);
+
+      switch (this.#propertiesSuggestionsPosition) {
+        case "start":
+          listContainer.prepend(...suggestedListItems);
+          break;
+
+        case "end":
+          listContainer.append(...suggestedListItems);
+          break;
+
+        default:
+          console.warn("Invalid position for property suggestions!");
+      }
+
 
       autocompleteContainer.style.position = 'absolute';
       autocompleteContainer.style.left = `${targetInput.offsetLeft}px`;
