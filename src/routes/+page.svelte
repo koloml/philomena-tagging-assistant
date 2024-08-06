@@ -6,5 +6,6 @@
 <Menu>
     <MenuItem href="/settings/maintenance">Tagging Profiles</MenuItem>
     <hr>
+    <MenuItem href="/preferences">Preferences</MenuItem>
     <MenuItem href="/about">About</MenuItem>
 </Menu>
