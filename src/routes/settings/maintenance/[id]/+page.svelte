@@ -1,11 +1,10 @@
 <script>
     import Menu from "$components/ui/menu/Menu.svelte";
-    import MenuLink from "$components/ui/menu/MenuLink.svelte";
+    import MenuItem from "$components/ui/menu/MenuItem.svelte";
     import {page} from "$app/stores";
     import {goto} from "$app/navigation";
-
-    import {onDestroy} from "svelte";
     import {activeProfileStore, maintenanceProfilesStore} from "$stores/maintenance-profiles-store.js";
+    import ProfileView from "$components/maintenance/ProfileView.svelte";
 
     const profileId = $page.params.id;
     /** @type {import('$lib/extension/entities/MaintenanceProfile.js').default|null} */
@@ -39,48 +38,26 @@
 </script>
 
 <Menu>
-    <MenuLink href="/settings/maintenance" icon="arrow-left">Back</MenuLink>
+    <MenuItem href="/settings/maintenance" icon="arrow-left">Back</MenuItem>
     <hr>
 </Menu>
 {#if profile}
-    <div class="block">
-        <strong>Profile:</strong>
-        <div>{profile.settings.name}</div>
-    </div>
-    <div class="block">
-        <strong>Tags:</strong>
-        <div class="tags-list">
-            {#each profile.settings.tags as tagName}
-                <span class="tag">{tagName}</span>
-            {/each}
-        </div>
-    </div>
+    <ProfileView {profile}/>
 {/if}
 <Menu>
     <hr>
-    <MenuLink icon="wrench" href="/settings/maintenance/{profileId}/edit">Edit Profile</MenuLink>
-    <MenuLink icon="tag" href="#" on:click={activateProfile}>
+    <MenuItem icon="wrench" href="/settings/maintenance/{profileId}/edit">Edit Profile</MenuItem>
+    <MenuItem icon="tag" href="#" on:click={activateProfile}>
         {#if isActiveProfile}
             <span>Profile is Active</span>
         {:else}
             <span>Activate Profile</span>
         {/if}
-    </MenuLink>
+    </MenuItem>
+    <MenuItem icon="file-export" href="/settings/maintenance/{profileId}/export">
+        Export Profile
+    </MenuItem>
 </Menu>
 
 <style lang="scss">
-    .tags-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-    }
-
-    .block + .block {
-        margin-top: .5em;
-
-        strong {
-            display: block;
-            margin-bottom: .25em;
-        }
-    }
 </style>

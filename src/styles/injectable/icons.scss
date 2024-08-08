@@ -37,3 +37,7 @@
 .icon.icon-plus {
   @include insert-icon('/img/plus.svg');
 }
+
+.icon.icon-file-export {
+  @include insert-icon('/img/file-export.svg');
+}

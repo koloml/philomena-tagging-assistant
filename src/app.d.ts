@@ -7,6 +7,17 @@ declare global {
         // interface PageData {}
         // interface PageState {}
         // interface Platform {}
+        type LinkTarget = "_blank" | "_self" | "_parent" | "_top";
+        type IconName = (
+                "tag"
+                | "paint-brush"
+                | "arrow-left"
+                | "info-circle"
+                | "wrench"
+                | "globe"
+                | "plus"
+                | "file-export"
+                );
     }
 }
 

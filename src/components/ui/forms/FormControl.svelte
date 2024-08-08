@@ -1,7 +1,7 @@
 <script>
 
     /** @type {string|undefined} */
-    export let label;
+    export let label = undefined;
 </script>
 
 <label class="control">
@@ -12,5 +12,16 @@
 </label>
 
 <style lang="scss">
+    .label {
+        margin-bottom: .5em;
+    }
 
+    .control {
+        padding: 5px 0;
+
+        :global(textarea) {
+            width: 100%;
+            resize: vertical;
+        }
+    }
 </style>

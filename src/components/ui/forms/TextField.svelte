@@ -10,3 +10,9 @@
 </script>
 
 <input type="text" {name} {placeholder} bind:value={value}>
+
+<style lang="scss">
+    :global(.control) input {
+        width: 100%;
+    }
+</style>
