@@ -59,15 +59,19 @@
 
     /**
      * Handle adding new tags to the list or removing them when backspace is pressed.
+     *
+     * Additional note: For some reason, mobile Chrome breaks the usual behaviour inside extension. `code` is becoming
+     * empty, while usually it should contain proper button code.
+     *
      * @param {KeyboardEvent} event
      */
     function handleKeyPresses(event) {
-        if (event.code === 'Enter' && addedTagName.length) {
+        if ((event.code === 'Enter' || event.key === 'Enter') && addedTagName.length) {
             addTag(addedTagName)
             addedTagName = '';
         }
 
-        if (event.code === 'Backspace' && !addedTagName.length && tags?.length) {
+        if ((event.code === 'Backspace' || event.key === 'Backspace') && !addedTagName.length && tags?.length) {
             removeTag(tags[tags.length - 1]);
         }
     }
@@ -82,7 +86,11 @@
                   role="button" tabindex="0">x</span>
         </div>
     {/each}
-    <input type="text" bind:value={addedTagName} on:keydown={handleKeyPresses}/>
+    <input type="text"
+           bind:value={addedTagName}
+           on:keydown={handleKeyPresses}
+           autocomplete="off"
+           autocapitalize="none"/>
 </div>
 
 <style lang="scss">
@@ -90,5 +98,9 @@
         display: flex;
         flex-wrap: wrap;
         gap: 6px;
+
+        input {
+            width: 100%;
+        }
     }
 </style>
