@@ -28,7 +28,7 @@
         if (maybeExistingProfile) {
             targetProfile = maybeExistingProfile;
             profileName = targetProfile.settings.name;
-            tagsList = [...targetProfile.settings.tags];
+            tagsList = [...targetProfile.settings.tags].sort((a, b) => a.localeCompare(b));
         } else {
             goto('/settings/maintenance');
         }

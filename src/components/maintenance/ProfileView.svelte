@@ -1,6 +1,8 @@
 <script>
     /** @type {import('$lib/extension/entities/MaintenanceProfile.js').default} */
     export let profile;
+
+    const sortedTagsList = profile.settings.tags.sort((a, b) => a.localeCompare(b));
 </script>
 
 <div class="block">
@@ -10,7 +12,7 @@
 <div class="block">
     <strong>Tags:</strong>
     <div class="tags-list">
-        {#each profile.settings.tags as tagName}
+        {#each sortedTagsList as tagName}
             <span class="tag">{tagName}</span>
         {/each}
     </div>

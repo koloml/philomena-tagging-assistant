@@ -1,15 +1,19 @@
 import {BaseComponent} from "$lib/components/base/BaseComponent.js";
 import {getComponent} from "$lib/components/base/ComponentUtils.js";
+import MiscSettings from "$lib/extension/settings/MiscSettings.js";
 
 export class ImageShowFullscreenButton extends BaseComponent {
   /**
    * @type {MediaBoxTools}
    */
   #mediaBoxTools;
+  #isFullscreenButtonEnabled = false;
 
   build() {
     this.container.innerText = '🔍';
     ImageShowFullscreenButton.#resolveFullscreenViewer();
+
+    ImageShowFullscreenButton.#miscSettings ??= new MiscSettings();
   }
 
   init() {
@@ -20,6 +24,24 @@ export class ImageShowFullscreenButton extends BaseComponent {
     }
 
     this.on('click', this.#onButtonClicked.bind(this));
+
+    if (ImageShowFullscreenButton.#miscSettings) {
+      ImageShowFullscreenButton.#miscSettings.resolveFullscreenViewerEnabled()
+        .then(isEnabled => {
+          this.#isFullscreenButtonEnabled = isEnabled;
+          this.#updateFullscreenButtonVisibility();
+        })
+        .then(() => {
+          ImageShowFullscreenButton.#miscSettings.subscribe(settings => {
+            this.#isFullscreenButtonEnabled = settings.fullscreenViewer;
+            this.#updateFullscreenButtonVisibility();
+          })
+        })
+    }
+  }
+
+  #updateFullscreenButtonVisibility() {
+    this.container.classList.toggle('is-visible', this.#isFullscreenButtonEnabled);
   }
 
   #onButtonClicked() {
@@ -113,6 +135,11 @@ export class ImageShowFullscreenButton extends BaseComponent {
       videoElement.remove();
     })
   }
+
+  /**
+   * @type {MiscSettings|null}
+   */
+  static #miscSettings = null;
 }
 
 export function createImageShowFullscreenButton() {
