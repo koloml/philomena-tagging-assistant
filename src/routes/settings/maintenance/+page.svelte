@@ -7,7 +7,7 @@
     /** @type {import('$lib/extension/entities/MaintenanceProfile.js').default[]} */
     let profiles = [];
 
-    $: profiles = $maintenanceProfilesStore.sort((a, b) => b.settings.name.localeCompare(a.settings.name));
+    $: profiles = $maintenanceProfilesStore.sort((a, b) => a.settings.name.localeCompare(b.settings.name));
 
     function resetActiveProfile() {
         $activeProfileStore = null;
