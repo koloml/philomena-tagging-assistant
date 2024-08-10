@@ -1,7 +1,7 @@
 import {writable} from "svelte/store";
 import MiscSettings from "$lib/extension/settings/MiscSettings.js";
 
-export const fullScreenViewerEnabled = writable(false);
+export const fullScreenViewerEnabled = writable(true);
 
 const miscSettings = new MiscSettings();
 

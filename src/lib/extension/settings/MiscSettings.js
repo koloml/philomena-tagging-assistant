@@ -6,7 +6,7 @@ export default class MiscSettings extends CacheableSettings {
   }
 
   async resolveFullscreenViewerEnabled() {
-    return this._resolveSetting("fullscreenViewer", false);
+    return this._resolveSetting("fullscreenViewer", true);
   }
 
   async setFullscreenViewerEnabled(isEnabled) {
@@ -20,7 +20,7 @@ export default class MiscSettings extends CacheableSettings {
   subscribe(callback) {
     return super.subscribe(settings => {
       callback({
-        fullscreenViewer: settings.fullscreenViewer ?? false,
+        fullscreenViewer: settings.fullscreenViewer ?? true,
       })
     });
   }
