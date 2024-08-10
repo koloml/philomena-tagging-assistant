@@ -1,5 +1,8 @@
 # Furbooru Tagging Assistant
 
+[![Get the Add-on on Firefox](.github/assets/firefox.png)](https://addons.mozilla.org/en-US/firefox/addon/furbooru-tagging-assistant/)
+[![](.github/assets/chrome.png)](https://chromewebstore.google.com/detail/kpgaphaooaaodgodmnkamhmoedjcnfkj)
+
 This is a browser extension written for the [Furbooru](https://furbooru.org) image-board. It gives you the ability to
 tag the images more easily and quickly.
 
