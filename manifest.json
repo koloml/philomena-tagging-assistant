@@ -23,7 +23,8 @@
                 "*://*.furbooru.org/",
                 "*://*.furbooru.org/images?*",
                 "*://*.furbooru.org/search?*",
-                "*://*.furbooru.org/tags/*"
+                "*://*.furbooru.org/tags/*",
+                "*://*.furbooru.org/galleries/*"
             ],
             "js": [
                 "src/content/listing.js"
