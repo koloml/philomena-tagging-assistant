@@ -8,4 +8,6 @@
     <hr>
     <MenuItem href="/preferences/search">Search</MenuItem>
     <MenuItem href="/preferences/misc">Misc & Tools</MenuItem>
+    <hr>
+    <MenuItem href="/preferences/debug">Debug</MenuItem>
 </Menu>
