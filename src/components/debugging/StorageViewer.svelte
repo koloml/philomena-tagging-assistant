@@ -27,7 +27,7 @@
             let entryPath = entry;
 
             if (resultCrumbs.length) {
-                entryPath = resultCrumbs[resultCrumbs.length - 1] + "/" + entryPath;
+                entryPath = resultCrumbs[resultCrumbs.length - 1][1] + "/" + entryPath;
             }
 
             resultCrumbs.push([entry, entryPath]);
