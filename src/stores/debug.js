@@ -15,5 +15,7 @@ chrome.storage.local.onChanged.addListener(changes => {
     for (let updatedStorageName of Object.keys(changes)) {
       storages[updatedStorageName] = changes[updatedStorageName].newValue;
     }
+
+    return storages;
   })
 });
