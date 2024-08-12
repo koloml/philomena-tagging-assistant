@@ -77,7 +77,7 @@
                 </MenuItem>
             {:else}
                 <MenuItem>
-                    {key}: {typeof key} = {targetObject[key]}
+                    {key}: {typeof targetObject[key]} = {targetObject[key]}
                 </MenuItem>
             {/if}
         {/each}
