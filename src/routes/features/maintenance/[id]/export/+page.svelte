@@ -20,7 +20,7 @@
     let compressedProfile = '';
 
     if (!profile) {
-        goto('/settings/maintenance/');
+        goto('/features/maintenance/');
     } else {
         exportedProfile = profile.toJSON();
         compressedProfile = profile.toCompressedJSON();
@@ -30,7 +30,7 @@
 </script>
 
 <Menu>
-    <MenuItem href="/settings/maintenance/{profileId}" icon="arrow-left">
+    <MenuItem href="/features/maintenance/{profileId}" icon="arrow-left">
         Back
     </MenuItem>
     <hr>

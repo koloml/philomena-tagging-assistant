@@ -53,7 +53,7 @@
         }
 
         candidateProfile.save().then(() => {
-            goto(`/settings/maintenance`);
+            goto(`/features/maintenance`);
         });
     }
 
@@ -65,13 +65,13 @@
         const clonedProfile = new MaintenanceProfile(crypto.randomUUID(), candidateProfile.settings);
         clonedProfile.settings.name += ` (Clone ${new Date().toISOString()})`;
         clonedProfile.save().then(() => {
-            goto(`/settings/maintenance`);
+            goto(`/features/maintenance`);
         });
     }
 </script>
 
 <Menu>
-    <MenuItem icon="arrow-left" href="/settings/maintenance">Back</MenuItem>
+    <MenuItem icon="arrow-left" href="/features/maintenance">Back</MenuItem>
     <hr>
 </Menu>
 {#if errorMessage}
