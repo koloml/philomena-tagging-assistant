@@ -27,12 +27,12 @@
 
 <Menu>
     <MenuItem icon="arrow-left" href="/">Back</MenuItem>
-    <MenuItem icon="plus" href="/settings/maintenance/new/edit">Create New</MenuItem>
+    <MenuItem icon="plus" href="/features/maintenance/new/edit">Create New</MenuItem>
     {#if profiles.length}
         <hr>
     {/if}
     {#each profiles as profile}
-        <MenuRadioItem href="/settings/maintenance/{profile.id}"
+        <MenuRadioItem href="/features/maintenance/{profile.id}"
                        name="active-profile"
                        value="{profile.id}"
                        checked="{$activeProfileStore === profile.id}"
@@ -42,5 +42,5 @@
     {/each}
     <hr>
     <MenuItem href="#" on:click={resetActiveProfile}>Reset Active Profile</MenuItem>
-    <MenuItem href="/settings/maintenance/import">Import Profile</MenuItem>
+    <MenuItem href="/features/maintenance/import">Import Profile</MenuItem>
 </Menu>

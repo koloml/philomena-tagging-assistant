@@ -22,7 +22,7 @@
             profile = resolvedProfile;
         } else {
             console.warn(`Profile ${profileId} not found.`);
-            goto('/settings/maintenance');
+            goto('/features/maintenance');
         }
     }
 
@@ -38,7 +38,7 @@
 </script>
 
 <Menu>
-    <MenuItem href="/settings/maintenance" icon="arrow-left">Back</MenuItem>
+    <MenuItem href="/features/maintenance" icon="arrow-left">Back</MenuItem>
     <hr>
 </Menu>
 {#if profile}
@@ -46,7 +46,7 @@
 {/if}
 <Menu>
     <hr>
-    <MenuItem icon="wrench" href="/settings/maintenance/{profileId}/edit">Edit Profile</MenuItem>
+    <MenuItem icon="wrench" href="/features/maintenance/{profileId}/edit">Edit Profile</MenuItem>
     <MenuItem icon="tag" href="#" on:click={activateProfile}>
         {#if isActiveProfile}
             <span>Profile is Active</span>
@@ -54,7 +54,7 @@
             <span>Activate Profile</span>
         {/if}
     </MenuItem>
-    <MenuItem icon="file-export" href="/settings/maintenance/{profileId}/export">
+    <MenuItem icon="file-export" href="/features/maintenance/{profileId}/export">
         Export Profile
     </MenuItem>
 </Menu>

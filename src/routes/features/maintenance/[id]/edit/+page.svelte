@@ -30,7 +30,7 @@
             profileName = targetProfile.settings.name;
             tagsList = [...targetProfile.settings.tags].sort((a, b) => a.localeCompare(b));
         } else {
-            goto('/settings/maintenance');
+            goto('/features/maintenance');
         }
     }
 
@@ -44,7 +44,7 @@
         targetProfile.settings.tags = [...tagsList];
 
         await targetProfile.save();
-        await goto('/settings/maintenance/' + targetProfile.id);
+        await goto('/features/maintenance/' + targetProfile.id);
     }
 
     async function deleteProfile() {
@@ -54,12 +54,12 @@
         }
 
         await targetProfile.delete();
-        await goto('/settings/maintenance');
+        await goto('/features/maintenance');
     }
 </script>
 
 <Menu>
-    <MenuItem icon="arrow-left" href="/settings/maintenance{profileId === 'new' ? '' : '/' + profileId}">
+    <MenuItem icon="arrow-left" href="/features/maintenance{profileId === 'new' ? '' : '/' + profileId}">
         Back
     </MenuItem>
     <hr>
