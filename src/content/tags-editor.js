@@ -1,7 +1,3 @@
-import {initializeTagForm} from "$lib/components/TagsForm.js";
+import {TagsForm} from "$lib/components/TagsForm.js";
 
-const tagsEditorContainer = document.querySelector('#tags-form');
-
-if (tagsEditorContainer) {
-  initializeTagForm(tagsEditorContainer);
-}
+TagsForm.watchForEditors();

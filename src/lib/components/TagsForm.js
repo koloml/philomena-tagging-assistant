@@ -1,30 +1,11 @@
 import {BaseComponent} from "$lib/components/base/BaseComponent.js";
+import {getComponent} from "$lib/components/base/ComponentUtils.js";
 
-class TagsForm extends BaseComponent {
-  /**
-   * Button to edit tags for the image.
-   * @type {HTMLElement|null}
-   */
-  #editTagButton;
-
-  build() {
-    this.#editTagButton = document.querySelector('#edit-tags');
-  }
-
-  init() {
-    if (this.#editTagButton) {
-      this.#editTagButton.addEventListener('click', this.#onEditClicked.bind(this));
-    }
-  }
-
-  #onEditClicked() {
-    this.#refreshTagColors();
-  }
-
+export class TagsForm extends BaseComponent {
   /**
    * Collect all the tag categories available on the page and color the tags in the editor according to them.
    */
-  #refreshTagColors() {
+  refreshTagColors() {
     const tagCategories = this.#gatherTagCategories();
     const editableTags = this.container.querySelectorAll('.tag');
 
@@ -63,8 +44,38 @@ class TagsForm extends BaseComponent {
 
     return tagCategories;
   }
-}
 
-export function initializeTagForm(container) {
-  new TagsForm(container).initialize();
+  static watchForEditors() {
+    document.body.addEventListener('click', event => {
+      const targetElement = event.target;
+
+      if (!(targetElement instanceof HTMLElement)) {
+        return;
+      }
+
+      const tagEditorWrapper = targetElement.closest('#image_tags_and_source');
+
+      if (!tagEditorWrapper) {
+        return;
+      }
+
+      const refreshTrigger = targetElement.closest('.js-taginput-show, #edit-tags')
+
+      if (!refreshTrigger) {
+        return;
+      }
+
+      const tagFormElement = tagEditorWrapper.querySelector('#tags-form');
+
+      /** @type {TagsForm|null} */
+      let tagEditor = getComponent(tagFormElement);
+
+      if (!tagEditor || (!tagEditor instanceof TagsForm)) {
+        tagEditor = new TagsForm(tagFormElement);
+        tagEditor.initialize();
+      }
+
+      tagEditor.refreshTagColors();
+    });
+  }
 }
