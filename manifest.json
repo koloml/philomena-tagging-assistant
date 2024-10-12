@@ -40,6 +40,23 @@
             "js": [
                 "src/content/header.js"
             ]
+        },
+        {
+            "matches": [
+                "*://*.furbooru.org/images?*",
+                "*://*.furbooru.org/images/*",
+                "*://*.furbooru.org/images/*/tag_changes",
+                "*://*.furbooru.org/images/*/tag_changes?*",
+                "*://*.furbooru.org/search?*",
+                "*://*.furbooru.org/tags?*",
+                "*://*.furbooru.org/tags/*",
+                "*://*.furbooru.org/profiles/*/tag_changes",
+                "*://*.furbooru.org/profiles/*/tag_changes?*",
+                "*://*.furbooru.org/filters/*"
+            ],
+            "js": [
+                "src/content/tags.js"
+            ]
         }
     ],
     "action": {
