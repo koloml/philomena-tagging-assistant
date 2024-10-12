@@ -57,6 +57,14 @@
             "js": [
                 "src/content/tags.js"
             ]
+        },
+        {
+            "matches": [
+                "*://*.furbooru.org/images/*"
+            ],
+            "js": [
+                "src/content/tags-editor.js"
+            ]
         }
     ],
     "action": {
