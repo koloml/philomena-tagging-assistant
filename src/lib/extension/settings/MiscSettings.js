@@ -5,10 +5,17 @@ export default class MiscSettings extends CacheableSettings {
     super("misc");
   }
 
+  /**
+   * @return {Promise<boolean>}
+   */
   async resolveFullscreenViewerEnabled() {
     return this._resolveSetting("fullscreenViewer", true);
   }
 
+  /**
+   * @param {boolean} isEnabled
+   * @return {Promise<void>}
+   */
   async setFullscreenViewerEnabled(isEnabled) {
     return this._writeSetting("fullscreenViewer", isEnabled);
   }
