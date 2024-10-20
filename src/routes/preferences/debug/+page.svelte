@@ -4,7 +4,7 @@
 </script>
 
 <Menu>
-    <MenuItem href="/">Back</MenuItem>
+    <MenuItem href="/preferences" icon="arrow-left">Back</MenuItem>
     <hr>
-    <MenuItem href="/settings/maintenance">Tagging Profiles</MenuItem>
+    <MenuItem href="/preferences/debug/storage">Inspect Storages</MenuItem>
 </Menu>
