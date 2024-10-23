@@ -48,6 +48,7 @@
                 "*://*.furbooru.org/images/*/tag_changes",
                 "*://*.furbooru.org/images/*/tag_changes?*",
                 "*://*.furbooru.org/search?*",
+                "*://*.furbooru.org/tags",
                 "*://*.furbooru.org/tags?*",
                 "*://*.furbooru.org/tags/*",
                 "*://*.furbooru.org/profiles/*/tag_changes",
