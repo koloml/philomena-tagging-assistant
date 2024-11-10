@@ -32,5 +32,6 @@
         width: 16px;
         height: 16px;
         margin-right: 6px;
+        flex-shrink: 0;
     }
 </style>
