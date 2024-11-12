@@ -199,6 +199,11 @@ export function wrapTagDropdown(element) {
 }
 
 export function watchTagDropdownsInTagsEditor() {
+  // We only need to watch for new editor elements if there is a tag editor present on the page
+  if (!document.querySelector('#image_tags_and_source')) {
+    return;
+  }
+
   document.body.addEventListener('mouseover', event => {
     /** @type {HTMLElement} */
     const targetElement = event.target;
