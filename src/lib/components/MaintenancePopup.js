@@ -286,7 +286,13 @@ export class MaintenancePopup extends BaseComponent {
 
     this.#maintenanceSettings
       .resolveActiveProfileAsObject()
-      .then(callback);
+      .then(profileOrNull => {
+        if (profileOrNull) {
+          lastActiveProfileId = profileOrNull.id;
+        }
+
+        callback(profileOrNull);
+      });
 
     return () => {
       unsubscribeFromProfilesChanges();
