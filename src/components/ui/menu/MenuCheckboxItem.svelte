@@ -7,14 +7,14 @@
     export let checked;
 
     /**
-     * @type {string}
+     * @type {string|undefined}
      */
-    export let name;
+    export let name = undefined;
 
     /**
-     * @type {string}
+     * @type {string|undefined}
      */
-    export let value;
+    export let value = undefined;
 
     /**
      * @type {string|null}
@@ -23,7 +23,7 @@
 </script>
 
 <MenuLink {href}>
-    <input type="radio" {name} {value} {checked} on:input on:click|stopPropagation>
+    <input type="checkbox" {name} {value} {checked} on:input on:click|stopPropagation>
     <slot></slot>
 </MenuLink>
 
