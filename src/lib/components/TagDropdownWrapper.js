@@ -1,6 +1,9 @@
 import {BaseComponent} from "$lib/components/base/BaseComponent.js";
 import MaintenanceProfile from "$entities/MaintenanceProfile.js";
 import MaintenanceSettings from "$lib/extension/settings/MaintenanceSettings.js";
+import {getComponent} from "$lib/components/base/ComponentUtils.js";
+
+const isTagEditorProcessedKey = Symbol();
 
 class TagDropdownWrapper extends BaseComponent {
   /**
@@ -187,5 +190,41 @@ class TagDropdownWrapper extends BaseComponent {
 }
 
 export function wrapTagDropdown(element) {
+  // Skip initialization when tag component is already wrapped
+  if (getComponent(element)) {
+    return;
+  }
+
   new TagDropdownWrapper(element).initialize();
+}
+
+export function watchTagDropdownsInTagsEditor() {
+  // We only need to watch for new editor elements if there is a tag editor present on the page
+  if (!document.querySelector('#image_tags_and_source')) {
+    return;
+  }
+
+  document.body.addEventListener('mouseover', event => {
+    /** @type {HTMLElement} */
+    const targetElement = event.target;
+
+    if (targetElement[isTagEditorProcessedKey]) {
+      return;
+    }
+
+    /** @type {HTMLElement|null} */
+    const closestTagEditor = targetElement.closest('#image_tags_and_source');
+
+    if (!closestTagEditor || closestTagEditor[isTagEditorProcessedKey]) {
+      targetElement[isTagEditorProcessedKey] = true;
+      return;
+    }
+
+    targetElement[isTagEditorProcessedKey] = true;
+    closestTagEditor[isTagEditorProcessedKey] = true;
+
+    for (const tagDropdownElement of closestTagEditor.querySelectorAll('.tag.dropdown')) {
+      wrapTagDropdown(tagDropdownElement);
+    }
+  })
 }
