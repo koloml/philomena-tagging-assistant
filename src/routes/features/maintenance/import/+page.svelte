@@ -7,6 +7,9 @@
     import ProfileView from "$components/maintenance/ProfileView.svelte";
     import {maintenanceProfilesStore} from "$stores/maintenance-profiles-store.js";
     import {goto} from "$app/navigation";
+    import EntitiesTransporter from "$lib/extension/EntitiesTransporter.ts";
+
+    const profilesTransporter = new EntitiesTransporter(MaintenanceProfile);
 
     /** @type {string} */
     let importedString = '';
@@ -32,10 +35,10 @@
 
         try {
             if (importedString.trim().startsWith('{')) {
-                candidateProfile = MaintenanceProfile.importFromJSON(importedString);
+                candidateProfile = profilesTransporter.importFromJSON(importedString);
             }
 
-            candidateProfile = MaintenanceProfile.importFromCompressedJSON(importedString);
+            candidateProfile = profilesTransporter.importFromCompressedJSON(importedString);
         } catch (error) {
             errorMessage = error instanceof Error
                     ? error.message
