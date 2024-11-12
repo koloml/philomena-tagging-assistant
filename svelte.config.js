@@ -19,6 +19,12 @@ const config = {
       "$stores": "./src/stores",
       "$entities": "./src/lib/extension/entities",
     },
+    typescript: {
+      config: config => {
+        config.compilerOptions = config.compilerOptions || {};
+        config.compilerOptions.allowImportingTsExtension = true
+      }
+    }
   },
   preprocess: [
     vitePreprocess({
