@@ -15,6 +15,8 @@ export class SearchWrapper extends BaseComponent {
   #propertiesSuggestionsPosition = "start";
   /** @type {HTMLElement|null} */
   #cachedAutocompleteContainer = null;
+  /** @type {TermToken|QuotedTermToken|null} */
+  #lastTermToken = null;
 
   build() {
     this.#searchField = this.container.querySelector('input[name=q]');
@@ -96,6 +98,7 @@ export class SearchWrapper extends BaseComponent {
     let searchValue = this.#searchField.value;
 
     if (!searchValue) {
+      this.#lastTermToken = null;
       return null;
     }
 
@@ -105,13 +108,16 @@ export class SearchWrapper extends BaseComponent {
     );
 
     if (token instanceof TermToken) {
+      this.#lastTermToken = token;
       return token.value;
     }
 
     if (token instanceof QuotedTermToken) {
+      this.#lastTermToken = token;
       return token.decodedValue;
     }
 
+    this.#lastTermToken = null;
     return searchValue;
   }
 
@@ -141,7 +147,7 @@ export class SearchWrapper extends BaseComponent {
   #renderSuggestions(suggestions, targetInput) {
     /** @type {HTMLElement[]} */
     const suggestedListItems = suggestions
-      .map(suggestedTerm => SearchWrapper.#renderTermSuggestion(suggestedTerm));
+      .map(suggestedTerm => this.#renderTermSuggestion(suggestedTerm));
 
     requestAnimationFrame(() => {
       const autocompleteContainer = this.#resolveAutocompleteContainer();
@@ -276,7 +282,7 @@ export class SearchWrapper extends BaseComponent {
    * @param {string} suggestedTerm Term to use for suggestion item.
    * @return {HTMLElement} Resulting element.
    */
-  static #renderTermSuggestion(suggestedTerm) {
+  #renderTermSuggestion(suggestedTerm) {
     /** @type {HTMLElement} */
     const suggestionItem = document.createElement('li');
     suggestionItem.classList.add('autocomplete__item', 'autocomplete__item--property');
@@ -284,15 +290,41 @@ export class SearchWrapper extends BaseComponent {
     suggestionItem.innerText = suggestedTerm;
 
     suggestionItem.addEventListener('mouseover', () => {
-      this.#findAndResetSelectedSuggestion(suggestionItem);
+      SearchWrapper.#findAndResetSelectedSuggestion(suggestionItem);
       suggestionItem.classList.add('autocomplete__item--selected');
     });
 
     suggestionItem.addEventListener('mouseout', () => {
-      this.#findAndResetSelectedSuggestion(suggestionItem);
-    })
+      SearchWrapper.#findAndResetSelectedSuggestion(suggestionItem);
+    });
+
+    suggestionItem.addEventListener('click', () => {
+      this.#replaceLastActiveTokenWithSuggestion(suggestedTerm);
+    });
 
     return suggestionItem;
+  }
+
+  /**
+   * Automatically replace the last active token stored in the variable with the new value.
+   * @param {string} suggestedTerm Term to replace the value with.
+   */
+  #replaceLastActiveTokenWithSuggestion(suggestedTerm) {
+    if (!this.#lastTermToken) {
+      return;
+    }
+
+    const searchQuery = this.#searchField.value;
+    const beforeToken = searchQuery.substring(0, this.#lastTermToken.index);
+    const afterToken = searchQuery.substring(this.#lastTermToken.index + this.#lastTermToken.value.length);
+
+    let replacementValue = suggestedTerm;
+
+    if (replacementValue.includes('"')) {
+      replacementValue = `"${QuotedTermToken.encode(replacementValue)}"`
+    }
+
+    this.#searchField.value = beforeToken + replacementValue + afterToken;
   }
 
   /**
