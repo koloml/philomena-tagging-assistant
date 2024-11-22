@@ -10,5 +10,9 @@ Promise.allSettled([
 ]).then(() => {
   fullScreenViewerEnabled.subscribe(value => {
     void miscSettings.setFullscreenViewerEnabled(value);
-  })
+  });
+
+  miscSettings.subscribe(settings => {
+    fullScreenViewerEnabled.set(settings.fullscreenViewer);
+  });
 });

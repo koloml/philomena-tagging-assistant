@@ -21,4 +21,9 @@ Promise.allSettled([
   searchPropertiesSuggestionsPosition.subscribe(value => {
     void searchSettings.setPropertiesSuggestionsPosition(value);
   });
+
+  searchSettings.subscribe(settings => {
+    searchPropertiesSuggestionsEnabled.set(settings.suggestProperties);
+    searchPropertiesSuggestionsPosition.set(settings.suggestPropertiesPosition);
+  });
 })
