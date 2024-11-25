@@ -57,6 +57,9 @@
     <MenuItem icon="file-export" href="/features/maintenance/{profileId}/export">
         Export Profile
     </MenuItem>
+    <MenuItem icon="trash" href="/features/maintenance/{profileId}/delete">
+        Delete Profile
+    </MenuItem>
 </Menu>
 
 <style lang="scss">

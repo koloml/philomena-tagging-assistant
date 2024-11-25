@@ -41,3 +41,7 @@
 .icon.icon-file-export {
   @include insert-icon(url('@fortawesome/fontawesome-free/svgs/solid/file-export.svg'));
 }
+
+.icon.icon-trash {
+  @include insert-icon(url('@fortawesome/fontawesome-free/svgs/solid/trash.svg'));
+}
