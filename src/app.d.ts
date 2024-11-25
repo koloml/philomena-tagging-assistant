@@ -17,6 +17,7 @@ declare global {
                 | "globe"
                 | "plus"
                 | "file-export"
+                | "trash"
                 );
     }
 }
