@@ -1,6 +1,6 @@
-@mixin insert-icon($icon_src) {
-  mask-image: url($icon_src);
-  -webkit-mask-image: url($icon_src);
+@mixin insert-icon($url) {
+  mask-image: $url;
+  -webkit-mask-image: $url;
 }
 
 .icon {
@@ -11,33 +11,33 @@
 }
 
 .icon.icon-tag {
-  @include insert-icon('/img/tag.svg');
+  @include insert-icon(url('@fortawesome/fontawesome-free/svgs/solid/tag.svg'));
 }
 
 .icon.icon-paint-brush {
-  @include insert-icon('/img/paint-brush.svg');
+  @include insert-icon(url('@fortawesome/fontawesome-free/svgs/solid/paintbrush.svg'));
 }
 
 .icon.icon-arrow-left {
-  @include insert-icon('/img/arrow-left.svg');
+  @include insert-icon(url('@fortawesome/fontawesome-free/svgs/solid/arrow-left.svg'));
 }
 
 .icon.icon-info-circle {
-  @include insert-icon('/img/info-circle.svg');
+  @include insert-icon(url('@fortawesome/fontawesome-free/svgs/solid/circle-info.svg'));
 }
 
 .icon.icon-wrench {
-  @include insert-icon('/img/wrench.svg');
+  @include insert-icon(url('@fortawesome/fontawesome-free/svgs/solid/wrench.svg'));
 }
 
 .icon.icon-globe {
-  @include insert-icon('/img/globe.svg');
+  @include insert-icon(url('@fortawesome/fontawesome-free/svgs/solid/globe.svg'));
 }
 
 .icon.icon-plus {
-  @include insert-icon('/img/plus.svg');
+  @include insert-icon(url('@fortawesome/fontawesome-free/svgs/solid/plus.svg'));
 }
 
 .icon.icon-file-export {
-  @include insert-icon('/img/file-export.svg');
+  @include insert-icon(url('@fortawesome/fontawesome-free/svgs/solid/file-export.svg'));
 }
