@@ -10,10 +10,6 @@
     import MaintenanceProfile from "$entities/MaintenanceProfile.ts";
 
     const profileId = $page.params.id;
-
-    /**
-     * @type {import('$entities/MaintenanceProfile.ts').default|undefined}
-     */
     const profile = $maintenanceProfilesStore.find(profile => profile.id === profileId);
 
     const profilesTransporter = new EntitiesTransporter(MaintenanceProfile);

@@ -1,5 +1,5 @@
 import {validateImportedEntity} from "$lib/extension/transporting/validators.js";
-import {exportEntityToObject} from "$lib/extension/transporting/exporters.js";
+import {exportEntityToObject} from "$lib/extension/transporting/exporters.ts";
 import StorageEntity from "$lib/extension/base/StorageEntity.ts";
 import {compressToEncodedURIComponent, decompressFromEncodedURIComponent} from "lz-string";
 
@@ -53,6 +53,10 @@ export default class EntitiesTransporter<EntityType> {
   exportToJSON(entityObject: EntityType): string {
     if (!(entityObject instanceof this.#targetEntityConstructor)) {
       throw new TypeError('Transporter should be connected to the same entity to export!');
+    }
+
+    if (!(entityObject instanceof StorageEntity)) {
+      throw new TypeError('Only storage entities could be exported!');
     }
 
     const exportableObject = exportEntityToObject(
