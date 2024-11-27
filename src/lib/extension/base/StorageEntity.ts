@@ -24,7 +24,7 @@ export default abstract class StorageEntity<SettingsType extends Object = {}> {
     return this.#settings;
   }
 
-  protected static _entityName: string = "entity";
+  public static readonly _entityName: string = "entity";
 
   async save() {
     await EntitiesController.updateEntity(
