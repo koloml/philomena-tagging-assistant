@@ -1,8 +1,8 @@
 /**
- * @type {Map<string, ((entity: import('../base/StorageEntity.js').default) => Record<string, any>)>}
+ * @type {Map<string, ((entity: import('../base/StorageEntity.ts').default) => Record<string, any>)>}
  */
 const entitiesExporters = new Map([
-  ['profiles', /** @param {import('../entities/MaintenanceProfile.js').default} entity */entity => {
+  ['profiles', /** @param {import('../entities/MaintenanceProfile.ts').default} entity */entity => {
     return {
       v: 1,
       id: entity.id,

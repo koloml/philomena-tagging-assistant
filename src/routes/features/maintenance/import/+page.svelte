@@ -2,7 +2,7 @@
     import Menu from "$components/ui/menu/Menu.svelte";
     import MenuItem from "$components/ui/menu/MenuItem.svelte";
     import FormContainer from "$components/ui/forms/FormContainer.svelte";
-    import MaintenanceProfile from "$entities/MaintenanceProfile.js";
+    import MaintenanceProfile from "$entities/MaintenanceProfile.ts";
     import FormControl from "$components/ui/forms/FormControl.svelte";
     import ProfileView from "$components/maintenance/ProfileView.svelte";
     import {maintenanceProfilesStore} from "$stores/maintenance-profiles-store.js";

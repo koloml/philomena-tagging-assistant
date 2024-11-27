@@ -4,7 +4,7 @@
     import { activeProfileStore, maintenanceProfilesStore } from "$stores/maintenance-profiles-store.js";
     import MenuCheckboxItem from "$components/ui/menu/MenuCheckboxItem.svelte";
 
-    /** @type {import('$lib/extension/entities/MaintenanceProfile.js').default|undefined} */
+    /** @type {import('$entities/MaintenanceProfile.ts').default|undefined} */
     let activeProfile;
 
     $: activeProfile = $maintenanceProfilesStore.find(profile => profile.id === $activeProfileStore);

@@ -8,7 +8,7 @@
     import {page} from "$app/stores";
     import {goto} from "$app/navigation";
     import {maintenanceProfilesStore} from "$stores/maintenance-profiles-store.js";
-    import MaintenanceProfile from "$entities/MaintenanceProfile.js";
+    import MaintenanceProfile from "$entities/MaintenanceProfile.ts";
 
     /** @type {string} */
     let profileId = $page.params.id;

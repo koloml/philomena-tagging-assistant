@@ -1,5 +1,5 @@
 import MaintenanceSettings from "$lib/extension/settings/MaintenanceSettings.js";
-import MaintenanceProfile from "$entities/MaintenanceProfile.js";
+import MaintenanceProfile from "$entities/MaintenanceProfile.ts";
 import {BaseComponent} from "$lib/components/base/BaseComponent.js";
 import {getComponent} from "$lib/components/base/ComponentUtils.js";
 import ScrapedAPI from "$lib/booru/scraped/ScrapedAPI.js";

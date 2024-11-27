@@ -7,12 +7,12 @@
     import FormContainer from "$components/ui/forms/FormContainer.svelte";
     import FormControl from "$components/ui/forms/FormControl.svelte";
     import EntitiesTransporter from "$lib/extension/EntitiesTransporter.ts";
-    import MaintenanceProfile from "$entities/MaintenanceProfile.js";
+    import MaintenanceProfile from "$entities/MaintenanceProfile.ts";
 
     const profileId = $page.params.id;
 
     /**
-     * @type {import('$lib/extension/entities/MaintenanceProfile.js').default|undefined}
+     * @type {import('$entities/MaintenanceProfile.ts').default|undefined}
      */
     const profile = $maintenanceProfilesStore.find(profile => profile.id === profileId);
 
