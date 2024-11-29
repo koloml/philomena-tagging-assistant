@@ -1,5 +1,5 @@
 import StorageEntity from "$lib/extension/base/StorageEntity.ts";
-import EntitiesController from "$lib/extension/EntitiesController.js";
+import EntitiesController from "$lib/extension/EntitiesController.ts";
 
 export interface MaintenanceProfileSettings {
   name: string;
