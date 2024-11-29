@@ -21,7 +21,7 @@ export default class MaintenanceProfile extends StorageEntity<MaintenanceProfile
     });
   }
 
-  static _entityName = "profiles";
+  public static readonly _entityName = "profiles";
 
   /**
    * Read all maintenance profiles from the storage.
