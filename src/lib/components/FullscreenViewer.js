@@ -2,9 +2,11 @@ import {BaseComponent} from "$lib/components/base/BaseComponent.js";
 
 export class FullscreenViewer extends BaseComponent {
   /** @type {HTMLVideoElement} */
-  #videoElement;
+  #videoElement = document.createElement('video');
   /** @type {HTMLImageElement} */
-  #imageElement;
+  #imageElement = document.createElement('img');
+
+  #spinnerElement = document.createElement('i');
 
   /** @type {number|null} */
   #touchId = null;
@@ -20,9 +22,9 @@ export class FullscreenViewer extends BaseComponent {
    */
   build() {
     this.container.classList.add('fullscreen-viewer');
+    this.container.append(this.#spinnerElement);
 
-    this.#videoElement = document.createElement('video');
-    this.#imageElement = document.createElement('img');
+    this.#spinnerElement.classList.add('spinner', 'fa', 'fa-circle-notch', 'fa-spin');
   }
 
   /**
@@ -35,6 +37,13 @@ export class FullscreenViewer extends BaseComponent {
     this.on('touchstart', this.#onTouchStart.bind(this));
     this.on('touchmove', this.#onTouchMove.bind(this));
     this.on('touchend', this.#onTouchEnd.bind(this));
+
+    this.#videoElement.addEventListener('loadeddata', this.#onLoaded.bind(this));
+    this.#imageElement.addEventListener('load', this.#onLoaded.bind(this));
+  }
+
+  #onLoaded() {
+    this.container.classList.remove('loading');
   }
 
   /**
@@ -169,6 +178,8 @@ export class FullscreenViewer extends BaseComponent {
    * @param {string} url
    */
   show(url) {
+    this.container.classList.add('loading');
+
     requestAnimationFrame(() => {
       this.container.classList.add(FullscreenViewer.#shownState);
       document.body.style.overflow = 'hidden';
