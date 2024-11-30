@@ -1,5 +1,5 @@
 import ConfigurationController from "$lib/extension/ConfigurationController.js";
-import MaintenanceProfile from "$lib/extension/entities/MaintenanceProfile.js";
+import MaintenanceProfile from "$entities/MaintenanceProfile.ts";
 import CacheableSettings from "$lib/extension/base/CacheableSettings.js";
 
 export default class MaintenanceSettings extends CacheableSettings {

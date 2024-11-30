@@ -7,7 +7,7 @@
     import ProfileView from "$components/maintenance/ProfileView.svelte";
 
     const profileId = $page.params.id;
-    /** @type {import('$lib/extension/entities/MaintenanceProfile.js').default|null} */
+    /** @type {import('$entities/MaintenanceProfile.ts').default|null} */
     let profile = null;
     let isActiveProfile = false;
 
@@ -56,6 +56,9 @@
     </MenuItem>
     <MenuItem icon="file-export" href="/features/maintenance/{profileId}/export">
         Export Profile
+    </MenuItem>
+    <MenuItem icon="trash" href="/features/maintenance/{profileId}/delete">
+        Delete Profile
     </MenuItem>
 </Menu>
 

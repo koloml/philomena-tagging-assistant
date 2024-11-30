@@ -1,5 +1,5 @@
 import {BaseComponent} from "$lib/components/base/BaseComponent.js";
-import MaintenanceProfile from "$entities/MaintenanceProfile.js";
+import MaintenanceProfile from "$entities/MaintenanceProfile.ts";
 import MaintenanceSettings from "$lib/extension/settings/MaintenanceSettings.js";
 import {getComponent} from "$lib/components/base/ComponentUtils.js";
 

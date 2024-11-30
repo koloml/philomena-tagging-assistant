@@ -1,5 +1,5 @@
 import {writable} from "svelte/store";
-import MaintenanceProfile from "$lib/extension/entities/MaintenanceProfile.js";
+import MaintenanceProfile from "$entities/MaintenanceProfile.ts";
 import MaintenanceSettings from "$lib/extension/settings/MaintenanceSettings.js";
 
 /**

@@ -1,13 +1,13 @@
 {
     "name": "furbooru-tagging-assistant",
-    "version": "0.3.2",
+    "version": "0.3.3",
     "private": true,
     "scripts": {
         "build": "npm run build:popup && npm run build:extension",
         "build:popup": "vite build",
         "build:extension": "node build-extension.js",
-        "check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json",
-        "check:watch": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json --watch"
+        "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+        "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
     },
     "devDependencies": {
         "@sveltejs/adapter-auto": "^3.0.0",
@@ -24,6 +24,7 @@
     },
     "type": "module",
     "dependencies": {
+        "@fortawesome/fontawesome-free": "^6.7.1",
         "lz-string": "^1.5.0"
     }
 }

@@ -1,16 +1,28 @@
 import {validateImportedEntity} from "$lib/extension/transporting/validators.js";
-import {exportEntityToObject} from "$lib/extension/transporting/exporters.js";
-import StorageEntity from "./base/StorageEntity.js";
+import {exportEntityToObject} from "$lib/extension/transporting/exporters.ts";
+import StorageEntity from "$lib/extension/base/StorageEntity.ts";
 import {compressToEncodedURIComponent, decompressFromEncodedURIComponent} from "lz-string";
 
-type EntityConstructor<T extends StorageEntity> =
-  (new (id: string, settings: Record<string, any>) => T)
-  & typeof StorageEntity;
+export default class EntitiesTransporter<EntityType> {
+  readonly #targetEntityConstructor: new (...any: any[]) => EntityType;
 
-export default class EntitiesTransporter<EntityType extends StorageEntity> {
-  readonly #targetEntityConstructor: EntityConstructor<EntityType>;
+  /**
+   * Name of the entity, exported directly from the constructor.
+   * @private
+   */
+  get #entityName() {
+    // How the hell should I even do this?
+    return ((this.#targetEntityConstructor as any) as typeof StorageEntity)._entityName;
+  }
 
-  constructor(entityConstructor: EntityConstructor<EntityType>) {
+  /**
+   * @param entityConstructor Class which should be used for import or export.
+   */
+  constructor(entityConstructor: new (...any: any[]) => EntityType) {
+    if (!(entityConstructor.prototype instanceof StorageEntity)) {
+      throw new TypeError('Invalid class provided as the target for importing!');
+    }
+
     this.#targetEntityConstructor = entityConstructor;
   }
 
@@ -23,7 +35,7 @@ export default class EntitiesTransporter<EntityType extends StorageEntity> {
 
     validateImportedEntity(
       importedObject,
-      this.#targetEntityConstructor._entityName
+      this.#entityName
     );
 
     return new this.#targetEntityConstructor(
@@ -43,9 +55,13 @@ export default class EntitiesTransporter<EntityType extends StorageEntity> {
       throw new TypeError('Transporter should be connected to the same entity to export!');
     }
 
+    if (!(entityObject instanceof StorageEntity)) {
+      throw new TypeError('Only storage entities could be exported!');
+    }
+
     const exportableObject = exportEntityToObject(
       entityObject,
-      this.#targetEntityConstructor._entityName
+      this.#entityName
     );
 
     return JSON.stringify(exportableObject, null, 2);
