@@ -11,7 +11,7 @@ export default abstract class StorageEntity<SettingsType extends Object = {}> {
    */
   readonly #settings: SettingsType;
 
-  constructor(id: string, settings: SettingsType) {
+  protected constructor(id: string, settings: SettingsType) {
     this.#id = id;
     this.#settings = settings;
   }
