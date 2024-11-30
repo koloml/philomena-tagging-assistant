@@ -46,16 +46,6 @@
         await targetProfile.save();
         await goto('/features/maintenance/' + targetProfile.id);
     }
-
-    async function deleteProfile() {
-        if (!targetProfile) {
-            console.warn('Attempting to delete the profile, but the profile is not loaded yet.');
-            return;
-        }
-
-        await targetProfile.delete();
-        await goto('/features/maintenance');
-    }
 </script>
 
 <Menu>
@@ -75,7 +65,4 @@
 <Menu>
     <hr>
     <MenuItem href="#" on:click={saveProfile}>Save Profile</MenuItem>
-    {#if profileId !== 'new'}
-        <MenuItem href="#" on:click={deleteProfile}>Delete Profile</MenuItem>
-    {/if}
 </Menu>
