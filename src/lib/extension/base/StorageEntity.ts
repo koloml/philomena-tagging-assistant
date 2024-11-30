@@ -40,7 +40,11 @@ export default abstract class StorageEntity<SettingsType extends Object = {}> {
     );
   }
 
-  static async readAll(): Promise<Array<any>> {
-    throw new Error("Not implemented");
+  public static async readAll<Type extends StorageEntity<any>>(this: new (...args: any[]) => Type): Promise<Type[]> {
+    return await EntitiesController.readAllEntities(
+      // Voodoo magic, once again.
+      ((this as any) as typeof StorageEntity)._entityName,
+      this
+    )
   }
 }

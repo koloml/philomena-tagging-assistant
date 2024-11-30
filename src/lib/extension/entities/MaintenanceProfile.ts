@@ -24,16 +24,6 @@ export default class MaintenanceProfile extends StorageEntity<MaintenanceProfile
   public static readonly _entityName = "profiles";
 
   /**
-   * Read all maintenance profiles from the storage.
-   */
-  static async readAll(): Promise<MaintenanceProfile[]> {
-    return await EntitiesController.readAllEntities(
-      this._entityName,
-      MaintenanceProfile
-    );
-  }
-
-  /**
    * Subscribe to the changes and receive the new list of profiles when they change.
    *
    * @param callback Callback to call when the profiles change. The new list of profiles is passed as an argument.
