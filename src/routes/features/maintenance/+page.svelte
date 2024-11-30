@@ -4,7 +4,7 @@
     import MenuRadioItem from "$components/ui/menu/MenuRadioItem.svelte";
     import {activeProfileStore, maintenanceProfilesStore} from "$stores/maintenance-profiles-store.js";
 
-    /** @type {import('$lib/extension/entities/MaintenanceProfile.js').default[]} */
+    /** @type {import('$entities/MaintenanceProfile.ts').default[]} */
     let profiles = [];
 
     $: profiles = $maintenanceProfilesStore.sort((a, b) => a.settings.name.localeCompare(b.settings.name));

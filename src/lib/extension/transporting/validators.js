@@ -1,6 +1,6 @@
 /**
  * Map of validators for each entity. Function should throw the error if validation failed.
- * @type {Map<string, ((importedObject: Object) => void)>}
+ * @type {Map<keyof App.EntityNamesMap|string, ((importedObject: Object) => void)>}
  */
 const entitiesValidators = new Map([
   ['profiles', importedObject => {
