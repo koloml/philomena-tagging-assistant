@@ -1,4 +1,5 @@
 import StorageHelper from "$lib/browser/StorageHelper.js";
+import type StorageEntity from "$lib/extension/base/StorageEntity.ts";
 
 export default class EntitiesController {
   static #storageHelper = new StorageHelper(chrome.storage.local);
@@ -6,15 +7,13 @@ export default class EntitiesController {
   /**
    * Read all entities of the given type from the storage. Build the entities from the raw data and return them.
    *
-   * @template EntityClass
+   * @param entityName Name of the entity to read.
+   * @param entityClass Class of the entity to read. Must have a constructor that accepts the ID and the settings
+   * object.
    *
-   * @param {string} entityName Name of the entity to read.
-   * @param {EntityClass} entityClass Class of the entity to read. Must have a constructor that accepts the ID and the
-   * settings object.
-   *
-   * @return {Promise<InstanceType<EntityClass>[]>} List of entities of the given type.
+   * @return List of entities of the given type.
    */
-  static async readAllEntities(entityName, entityClass) {
+  static async readAllEntities<Type extends StorageEntity<any>>(entityName: string, entityClass: new (...any: any[]) => Type): Promise<Type[]> {
     const rawEntities = await this.#storageHelper.read(entityName, {});
 
     if (!rawEntities || Object.keys(rawEntities).length === 0) {
@@ -29,13 +28,11 @@ export default class EntitiesController {
   /**
    * Update the single entity in the storage. If the entity with the given ID already exists, it will be overwritten.
    *
-   * @param {string} entityName Name of the entity to update.
-   * @param {StorageEntity} entity Entity to update.
-   *
-   * @return {Promise<void>}
+   * @param entityName Name of the entity to update.
+   * @param entity Entity to update.
    */
-  static async updateEntity(entityName, entity) {
-    await this.#storageHelper.write(
+  static async updateEntity(entityName: string, entity: StorageEntity<Object>): Promise<void> {
+    this.#storageHelper.write(
       entityName,
       Object.assign(
         await this.#storageHelper.read(
@@ -51,15 +48,13 @@ export default class EntitiesController {
   /**
    * Delete the entity with the given ID.
    *
-   * @param {string} entityName Name of the entity to delete.
-   * @param {string} entityId ID of the entity to delete.
-   *
-   * @return {Promise<void>}
+   * @param entityName Name of the entity to delete.
+   * @param entityId ID of the entity to delete.
    */
-  static async deleteEntity(entityName, entityId) {
+  static async deleteEntity(entityName: string, entityId: string): Promise<void> {
     const entities = await this.#storageHelper.read(entityName, {});
     delete entities[entityId];
-    await this.#storageHelper.write(entityName, entities);
+    this.#storageHelper.write(entityName, entities);
   }
 
   /**
@@ -67,17 +62,16 @@ export default class EntitiesController {
    *
    * @template EntityClass
    *
-   * @param {string} entityName Name of the entity to subscribe to.
-   * @param {EntityClass} entityClass Class of the entity to subscribe to.
-   * @param {function(InstanceType<EntityClass>[]): any} callback Callback to call when the storage changes.
-   * @return {function(): void} Unsubscribe function.
+   * @param entityName Name of the entity to subscribe to.
+   * @param entityClass Class of the entity to subscribe to.
+   * @param callback Callback to call when the storage changes.
+   * @return Unsubscribe function.
    */
-  static subscribeToEntity(entityName, entityClass, callback) {
+  static subscribeToEntity<Type extends StorageEntity<any>>(entityName: string, entityClass: new (...any: any[]) => Type, callback: (entities: Type[]) => void): () => void {
     /**
      * Watch the changes made to the storage and call the callback when the entity changes.
-     * @param {Object<string, StorageChange>} changes Changes made to the storage.
      */
-    const storageChangesSubscriber = changes => {
+    const storageChangesSubscriber = (changes: Record<string, chrome.storage.StorageChange>) => {
       if (!changes[entityName]) {
         return;
       }

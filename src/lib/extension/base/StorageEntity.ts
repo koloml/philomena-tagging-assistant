@@ -47,4 +47,13 @@ export default abstract class StorageEntity<SettingsType extends Object = {}> {
       this
     )
   }
+
+  public static subscribe<Type extends StorageEntity<any>>(this: new (...args: any[]) => Type, callback: (entities: Type[]) => void): () => void {
+    return EntitiesController.subscribeToEntity(
+      // And once more.
+      ((this as any) as typeof StorageEntity)._entityName,
+      this,
+      callback
+    );
+  }
 }

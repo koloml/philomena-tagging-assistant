@@ -22,19 +22,4 @@ export default class MaintenanceProfile extends StorageEntity<MaintenanceProfile
   }
 
   public static readonly _entityName = "profiles";
-
-  /**
-   * Subscribe to the changes and receive the new list of profiles when they change.
-   *
-   * @param callback Callback to call when the profiles change. The new list of profiles is passed as an argument.
-   *
-   * @return Unsubscribe function.
-   */
-  static subscribe(callback: (profiles: MaintenanceProfile[]) => void): () => void {
-    return EntitiesController.subscribeToEntity(
-      this._entityName,
-      MaintenanceProfile,
-      callback
-    );
-  }
 }
