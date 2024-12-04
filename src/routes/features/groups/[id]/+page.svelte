@@ -35,4 +35,5 @@
     <hr>
     <MenuItem href="/features/groups/{groupId}/edit" icon="wrench">Edit Group</MenuItem>
     <MenuItem href="/features/groups/{groupId}/export" icon="file-export">Export Group</MenuItem>
+    <MenuItem href="/features/groups/{groupId}/delete" icon="trash">Delete Group</MenuItem>
 </Menu>
