@@ -39,6 +39,9 @@
             ],
             "js": [
                 "src/content/header.js"
+            ],
+            "css": [
+                "src/styles/content/header.scss"
             ]
         },
         {
