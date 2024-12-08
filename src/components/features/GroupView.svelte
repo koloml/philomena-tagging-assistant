@@ -1,4 +1,6 @@
 <script>
+    import TagsColorContainer from "$components/tags/TagsColorContainer.svelte";
+
     /**
      * @type {import('$entities/TagGroup.ts').default}
      */
@@ -16,19 +18,23 @@
 </div>
 <div class="block">
     <strong>Tags:</strong>
-    <div class="tags-list">
-        {#each sortedTagsList as tagName}
-            <span class="tag">{tagName}</span>
-        {/each}
-    </div>
+    <TagsColorContainer targetCategory="{group.settings.category}">
+        <div class="tags-list">
+            {#each sortedTagsList as tagName}
+                <span class="tag">{tagName}</span>
+            {/each}
+        </div>
+    </TagsColorContainer>
 </div>
 <div class="block">
     <strong>Prefixes:</strong>
-    <div class="tags-list">
-        {#each sortedPrefixes as prefixName}
-            <span class="tag">{prefixName}*</span>
-        {/each}
-    </div>
+    <TagsColorContainer targetCategory="{group.settings.category}">
+        <div class="tags-list">
+            {#each sortedPrefixes as prefixName}
+                <span class="tag">{prefixName}*</span>
+            {/each}
+        </div>
+    </TagsColorContainer>
 </div>
 
 <style lang="scss">

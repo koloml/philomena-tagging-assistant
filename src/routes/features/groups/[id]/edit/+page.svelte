@@ -1,8 +1,10 @@
 <script>
     import { goto } from "$app/navigation";
     import { page } from "$app/stores";
+    import TagsColorContainer from "$components/tags/TagsColorContainer.svelte";
     import FormContainer from "$components/ui/forms/FormContainer.svelte";
     import FormControl from "$components/ui/forms/FormControl.svelte";
+    import TagCategorySelectField from "$components/ui/forms/TagCategorySelectField.svelte";
     import TextField from "$components/ui/forms/TextField.svelte";
     import Menu from "$components/ui/menu/Menu.svelte";
     import MenuItem from "$components/ui/menu/MenuItem.svelte";
@@ -19,6 +21,7 @@
     let tagsList = [];
     /** @type {string[]} */
     let prefixesList = [];
+    let tagCategory = '';
 
     if (groupId==='new') {
         targetGroup = new TagGroup(crypto.randomUUID(), {});
@@ -29,6 +32,7 @@
             groupName = targetGroup.settings.name;
             tagsList = [ ...targetGroup.settings.tags ].sort((a, b) => a.localeCompare(b));
             prefixesList = [ ...targetGroup.settings.prefixes ].sort((a, b) => a.localeCompare(b));
+            tagCategory = targetGroup.settings.category;
         } else {
             goto('/features/groups');
         }
@@ -43,6 +47,7 @@
         targetGroup.settings.name = groupName;
         targetGroup.settings.tags = [ ...tagsList ];
         targetGroup.settings.prefixes = [ ...prefixesList ];
+        targetGroup.settings.category = tagCategory;
 
         await targetGroup.save();
         await goto(`/features/groups/${ targetGroup.id }`);
@@ -57,12 +62,17 @@
     <FormControl label="Group Name">
         <TextField bind:value={groupName} placeholder="Group Name"></TextField>
     </FormControl>
-    <FormControl label="Tags">
-        <TagsEditor bind:tags={tagsList}/>
+    <FormControl label="Group Color">
+        <TagCategorySelectField bind:value={tagCategory}/>
     </FormControl>
-    <FormControl label="Tag Prefixes">
-        <TagsEditor bind:tags={prefixesList}/>
-    </FormControl>
+    <TagsColorContainer targetCategory="{tagCategory}">
+        <FormControl label="Tags">
+            <TagsEditor bind:tags={tagsList}/>
+        </FormControl>
+        <FormControl label="Tag Prefixes">
+            <TagsEditor bind:tags={prefixesList}/>
+        </FormControl>
+    </TagsColorContainer>
 </FormContainer>
 <Menu>
     <hr>
