@@ -25,6 +25,27 @@ $tag-background: #1b3c21;
 $tag-count-background: #2d6236;
 $tag-text: #4aa158;
 
+$tag-rating-text: #418dd9;
+$tag-rating-background: darken($tag-rating-text, 35%);
+$tag-spoiler-text: #d49b39;
+$tag-spoiler-background: darken($tag-spoiler-text, 34%);
+$tag-origin-text: #6f66d6;
+$tag-origin-background: darken($tag-origin-text, 40%);
+$tag-oc-text: #b157b7;
+$tag-oc-background: darken($tag-oc-text, 33%);
+$tag-error-text: #d45460;
+$tag-error-background: desaturate(darken($tag-error-text, 38%), 6%);
+$tag-character-text: #4aaabf;
+$tag-character-background: darken($tag-character-text, 33%);
+$tag-content-official-text: #b9b541;
+$tag-content-official-background: desaturate(darken($tag-content-official-text, 29%),2%);
+$tag-content-fanmade-text: #cc8eb5;
+$tag-content-fanmade-background: darken($tag-content-fanmade-text, 40%);
+$tag-species-text: #b16b50;
+$tag-species-background: darken($tag-species-text, 35%);
+$tag-body-type-text: #b8b8b8;
+$tag-body-type-background: desaturate(darken($tag-body-type-text, 35%), 10%);
+
 $input-background: #26232d;
 $input-border: #5c5a61;
 
