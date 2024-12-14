@@ -3,6 +3,7 @@ import CacheableSettings from "$lib/extension/base/CacheableSettings.ts";
 
 interface MaintenanceSettingsFields {
   activeProfile: string | null;
+  stripBlacklistedTags: boolean;
 }
 
 export default class MaintenanceSettings extends CacheableSettings<MaintenanceSettingsFields> {
@@ -27,6 +28,10 @@ export default class MaintenanceSettings extends CacheableSettings<MaintenanceSe
       .find(profile => profile.id === resolvedProfileId) || null;
   }
 
+  async resolveStripBlacklistedTags() {
+    return this._resolveSetting('stripBlacklistedTags', false);
+  }
+
   /**
    * Set the active maintenance profile.
    *
@@ -35,5 +40,9 @@ export default class MaintenanceSettings extends CacheableSettings<MaintenanceSe
    */
   async setActiveProfileId(profileId: string | null): Promise<void> {
     await this._writeSetting("activeProfile", profileId);
+  }
+
+  async setStripBlacklistedTags(isEnabled: boolean) {
+    await this._writeSetting('stripBlacklistedTags', isEnabled);
   }
 }
