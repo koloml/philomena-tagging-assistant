@@ -289,6 +289,10 @@ export class SearchWrapper extends BaseComponent {
     suggestionItem.dataset.value = suggestedTerm;
     suggestionItem.innerText = suggestedTerm;
 
+    const propertyIcon = document.createElement('i');
+    propertyIcon.classList.add('fa', 'fa-info-circle');
+    suggestionItem.insertAdjacentElement('afterbegin', propertyIcon);
+
     suggestionItem.addEventListener('mouseover', () => {
       SearchWrapper.#findAndResetSelectedSuggestion(suggestionItem);
       suggestionItem.classList.add('autocomplete__item--selected');
