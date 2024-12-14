@@ -1,6 +1,6 @@
 import {BaseComponent} from "$lib/components/base/BaseComponent.js";
 import {QueryLexer, QuotedTermToken, TermToken, Token} from "$lib/booru/search/QueryLexer.js";
-import SearchSettings from "$lib/extension/settings/SearchSettings.js";
+import SearchSettings from "$lib/extension/settings/SearchSettings.ts";
 
 export class SearchWrapper extends BaseComponent {
   /** @type {HTMLInputElement|null} */

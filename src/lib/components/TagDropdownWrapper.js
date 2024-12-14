@@ -1,6 +1,6 @@
 import {BaseComponent} from "$lib/components/base/BaseComponent.js";
 import MaintenanceProfile from "$entities/MaintenanceProfile.ts";
-import MaintenanceSettings from "$lib/extension/settings/MaintenanceSettings.js";
+import MaintenanceSettings from "$lib/extension/settings/MaintenanceSettings.ts";
 import {getComponent} from "$lib/components/base/ComponentUtils.js";
 
 const isTagEditorProcessedKey = Symbol();
