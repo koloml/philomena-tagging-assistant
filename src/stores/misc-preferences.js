@@ -1,5 +1,5 @@
 import {writable} from "svelte/store";
-import MiscSettings from "$lib/extension/settings/MiscSettings.js";
+import MiscSettings from "$lib/extension/settings/MiscSettings.ts";
 
 export const fullScreenViewerEnabled = writable(true);
 
@@ -13,6 +13,6 @@ Promise.allSettled([
   });
 
   miscSettings.subscribe(settings => {
-    fullScreenViewerEnabled.set(settings.fullscreenViewer);
+    fullScreenViewerEnabled.set(Boolean(settings.fullscreenViewer));
   });
 });
