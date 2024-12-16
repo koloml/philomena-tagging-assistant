@@ -1,6 +1,6 @@
 import {BaseComponent} from "$lib/components/base/BaseComponent.js";
 import {QueryLexer, QuotedTermToken, TermToken, Token} from "$lib/booru/search/QueryLexer.js";
-import SearchSettings from "$lib/extension/settings/SearchSettings.js";
+import SearchSettings from "$lib/extension/settings/SearchSettings.ts";
 
 export class SearchWrapper extends BaseComponent {
   /** @type {HTMLInputElement|null} */
@@ -288,6 +288,10 @@ export class SearchWrapper extends BaseComponent {
     suggestionItem.classList.add('autocomplete__item', 'autocomplete__item--property');
     suggestionItem.dataset.value = suggestedTerm;
     suggestionItem.innerText = suggestedTerm;
+
+    const propertyIcon = document.createElement('i');
+    propertyIcon.classList.add('fa', 'fa-info-circle');
+    suggestionItem.insertAdjacentElement('afterbegin', propertyIcon);
 
     suggestionItem.addEventListener('mouseover', () => {
       SearchWrapper.#findAndResetSelectedSuggestion(suggestionItem);

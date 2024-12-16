@@ -1,5 +1,5 @@
 import {writable} from "svelte/store";
-import SearchSettings from "$lib/extension/settings/SearchSettings.js";
+import SearchSettings from "$lib/extension/settings/SearchSettings.ts";
 
 export const searchPropertiesSuggestionsEnabled = writable(false);
 
@@ -23,7 +23,7 @@ Promise.allSettled([
   });
 
   searchSettings.subscribe(settings => {
-    searchPropertiesSuggestionsEnabled.set(settings.suggestProperties);
-    searchPropertiesSuggestionsPosition.set(settings.suggestPropertiesPosition);
+    searchPropertiesSuggestionsEnabled.set(Boolean(settings.suggestProperties));
+    searchPropertiesSuggestionsPosition.set(settings.suggestPropertiesPosition || 'start');
   });
 })

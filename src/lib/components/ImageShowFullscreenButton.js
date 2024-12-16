@@ -1,6 +1,6 @@
 import {BaseComponent} from "$lib/components/base/BaseComponent.js";
 import {getComponent} from "$lib/components/base/ComponentUtils.js";
-import MiscSettings from "$lib/extension/settings/MiscSettings.js";
+import MiscSettings from "$lib/extension/settings/MiscSettings.ts";
 import {FullscreenViewer} from "$lib/components/FullscreenViewer.js";
 
 export class ImageShowFullscreenButton extends BaseComponent {

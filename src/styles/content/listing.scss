@@ -70,6 +70,11 @@
         color: colors.$tag-background;
       }
 
+      &[data-tag-category=error]:hover {
+        background: colors.$tag-error-text;
+        color: colors.$tag-error-background;
+      }
+
       &.is-missing:not(.is-added),
       &.is-present.is-removed {
         opacity: 0.5;

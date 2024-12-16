@@ -48,6 +48,7 @@ function wrapScriptIntoIIFE() {
  */
 function makeAliases(rootDir) {
   return {
+    "$config": path.resolve(rootDir, 'src/config'),
     "$lib": path.resolve(rootDir, 'src/lib'),
     "$entities": path.resolve(rootDir, 'src/lib/extension/entities'),
     "$styles": path.resolve(rootDir, 'src/styles'),
