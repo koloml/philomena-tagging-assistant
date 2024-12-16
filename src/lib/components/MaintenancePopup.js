@@ -3,6 +3,16 @@ import MaintenanceProfile from "$entities/MaintenanceProfile.ts";
 import {BaseComponent} from "$lib/components/base/BaseComponent.js";
 import {getComponent} from "$lib/components/base/ComponentUtils.js";
 import ScrapedAPI from "$lib/booru/scraped/ScrapedAPI.js";
+import {tagsBlacklist} from "$config/tags.ts";
+
+class BlackListedTagsEncounteredError extends Error {
+  /**
+   * @param {string} tagName
+   */
+  constructor(tagName) {
+    super(`This tag is blacklisted and prevents submission: ${tagName}`);
+  }
+}
 
 export class MaintenancePopup extends BaseComponent {
   /** @type {HTMLElement} */
@@ -10,6 +20,9 @@ export class MaintenancePopup extends BaseComponent {
 
   /** @type {HTMLElement[]} */
   #tagsList = [];
+
+  /** @type {Map<string, HTMLElement>} */
+  #suggestedInvalidTags = new Map();
 
   /** @type {MaintenanceProfile|null} */
   #activeProfile = null;
@@ -89,11 +102,16 @@ export class MaintenancePopup extends BaseComponent {
     /** @type {string[]} */
     const activeProfileTagsList = this.#activeProfile?.settings.tags || [];
 
-    for (let tagElement of this.#tagsList) {
+    for (const tagElement of this.#tagsList) {
+      tagElement.remove();
+    }
+
+    for (const tagElement of this.#suggestedInvalidTags.values()) {
       tagElement.remove();
     }
 
     this.#tagsList = new Array(activeProfileTagsList.length);
+    this.#suggestedInvalidTags.clear();
 
     const currentPostTags = this.#mediaBoxTools.mediaBox.tagsAndAliases;
 
@@ -109,6 +127,12 @@ export class MaintenancePopup extends BaseComponent {
         tagElement.classList.toggle('is-present', isPresent);
         tagElement.classList.toggle('is-missing', !isPresent);
         tagElement.classList.toggle('is-aliased', isPresent && currentPostTags.get(tagName) !== tagName);
+
+        // Just to prevent duplication, we need to include this tag to the map of suggested invalid tags
+        if (tagsBlacklist.includes(tagName)) {
+          MaintenancePopup.#markTagAsInvalid(tagElement);
+          this.#suggestedInvalidTags.set(tagName, tagElement);
+        }
       });
   }
 
@@ -188,6 +212,8 @@ export class MaintenancePopup extends BaseComponent {
 
     let maybeTagsAndAliasesAfterUpdate;
 
+    const shouldAutoRemove = await MaintenancePopup.#maintenanceSettings.resolveStripBlacklistedTags();
+
     try {
       maybeTagsAndAliasesAfterUpdate = await MaintenancePopup.#scrapedAPI.updateImageTags(
         this.#mediaBoxTools.mediaBox.imageId,
@@ -200,11 +226,27 @@ export class MaintenancePopup extends BaseComponent {
             tagsList.add(tagName);
           }
 
+          if (shouldAutoRemove) {
+            for (let tagName of tagsBlacklist) {
+              tagsList.delete(tagName);
+            }
+          } else {
+            for (let tagName of tagsList) {
+              if (tagsBlacklist.includes(tagName)) {
+                throw new BlackListedTagsEncounteredError(tagName);
+              }
+            }
+          }
+
           return tagsList;
         }
       );
     } catch (e) {
-      console.warn('Tags submission failed:', e);
+      if (e instanceof BlackListedTagsEncounteredError) {
+        this.#revealInvalidTags();
+      } else {
+        console.warn('Tags submission failed:', e);
+      }
 
       MaintenancePopup.#notifyAboutPendingSubmission(false);
       this.emit('maintenance-state-change', 'failed');
@@ -228,6 +270,36 @@ export class MaintenancePopup extends BaseComponent {
     this.#isSubmitting = false;
   }
 
+  #revealInvalidTags() {
+    const tagsAndAliases = this.#mediaBoxTools.mediaBox.tagsAndAliases;
+
+    if (!tagsAndAliases) {
+      return;
+    }
+
+    const firstTagInList = this.#tagsList[0];
+
+    for (let tagName of tagsBlacklist) {
+      if (tagsAndAliases.has(tagName)) {
+        if (this.#suggestedInvalidTags.has(tagName)) {
+          continue;
+        }
+
+        const tagElement = MaintenancePopup.#buildTagElement(tagName);
+        MaintenancePopup.#markTagAsInvalid(tagElement);
+        tagElement.classList.add('is-present');
+
+        this.#suggestedInvalidTags.set(tagName, tagElement);
+
+        if (firstTagInList && firstTagInList.isConnected) {
+          this.#tagsListElement.insertBefore(tagElement, firstTagInList);
+        } else {
+          this.#tagsListElement.appendChild(tagElement);
+        }
+      }
+    }
+  }
+
   /**
    * @return {boolean}
    */
@@ -246,6 +318,15 @@ export class MaintenancePopup extends BaseComponent {
     tagElement.dataset.name = tagName;
 
     return tagElement;
+  }
+
+  /**
+   * Marks the tag with red color.
+   * @param {HTMLElement} tagElement Element to mark.
+   */
+  static #markTagAsInvalid(tagElement) {
+    tagElement.dataset.tagCategory = 'error';
+    tagElement.setAttribute('data-tag-category', 'error');
   }
 
   /**

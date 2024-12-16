@@ -14,6 +14,7 @@ const config = {
       name: Date.now().toString(36)
     },
     alias: {
+      "$config": "./src/config",
       "$components": "./src/components",
       "$styles": "./src/styles",
       "$stores": "./src/stores",
