@@ -1,13 +1,13 @@
 import {BaseComponent} from "$lib/components/base/BaseComponent.js";
+import MiscSettings from "$lib/extension/settings/MiscSettings.ts";
 
 export class FullscreenViewer extends BaseComponent {
   /** @type {HTMLVideoElement} */
   #videoElement = document.createElement('video');
   /** @type {HTMLImageElement} */
   #imageElement = document.createElement('img');
-
   #spinnerElement = document.createElement('i');
-
+  #sizeSelectorElement = document.createElement('select');
   /** @type {number|null} */
   #touchId = null;
   /** @type {number|null} */
@@ -22,9 +22,22 @@ export class FullscreenViewer extends BaseComponent {
    */
   build() {
     this.container.classList.add('fullscreen-viewer');
-    this.container.append(this.#spinnerElement);
+
+    this.container.append(
+      this.#spinnerElement,
+      this.#sizeSelectorElement,
+    );
 
     this.#spinnerElement.classList.add('spinner', 'fa', 'fa-circle-notch', 'fa-spin');
+    this.#sizeSelectorElement.classList.add('size-selector', 'input');
+
+    for (const [sizeKey, sizeName] of Object.entries(FullscreenViewer.#previewSizes)) {
+      const sizeOptionElement = document.createElement('option');
+      sizeOptionElement.value = sizeKey;
+      sizeOptionElement.innerText = sizeName;
+
+      this.#sizeSelectorElement.append(sizeOptionElement);
+    }
   }
 
   /**
@@ -40,6 +53,11 @@ export class FullscreenViewer extends BaseComponent {
 
     this.#videoElement.addEventListener('loadeddata', this.#onLoaded.bind(this));
     this.#imageElement.addEventListener('load', this.#onLoaded.bind(this));
+
+    FullscreenViewer.#miscSettings
+      .resolveFullscreenViewerPreviewSize()
+      .then(this.#onSizeResolved.bind(this))
+      .then(this.#watchForSizeSelectionChanges.bind(this));
   }
 
   #onLoaded() {
@@ -163,6 +181,39 @@ export class FullscreenViewer extends BaseComponent {
     }
   }
 
+  /**
+   * @param {import("$lib/extension/settings/MiscSettings.js").FullscreenViewerSize} size
+   */
+  #onSizeResolved(size) {
+    this.#sizeSelectorElement.value = size;
+  }
+
+  #watchForSizeSelectionChanges() {
+    let lastActiveSize = this.#sizeSelectorElement.value;
+
+    FullscreenViewer.#miscSettings.subscribe(settings => {
+      const targetSize = settings.fullscreenViewerSize;
+
+      if (!targetSize || lastActiveSize === targetSize) {
+        return;
+      }
+
+      lastActiveSize = targetSize;
+      this.#sizeSelectorElement.value = targetSize;
+    });
+
+    this.#sizeSelectorElement.addEventListener('input', () => {
+      const targetSize = this.#sizeSelectorElement.value;
+
+      if (!targetSize || targetSize === lastActiveSize || !(targetSize in FullscreenViewer.#previewSizes)) {
+        return;
+      }
+
+      lastActiveSize = targetSize;
+      void FullscreenViewer.#miscSettings.setFullscreenViewerPreviewSize(targetSize);
+    });
+  }
+
   #close() {
     this.container.classList.remove(FullscreenViewer.#shownState);
     document.body.style.overflow = null;
@@ -214,9 +265,21 @@ export class FullscreenViewer extends BaseComponent {
     return url.endsWith('.mp4') || url.endsWith('.webm');
   }
 
+  static #miscSettings = new MiscSettings();
+
   static #offsetProperty = '--offset';
   static #opacityProperty = '--opacity';
   static #shownState = 'shown';
   static #swipeState = 'swiped';
   static #minRequiredDistance = 50;
+
+  /**
+   * @type {Record<import("$lib/extension/settings/MiscSettings.js").FullscreenViewerSize, string>}
+   */
+  static #previewSizes = {
+    full: 'Full',
+    large: 'Large',
+    medium: 'Medium',
+    small: 'Small'
+  }
 }

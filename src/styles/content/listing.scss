@@ -199,6 +199,12 @@
     transition: opacity .25s ease;
   }
 
+  .size-selector {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+  }
+
   &.shown {
     opacity: var(--opacity, 1);
     pointer-events: initial;
