@@ -33,7 +33,7 @@ export class ImageShowFullscreenButton extends BaseComponent {
         })
         .then(() => {
           ImageShowFullscreenButton.#miscSettings.subscribe(settings => {
-            this.#isFullscreenButtonEnabled = settings.fullscreenViewer;
+            this.#isFullscreenButtonEnabled = settings.fullscreenViewer ?? true;
             this.#updateFullscreenButtonVisibility();
           })
         })
