@@ -16,6 +16,7 @@ export class FullscreenViewer extends BaseComponent {
   #startY = null;
   /** @type {boolean|null} */
   #isClosingSwipeStarted = null;
+  #isSizeFetched = false;
 
   /**
    * @protected
@@ -187,6 +188,9 @@ export class FullscreenViewer extends BaseComponent {
    */
   #onSizeResolved(size) {
     this.#sizeSelectorElement.value = size;
+    this.#isSizeFetched = true;
+
+    this.emit('size-loaded');
   }
 
   #watchForSizeSelectionChanges() {
@@ -227,9 +231,42 @@ export class FullscreenViewer extends BaseComponent {
   }
 
   /**
-   * @param {string} url
+   * @param {App.ImageURIs} imageUris
+   * @return {Promise<string|null>}
    */
-  show(url) {
+  async #resolveCurrentSelectedSizeUrl(imageUris) {
+    if (!this.#isSizeFetched) {
+      await new Promise(resolve => this.on('size-loaded', resolve))
+    }
+
+    let targetSize = this.#sizeSelectorElement.value;
+
+    if (!imageUris.hasOwnProperty(targetSize)) {
+      targetSize = FullscreenViewer.#fallbackSize;
+    }
+
+    if (!imageUris.hasOwnProperty(targetSize)) {
+      targetSize = Object.keys(imageUris)[0];
+    }
+
+    if (!targetSize) {
+      return null;
+    }
+
+    return imageUris[targetSize];
+  }
+
+  /**
+   * @param {App.ImageURIs} imageUris
+   */
+  async show(imageUris) {
+    const url = await this.#resolveCurrentSelectedSizeUrl(imageUris);
+
+    if (!url) {
+      console.warn('Failed to resolve media for the viewer!');
+      return;
+    }
+
     this.container.classList.add('loading');
 
     requestAnimationFrame(() => {
@@ -283,4 +320,6 @@ export class FullscreenViewer extends BaseComponent {
     medium: 'Medium',
     small: 'Small'
   }
+
+  static #fallbackSize = 'large';
 }

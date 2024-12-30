@@ -25,6 +25,13 @@ declare global {
     interface EntityNamesMap {
       profiles: MaintenanceProfile;
     }
+
+    interface ImageURIs {
+      full: string;
+      large: string;
+      medium: string;
+      small: string;
+    }
   }
 }
 

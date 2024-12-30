@@ -47,7 +47,7 @@ export class ImageShowFullscreenButton extends BaseComponent {
   #onButtonClicked() {
     ImageShowFullscreenButton
       .#resolveViewer()
-      .show(this.#mediaBoxTools.mediaBox.imageLinks.large);
+      .show(this.#mediaBoxTools.mediaBox.imageLinks);
   }
 
   /**
