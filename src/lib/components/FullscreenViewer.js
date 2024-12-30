@@ -17,6 +17,8 @@ export class FullscreenViewer extends BaseComponent {
   /** @type {boolean|null} */
   #isClosingSwipeStarted = null;
   #isSizeFetched = false;
+  /** @type {App.ImageURIs|null} */
+  #currentURIs = null;
 
   /**
    * @protected
@@ -210,6 +212,10 @@ export class FullscreenViewer extends BaseComponent {
     this.#sizeSelectorElement.addEventListener('input', () => {
       const targetSize = this.#sizeSelectorElement.value;
 
+      if (this.#currentURIs) {
+        void this.show(this.#currentURIs);
+      }
+
       if (!targetSize || targetSize === lastActiveSize || !(targetSize in FullscreenViewer.#previewSizes)) {
         return;
       }
@@ -220,6 +226,8 @@ export class FullscreenViewer extends BaseComponent {
   }
 
   #close() {
+    this.#currentURIs = null;
+
     this.container.classList.remove(FullscreenViewer.#shownState);
     document.body.style.overflow = null;
 
@@ -260,6 +268,8 @@ export class FullscreenViewer extends BaseComponent {
    * @param {App.ImageURIs} imageUris
    */
   async show(imageUris) {
+    this.#currentURIs = imageUris;
+
     const url = await this.#resolveCurrentSelectedSizeUrl(imageUris);
 
     if (!url) {
