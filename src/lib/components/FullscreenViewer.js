@@ -53,6 +53,7 @@ export class FullscreenViewer extends BaseComponent {
 
     this.#videoElement.addEventListener('loadeddata', this.#onLoaded.bind(this));
     this.#imageElement.addEventListener('load', this.#onLoaded.bind(this));
+    this.#sizeSelectorElement.addEventListener('click', event => event.stopPropagation());
 
     FullscreenViewer.#miscSettings
       .resolveFullscreenViewerPreviewSize()
