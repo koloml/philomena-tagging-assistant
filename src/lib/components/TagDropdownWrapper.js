@@ -5,7 +5,7 @@ import {getComponent} from "$lib/components/base/ComponentUtils.js";
 
 const isTagEditorProcessedKey = Symbol();
 
-class TagDropdownWrapper extends BaseComponent {
+export class TagDropdownWrapper extends BaseComponent {
   /**
    * Container with dropdown elements to insert options into.
    * @type {HTMLElement}
@@ -53,7 +53,7 @@ class TagDropdownWrapper extends BaseComponent {
     });
   }
 
-  get #tagName() {
+  get tagName() {
     return this.container.dataset.tagName;
   }
 
@@ -89,7 +89,7 @@ class TagDropdownWrapper extends BaseComponent {
       const profileName = this.#activeProfile.settings.name;
       let profileSpecificButtonText = `Add to profile "${profileName}"`;
 
-      if (this.#activeProfile.settings.tags.includes(this.#tagName)) {
+      if (this.#activeProfile.settings.tags.includes(this.tagName)) {
         profileSpecificButtonText = `Remove from profile "${profileName}"`;
       }
 
@@ -108,7 +108,7 @@ class TagDropdownWrapper extends BaseComponent {
   async #onAddToNewClicked() {
     const profile = new MaintenanceProfile(crypto.randomUUID(), {
       name: 'Temporary Profile (' + (new Date().toISOString()) + ')',
-      tags: [this.#tagName]
+      tags: [this.tagName]
     });
 
     await profile.save();
@@ -121,7 +121,7 @@ class TagDropdownWrapper extends BaseComponent {
     }
 
     const tagsList = new Set(this.#activeProfile.settings.tags);
-    const targetTagName = this.#tagName;
+    const targetTagName = this.tagName;
 
     if (tagsList.has(targetTagName)) {
       tagsList.delete(targetTagName);
