@@ -16,26 +16,30 @@
     <strong>Group Name:</strong>
     <div>{group.settings.name}</div>
 </div>
-<div class="block">
-    <strong>Tags:</strong>
-    <TagsColorContainer targetCategory="{group.settings.category}">
-        <div class="tags-list">
-            {#each sortedTagsList as tagName}
-                <span class="tag">{tagName}</span>
-            {/each}
-        </div>
-    </TagsColorContainer>
-</div>
-<div class="block">
-    <strong>Prefixes:</strong>
-    <TagsColorContainer targetCategory="{group.settings.category}">
-        <div class="tags-list">
-            {#each sortedPrefixes as prefixName}
-                <span class="tag">{prefixName}*</span>
-            {/each}
-        </div>
-    </TagsColorContainer>
-</div>
+{#if sortedTagsList.length}
+    <div class="block">
+        <strong>Tags:</strong>
+        <TagsColorContainer targetCategory="{group.settings.category}">
+            <div class="tags-list">
+                {#each sortedTagsList as tagName}
+                    <span class="tag">{tagName}</span>
+                {/each}
+            </div>
+        </TagsColorContainer>
+    </div>
+{/if}
+{#if sortedPrefixes.length}
+    <div class="block">
+        <strong>Prefixes:</strong>
+        <TagsColorContainer targetCategory="{group.settings.category}">
+            <div class="tags-list">
+                {#each sortedPrefixes as prefixName}
+                    <span class="tag">{prefixName}*</span>
+                {/each}
+            </div>
+        </TagsColorContainer>
+    </div>
+{/if}
 
 <style lang="scss">
     .tags-list {
