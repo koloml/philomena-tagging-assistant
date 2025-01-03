@@ -2,8 +2,10 @@ import {BaseComponent} from "$lib/components/base/BaseComponent.js";
 import MaintenanceProfile from "$entities/MaintenanceProfile.ts";
 import MaintenanceSettings from "$lib/extension/settings/MaintenanceSettings.js";
 import {getComponent} from "$lib/components/base/ComponentUtils.js";
+import CustomCategoriesResolver from "$lib/extension/CustomCategoriesResolver";
 
 const isTagEditorProcessedKey = Symbol();
+const categoriesResolver = new CustomCategoriesResolver();
 
 export class TagDropdownWrapper extends BaseComponent {
   /**
@@ -235,7 +237,10 @@ export function wrapTagDropdown(element) {
     return;
   }
 
-  new TagDropdownWrapper(element).initialize();
+  const tagDropdown = new TagDropdownWrapper(element);
+  tagDropdown.initialize();
+
+  categoriesResolver.addElement(tagDropdown);
 }
 
 export function watchTagDropdownsInTagsEditor() {
