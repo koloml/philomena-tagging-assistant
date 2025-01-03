@@ -36,6 +36,11 @@ export class TagDropdownWrapper extends BaseComponent {
    */
   #isEntered = false;
 
+  /**
+   * @type {string|undefined|null}
+   */
+  #originalCategory = null;
+
   build() {
     this.#dropdownContainer = this.container.querySelector('.dropdown__content');
   }
@@ -55,6 +60,41 @@ export class TagDropdownWrapper extends BaseComponent {
 
   get tagName() {
     return this.container.dataset.tagName;
+  }
+
+  /**
+   * @return {string|undefined}
+   */
+  get tagCategory() {
+    return this.container.dataset.tagCategory;
+  }
+
+  /**
+   * @param {string|undefined} targetCategory
+   */
+  set tagCategory(targetCategory) {
+    // Make sure original category is properly stored.
+    this.originalCategory;
+
+    this.container.dataset.tagCategory = targetCategory;
+
+    if (targetCategory) {
+      this.container.setAttribute('data-tag-category', targetCategory);
+      return;
+    }
+
+    this.container.removeAttribute('data-tag-category');
+  }
+
+  /**
+   * @return {string|undefined}
+   */
+  get originalCategory() {
+    if (this.#originalCategory === null) {
+      this.#originalCategory = this.tagCategory;
+    }
+
+    return this.#originalCategory;
   }
 
   #onDropdownEntered() {
