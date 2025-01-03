@@ -8,6 +8,7 @@ export class FullscreenViewer extends BaseComponent {
   #imageElement = document.createElement('img');
   #spinnerElement = document.createElement('i');
   #sizeSelectorElement = document.createElement('select');
+  #closeButtonElement = document.createElement('i');
   /** @type {number|null} */
   #touchId = null;
   /** @type {number|null} */
@@ -29,9 +30,11 @@ export class FullscreenViewer extends BaseComponent {
     this.container.append(
       this.#spinnerElement,
       this.#sizeSelectorElement,
+      this.#closeButtonElement,
     );
 
     this.#spinnerElement.classList.add('spinner', 'fa', 'fa-circle-notch', 'fa-spin');
+    this.#closeButtonElement.classList.add('close', 'fa', 'fa-xmark');
     this.#sizeSelectorElement.classList.add('size-selector', 'input');
 
     for (const [sizeKey, sizeName] of Object.entries(FullscreenViewer.#previewSizes)) {
