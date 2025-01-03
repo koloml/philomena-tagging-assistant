@@ -1,6 +1,6 @@
 <script>
-    import { goto } from "$app/navigation";
-    import { page } from "$app/stores";
+    import {goto} from "$app/navigation";
+    import {page} from "$app/stores";
     import TagsColorContainer from "$components/tags/TagsColorContainer.svelte";
     import FormContainer from "$components/ui/forms/FormContainer.svelte";
     import FormControl from "$components/ui/forms/FormControl.svelte";
@@ -10,7 +10,7 @@
     import MenuItem from "$components/ui/menu/MenuItem.svelte";
     import TagsEditor from "$components/web-components/TagsEditor.svelte";
     import TagGroup from "$entities/TagGroup.ts";
-    import { tagGroupsStore } from "$stores/tag-groups-store.js";
+    import {tagGroupsStore} from "$stores/tag-groups-store.js";
 
     const groupId = $page.params.id;
     /** @type {TagGroup|null} */
@@ -30,8 +30,8 @@
 
         if (targetGroup) {
             groupName = targetGroup.settings.name;
-            tagsList = [ ...targetGroup.settings.tags ].sort((a, b) => a.localeCompare(b));
-            prefixesList = [ ...targetGroup.settings.prefixes ].sort((a, b) => a.localeCompare(b));
+            tagsList = [...targetGroup.settings.tags].sort((a, b) => a.localeCompare(b));
+            prefixesList = [...targetGroup.settings.prefixes].sort((a, b) => a.localeCompare(b));
             tagCategory = targetGroup.settings.category;
         } else {
             goto('/features/groups');
@@ -45,12 +45,12 @@
         }
 
         targetGroup.settings.name = groupName;
-        targetGroup.settings.tags = [ ...tagsList ];
-        targetGroup.settings.prefixes = [ ...prefixesList ];
+        targetGroup.settings.tags = [...tagsList];
+        targetGroup.settings.prefixes = [...prefixesList];
         targetGroup.settings.category = tagCategory;
 
         await targetGroup.save();
-        await goto(`/features/groups/${ targetGroup.id }`);
+        await goto(`/features/groups/${targetGroup.id}`);
     }
 </script>
 
@@ -69,6 +69,8 @@
         <FormControl label="Tags">
             <TagsEditor bind:tags={tagsList}/>
         </FormControl>
+    </TagsColorContainer>
+    <TagsColorContainer targetCategory="{tagCategory}">
         <FormControl label="Tag Prefixes">
             <TagsEditor bind:tags={prefixesList}/>
         </FormControl>
