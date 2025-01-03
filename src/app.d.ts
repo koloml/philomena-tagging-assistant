@@ -27,6 +27,13 @@ declare global {
       profiles: MaintenanceProfile;
       groups: TagGroup;
     }
+
+    interface ImageURIs {
+      full: string;
+      large: string;
+      medium: string;
+      small: string;
+    }
   }
 }
 
