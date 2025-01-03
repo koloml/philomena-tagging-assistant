@@ -150,7 +150,8 @@ export class TagDropdownWrapper extends BaseComponent {
   async #onAddToNewClicked() {
     const profile = new MaintenanceProfile(crypto.randomUUID(), {
       name: 'Temporary Profile (' + (new Date().toISOString()) + ')',
-      tags: [this.tagName]
+      tags: [this.tagName],
+      temporary: true,
     });
 
     await profile.save();
