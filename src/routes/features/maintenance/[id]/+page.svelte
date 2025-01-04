@@ -5,18 +5,18 @@
     import {goto} from "$app/navigation";
     import {activeProfileStore, maintenanceProfilesStore} from "$stores/maintenance-profiles-store.js";
     import ProfileView from "$components/maintenance/ProfileView.svelte";
+    import MenuCheckboxItem from "$components/ui/menu/MenuCheckboxItem.svelte";
 
     const profileId = $page.params.id;
     /** @type {import('$entities/MaintenanceProfile.ts').default|null} */
     let profile = null;
-    let isActiveProfile = false;
 
-    if (profileId === 'new') {
+    if (profileId==='new') {
         goto('/maintenance/profiles/new/edit');
     }
 
     $: {
-        const resolvedProfile = $maintenanceProfilesStore.find(profile => profile.id === profileId);
+        const resolvedProfile = $maintenanceProfilesStore.find(profile => profile.id===profileId);
 
         if (resolvedProfile) {
             profile = resolvedProfile;
@@ -26,14 +26,16 @@
         }
     }
 
-    $: isActiveProfile = $activeProfileStore === profileId;
+    let isActiveProfile = $activeProfileStore===profileId;
 
-    function activateProfile() {
-        if (isActiveProfile) {
-            return;
+    $: {
+        if (isActiveProfile && $activeProfileStore!==profileId) {
+            $activeProfileStore = profileId;
         }
 
-        $activeProfileStore = profileId;
+        if (!isActiveProfile && $activeProfileStore===profileId) {
+            $activeProfileStore = null;
+        }
     }
 </script>
 
@@ -47,13 +49,9 @@
 <Menu>
     <hr>
     <MenuItem icon="wrench" href="/features/maintenance/{profileId}/edit">Edit Profile</MenuItem>
-    <MenuItem icon="tag" href="#" on:click={activateProfile}>
-        {#if isActiveProfile}
-            <span>Profile is Active</span>
-        {:else}
-            <span>Activate Profile</span>
-        {/if}
-    </MenuItem>
+    <MenuCheckboxItem bind:checked={isActiveProfile}>
+        Activate Profile
+    </MenuCheckboxItem>
     <MenuItem icon="file-export" href="/features/maintenance/{profileId}/export">
         Export Profile
     </MenuItem>
