@@ -6,7 +6,6 @@ export default class CustomCategoriesResolver {
   #tagCategories = new Map<string, string>();
   #compiledRegExps = new Map<RegExp, string>();
   #tagDropdowns: TagDropdownWrapper[] = [];
-  #lastProcessedIndex = -1;
   #nextQueuedUpdate = -1;
 
   constructor() {
@@ -34,10 +33,7 @@ export default class CustomCategoriesResolver {
   }
 
   #updateUnprocessedTags() {
-    const startIndex = Math.max(0, this.#lastProcessedIndex);
-
     this.#tagDropdowns
-      .slice(startIndex)
       .filter(CustomCategoriesResolver.#skipTagsWithOriginalCategory)
       .filter(this.#applyCustomCategoryForExactMatches.bind(this))
       .filter(this.#matchCustomCategoryByRegExp.bind(this))
@@ -79,7 +75,6 @@ export default class CustomCategoriesResolver {
   #onTagGroupsReceived(tagGroups: TagGroup[]) {
     this.#tagCategories.clear();
     this.#compiledRegExps.clear();
-    this.#lastProcessedIndex = -1;
 
     if (!tagGroups.length) {
       return;
