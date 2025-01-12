@@ -12,7 +12,7 @@
     let isActiveProfile = false;
 
     if (profileId === 'new') {
-        goto('/maintenance/profiles/new/edit');
+        goto('/features/maintenance/new/edit');
     }
 
     $: {
