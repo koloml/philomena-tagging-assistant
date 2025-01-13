@@ -1,6 +1,7 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 import MaintenanceProfile from "$entities/MaintenanceProfile.ts";
+import type TagGroup from "$entities/TagGroup.ts";
 
 declare global {
   namespace App {
@@ -24,6 +25,14 @@ declare global {
 
     interface EntityNamesMap {
       profiles: MaintenanceProfile;
+      groups: TagGroup;
+    }
+
+    interface ImageURIs {
+      full: string;
+      large: string;
+      medium: string;
+      small: string;
     }
   }
 }

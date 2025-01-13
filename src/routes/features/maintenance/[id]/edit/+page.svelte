@@ -42,6 +42,7 @@
 
         targetProfile.settings.name = profileName;
         targetProfile.settings.tags = [...tagsList];
+        targetProfile.settings.temporary = false;
 
         await targetProfile.save();
         await goto('/features/maintenance/' + targetProfile.id);

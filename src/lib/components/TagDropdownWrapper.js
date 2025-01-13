@@ -2,10 +2,12 @@ import {BaseComponent} from "$lib/components/base/BaseComponent.js";
 import MaintenanceProfile from "$entities/MaintenanceProfile.ts";
 import MaintenanceSettings from "$lib/extension/settings/MaintenanceSettings.ts";
 import {getComponent} from "$lib/components/base/ComponentUtils.js";
+import CustomCategoriesResolver from "$lib/extension/CustomCategoriesResolver";
 
 const isTagEditorProcessedKey = Symbol();
+const categoriesResolver = new CustomCategoriesResolver();
 
-class TagDropdownWrapper extends BaseComponent {
+export class TagDropdownWrapper extends BaseComponent {
   /**
    * Container with dropdown elements to insert options into.
    * @type {HTMLElement}
@@ -36,6 +38,11 @@ class TagDropdownWrapper extends BaseComponent {
    */
   #isEntered = false;
 
+  /**
+   * @type {string|undefined|null}
+   */
+  #originalCategory = null;
+
   build() {
     this.#dropdownContainer = this.container.querySelector('.dropdown__content');
   }
@@ -53,8 +60,43 @@ class TagDropdownWrapper extends BaseComponent {
     });
   }
 
-  get #tagName() {
+  get tagName() {
     return this.container.dataset.tagName;
+  }
+
+  /**
+   * @return {string|undefined}
+   */
+  get tagCategory() {
+    return this.container.dataset.tagCategory;
+  }
+
+  /**
+   * @param {string|undefined} targetCategory
+   */
+  set tagCategory(targetCategory) {
+    // Make sure original category is properly stored.
+    this.originalCategory;
+
+    this.container.dataset.tagCategory = targetCategory;
+
+    if (targetCategory) {
+      this.container.setAttribute('data-tag-category', targetCategory);
+      return;
+    }
+
+    this.container.removeAttribute('data-tag-category');
+  }
+
+  /**
+   * @return {string|undefined}
+   */
+  get originalCategory() {
+    if (this.#originalCategory === null) {
+      this.#originalCategory = this.tagCategory;
+    }
+
+    return this.#originalCategory;
   }
 
   #onDropdownEntered() {
@@ -89,7 +131,7 @@ class TagDropdownWrapper extends BaseComponent {
       const profileName = this.#activeProfile.settings.name;
       let profileSpecificButtonText = `Add to profile "${profileName}"`;
 
-      if (this.#activeProfile.settings.tags.includes(this.#tagName)) {
+      if (this.#activeProfile.settings.tags.includes(this.tagName)) {
         profileSpecificButtonText = `Remove from profile "${profileName}"`;
       }
 
@@ -108,7 +150,8 @@ class TagDropdownWrapper extends BaseComponent {
   async #onAddToNewClicked() {
     const profile = new MaintenanceProfile(crypto.randomUUID(), {
       name: 'Temporary Profile (' + (new Date().toISOString()) + ')',
-      tags: [this.#tagName]
+      tags: [this.tagName],
+      temporary: true,
     });
 
     await profile.save();
@@ -121,7 +164,7 @@ class TagDropdownWrapper extends BaseComponent {
     }
 
     const tagsList = new Set(this.#activeProfile.settings.tags);
-    const targetTagName = this.#tagName;
+    const targetTagName = this.tagName;
 
     if (tagsList.has(targetTagName)) {
       tagsList.delete(targetTagName);
@@ -195,7 +238,10 @@ export function wrapTagDropdown(element) {
     return;
   }
 
-  new TagDropdownWrapper(element).initialize();
+  const tagDropdown = new TagDropdownWrapper(element);
+  tagDropdown.initialize();
+
+  categoriesResolver.addElement(tagDropdown);
 }
 
 export function watchTagDropdownsInTagsEditor() {

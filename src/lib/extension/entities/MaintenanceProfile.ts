@@ -4,6 +4,7 @@ import EntitiesController from "$lib/extension/EntitiesController.ts";
 export interface MaintenanceProfileSettings {
   name: string;
   tags: string[];
+  temporary: boolean;
 }
 
 /**
@@ -17,8 +18,17 @@ export default class MaintenanceProfile extends StorageEntity<MaintenanceProfile
   constructor(id: string, settings: Partial<MaintenanceProfileSettings>) {
     super(id, {
       name: settings.name || '',
-      tags: settings.tags || []
+      tags: settings.tags || [],
+      temporary: settings.temporary ?? false
     });
+  }
+
+  async save(): Promise<void> {
+    if (this.settings.temporary && !this.settings.tags?.length) {
+      return this.delete();
+    }
+
+    return super.save();
   }
 
   public static readonly _entityName = "profiles";

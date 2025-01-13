@@ -13,6 +13,15 @@ const entitiesExporters: ExportersMap = {
       tags: entity.settings.tags,
     }
   },
+  groups: entity => {
+    return {
+      v: 1,
+      id: entity.id,
+      name: entity.settings.name,
+      tags: entity.settings.tags,
+      prefixes: entity.settings.prefixes,
+    }
+  }
 };
 
 export function exportEntityToObject(entityInstance: StorageEntity<any>, entityName: string): Record<string, any> {
