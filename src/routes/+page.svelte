@@ -22,6 +22,7 @@
         <hr>
     {/if}
     <MenuItem href="/features/maintenance">Tagging Profiles</MenuItem>
+    <MenuItem href="/features/groups">Tag Groups</MenuItem>
     <hr>
     <MenuItem href="/preferences">Preferences</MenuItem>
     <MenuItem href="/about">About</MenuItem>

@@ -56,7 +56,7 @@ export class MediaBoxWrapper extends BaseComponent {
   }
 
   /**
-   * @return {ImageURIs}
+   * @return {App.ImageURIs}
    */
   get imageLinks() {
     return JSON.parse(this.#thumbnailContainer.dataset.uris);
@@ -100,10 +100,3 @@ export function calculateMediaBoxesPositions(mediaBoxesList) {
     }
   })
 }
-
-/**
- * @typedef {Object} ImageURIs
- * @property {string} full
- * @property {string} large
- * @property {string} small
- */
