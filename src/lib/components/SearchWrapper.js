@@ -351,8 +351,10 @@ export class SearchWrapper extends BaseComponent {
   static #typeDate = Symbol();
   static #typeLiteral = Symbol();
   static #typePersonal = Symbol();
+  static #typeBoolean = Symbol();
 
   static #properties = new Map([
+    ['animated', SearchWrapper.#typeBoolean],
     ['aspect_ratio', SearchWrapper.#typeNumeric],
     ['body_type_tag_count', SearchWrapper.#typeNumeric],
     ['character_tag_count', SearchWrapper.#typeNumeric],
@@ -362,22 +364,29 @@ export class SearchWrapper extends BaseComponent {
     ['created_at', SearchWrapper.#typeDate],
     ['description', SearchWrapper.#typeLiteral],
     ['downvotes', SearchWrapper.#typeNumeric],
+    ['duration', SearchWrapper.#typeNumeric],
     ['error_tag_count', SearchWrapper.#typeNumeric],
     ['faved_by', SearchWrapper.#typeLiteral],
     ['faved_by_id', SearchWrapper.#typeNumeric],
     ['faves', SearchWrapper.#typeNumeric],
+    ['file_name', SearchWrapper.#typeLiteral],
     ['first_seen_at', SearchWrapper.#typeDate],
     ['height', SearchWrapper.#typeNumeric],
     ['id', SearchWrapper.#typeNumeric],
     ['oc_tag_count', SearchWrapper.#typeNumeric],
     ['orig_sha512_hash', SearchWrapper.#typeLiteral],
+    ['original_format', SearchWrapper.#typeLiteral],
+    ['pixels', SearchWrapper.#typeNumeric],
     ['rating_tag_count', SearchWrapper.#typeNumeric],
     ['score', SearchWrapper.#typeNumeric],
     ['sha512_hash', SearchWrapper.#typeLiteral],
+    ['size', SearchWrapper.#typeNumeric],
+    ['source_count', SearchWrapper.#typeNumeric],
     ['source_url', SearchWrapper.#typeLiteral],
     ['species_tag_count', SearchWrapper.#typeNumeric],
     ['spoiler_tag_count', SearchWrapper.#typeNumeric],
     ['tag_count', SearchWrapper.#typeNumeric],
+    ['updated_at', SearchWrapper.#typeDate],
     ['uploader', SearchWrapper.#typeLiteral],
     ['uploader_id', SearchWrapper.#typeNumeric],
     ['upvotes', SearchWrapper.#typeNumeric],
@@ -401,6 +410,10 @@ export class SearchWrapper extends BaseComponent {
       'uploads',
       'upvotes',
       'watched',
+    ]],
+    [SearchWrapper.#typeBoolean, [
+      'true',
+      'false',
     ]]
   ]);
 }
