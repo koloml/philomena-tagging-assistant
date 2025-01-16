@@ -33,7 +33,7 @@ export class ImageShowFullscreenButton extends BaseComponent {
         })
         .then(() => {
           ImageShowFullscreenButton.#miscSettings.subscribe(settings => {
-            this.#isFullscreenButtonEnabled = settings.fullscreenViewer;
+            this.#isFullscreenButtonEnabled = settings.fullscreenViewer ?? true;
             this.#updateFullscreenButtonVisibility();
           })
         })
@@ -47,7 +47,7 @@ export class ImageShowFullscreenButton extends BaseComponent {
   #onButtonClicked() {
     ImageShowFullscreenButton
       .#resolveViewer()
-      .show(this.#mediaBoxTools.mediaBox.imageLinks.large);
+      .show(this.#mediaBoxTools.mediaBox.imageLinks);
   }
 
   /**

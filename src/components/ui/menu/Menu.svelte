@@ -3,7 +3,7 @@
 </nav>
 
 <style lang="scss">
-    @use 'src/styles/colors';
+    @use '$styles/colors';
 
     nav {
         display: flex;

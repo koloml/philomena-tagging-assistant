@@ -1,0 +1,40 @@
+@use '../colors';
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+body {
+  width: 320px;
+
+  // Hacky class which is added by the JavaScript indicating that page was (probably) opened in the tab
+  &.is-in-tab {
+    width: 100%;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+}
+
+html, body {
+  background-color: colors.$background;
+  color: colors.$text;
+  font-size: 16px;
+  font-family: verdana, arial, helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: colors.$link;
+  text-decoration: none;
+
+  &:hover, &:focus {
+    color: colors.$link-hover;
+  }
+}

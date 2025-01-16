@@ -23,7 +23,7 @@
 </script>
 
 <MenuLink {href}>
-    <input type="checkbox" {name} {value} {checked} on:input on:click|stopPropagation>
+    <input type="checkbox" {name} {value} bind:checked={checked} on:input on:click|stopPropagation>
     <slot></slot>
 </MenuLink>
 

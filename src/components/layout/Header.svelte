@@ -3,7 +3,7 @@
 </header>
 
 <style lang="scss">
-    @use "src/styles/colors";
+    @use "$styles/colors";
 
     header {
         background: colors.$header;
