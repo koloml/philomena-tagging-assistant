@@ -8,7 +8,7 @@
 </div>
 
 <style lang="scss">
-    @use '../../styles/colors';
+    @use '$styles/colors';
 
     .tag-color-container:is(.tag-color-container--rating) :global(.tag) {
         background-color: colors.$tag-rating-background;

@@ -113,7 +113,7 @@
 {/if}
 
 <style lang="scss">
-    @use '../../../../styles/colors';
+    @use '$styles/colors';
 
     .error, .warning {
         padding: 5px 24px;

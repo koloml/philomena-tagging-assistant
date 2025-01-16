@@ -23,7 +23,7 @@
 </svelte:element>
 
 <style lang="scss">
-    @use '../../../styles/colors';
+    @use '$styles/colors';
 
     .menu-item {
         display: flex;

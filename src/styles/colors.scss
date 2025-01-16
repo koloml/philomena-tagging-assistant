@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 $background: #15121a;
 
 $text: #dadada;
@@ -26,25 +28,25 @@ $tag-count-background: #2d6236;
 $tag-text: #4aa158;
 
 $tag-rating-text: #418dd9;
-$tag-rating-background: darken($tag-rating-text, 35%);
+$tag-rating-background: color.adjust($tag-rating-text, $lightness: -35%);
 $tag-spoiler-text: #d49b39;
-$tag-spoiler-background: darken($tag-spoiler-text, 34%);
+$tag-spoiler-background: color.adjust($tag-spoiler-text, $lightness: -34%);
 $tag-origin-text: #6f66d6;
-$tag-origin-background: darken($tag-origin-text, 40%);
+$tag-origin-background: color.adjust($tag-origin-text, $lightness: -40%);
 $tag-oc-text: #b157b7;
-$tag-oc-background: darken($tag-oc-text, 33%);
+$tag-oc-background: color.adjust($tag-oc-text, $lightness: -33%);
 $tag-error-text: #d45460;
-$tag-error-background: desaturate(darken($tag-error-text, 38%), 6%);
+$tag-error-background: color.adjust($tag-error-text, $lightness: -38%, $saturation: -6%, $space: hsl);
 $tag-character-text: #4aaabf;
-$tag-character-background: darken($tag-character-text, 33%);
+$tag-character-background: color.adjust($tag-character-text, $lightness: -33%);
 $tag-content-official-text: #b9b541;
-$tag-content-official-background: desaturate(darken($tag-content-official-text, 29%),2%);
+$tag-content-official-background: color.adjust($tag-content-official-text, $lightness: -29%, $saturation: -2%, $space: hsl);
 $tag-content-fanmade-text: #cc8eb5;
-$tag-content-fanmade-background: darken($tag-content-fanmade-text, 40%);
+$tag-content-fanmade-background: color.adjust($tag-content-fanmade-text, $lightness: -40%);
 $tag-species-text: #b16b50;
-$tag-species-background: darken($tag-species-text, 35%);
+$tag-species-background: color.adjust($tag-species-text, $lightness: -35%);
 $tag-body-type-text: #b8b8b8;
-$tag-body-type-background: desaturate(darken($tag-body-type-text, 35%), 10%);
+$tag-body-type-background: color.adjust($tag-body-type-text, $lightness: -35%, $saturation: -10%, $space: hsl);
 
 $input-background: #26232d;
 $input-border: #5c5a61;
