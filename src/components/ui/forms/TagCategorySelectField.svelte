@@ -22,7 +22,7 @@
 <SelectField bind:value={value} options={tagCategoriesOptions} name="tag_color"/>
 
 <style lang="scss">
-    @use '../../../styles/colors';
+    @use '$styles/colors';
 
     :global(select[name=tag_color]) {
         :global(option) {
