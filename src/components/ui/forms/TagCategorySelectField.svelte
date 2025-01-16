@@ -26,52 +26,52 @@
 
     :global(select[name=tag_color]) {
         :global(option) {
-            &:is([value=rating]) {
+            &:is(:global([value=rating])) {
                 background-color: colors.$tag-rating-background;
                 color: colors.$tag-rating-text;
             }
 
-            &:is([value=spoiler]) {
+            &:is(:global([value=spoiler])) {
                 background-color: colors.$tag-spoiler-background;
                 color: colors.$tag-spoiler-text;
             }
 
-            &:is([value=origin]) {
+            &:is(:global([value=origin])) {
                 background-color: colors.$tag-origin-background;
                 color: colors.$tag-origin-text;
             }
 
-            &:is([value=oc]) {
+            &:is(:global([value=oc])) {
                 background-color: colors.$tag-oc-background;
                 color: colors.$tag-oc-text;
             }
 
-            &:is([value=error]) {
+            &:is(:global([value=error])) {
                 background-color: colors.$tag-error-background;
                 color: colors.$tag-error-text;
             }
 
-            &:is([value=character]) {
+            &:is(:global([value=character])) {
                 background-color: colors.$tag-character-background;
                 color: colors.$tag-character-text;
             }
 
-            &:is([value=content-official]) {
+            &:is(:global([value=content-official])) {
                 background-color: colors.$tag-content-official-background;
                 color: colors.$tag-content-official-text;
             }
 
-            &:is([value=content-fanmade]) {
+            &:is(:global([value=content-fanmade])) {
                 background-color: colors.$tag-content-fanmade-background;
                 color: colors.$tag-content-fanmade-text;
             }
 
-            &:is([value=species]) {
+            &:is(:global([value=species])) {
                 background-color: colors.$tag-species-background;
                 color: colors.$tag-species-text;
             }
 
-            &:is([value=body-type]) {
+            &:is(:global([value=body-type])) {
                 background-color: colors.$tag-body-type-background;
                 color: colors.$tag-body-type-text;
             }
