@@ -1,22 +1,21 @@
 /**
  * Build the map containing both real tags and their aliases.
  *
- * @param {string[]} realAndAliasedTags List combining aliases and tag names.
- * @param {string[]} realTags List of actual tag names, excluding aliases.
+ * @param realAndAliasedTags List combining aliases and tag names.
+ * @param realTags List of actual tag names, excluding aliases.
  *
- * @return {Map<string, string>} Map where key is a tag or alias and value is an actual tag name.
+ * @return Map where key is a tag or alias and value is an actual tag name.
  */
-export function buildTagsAndAliasesMap(realAndAliasedTags, realTags) {
-  /** @type {Map<string, string>} */
-  const tagsAndAliasesMap = new Map();
+export function buildTagsAndAliasesMap(realAndAliasedTags: string[], realTags: string[]): Map<string, string> {
+  const tagsAndAliasesMap: Map<string, string> = new Map();
 
-  for (let tagName of realTags) {
+  for (const tagName of realTags) {
     tagsAndAliasesMap.set(tagName, tagName);
   }
 
-  let realTagName = null;
+  let realTagName: string | null = null;
 
-  for (let tagNameOrAlias of realAndAliasedTags) {
+  for (const tagNameOrAlias of realAndAliasedTags) {
     if (tagsAndAliasesMap.has(tagNameOrAlias)) {
       realTagName = tagNameOrAlias;
       continue;
