@@ -1,4 +1,4 @@
-import StorageHelper from "$lib/browser/StorageHelper";
+import StorageHelper, { type StorageChangeSubscriber } from "$lib/browser/StorageHelper";
 
 export default class ConfigurationController {
   readonly #configurationName: string;
@@ -18,7 +18,7 @@ export default class ConfigurationController {
    *
    * @return The setting value or the default value if the setting does not exist.
    */
-  async readSetting<Type = any, DefaultType = any>(settingName: string, defaultValue: DefaultType|null = null): Promise<Type|DefaultType> {
+  async readSetting<Type = any, DefaultType = any>(settingName: string, defaultValue: DefaultType | null = null): Promise<Type | DefaultType> {
     const settings = await ConfigurationController.#storageHelper.read(this.#configurationName, {});
     return settings[settingName] ?? defaultValue;
   }
@@ -61,7 +61,7 @@ export default class ConfigurationController {
    * @return {function(): void} Unsubscribe function.
    */
   subscribeToChanges(callback: (record: Record<string, any>) => void): () => void {
-    const changesSubscriber = (changes: Record<string, chrome.storage.StorageChange>) => {
+    const subscriber: StorageChangeSubscriber = changes => {
       if (!changes[this.#configurationName]) {
         return;
       }
@@ -69,9 +69,9 @@ export default class ConfigurationController {
       callback(changes[this.#configurationName].newValue);
     }
 
-    ConfigurationController.#storageHelper.subscribe(changesSubscriber);
+    ConfigurationController.#storageHelper.subscribe(subscriber);
 
-    return () => ConfigurationController.#storageHelper.unsubscribe(changesSubscriber);
+    return () => ConfigurationController.#storageHelper.unsubscribe(subscriber);
   }
 
   static #storageHelper = new StorageHelper(chrome.storage.local);

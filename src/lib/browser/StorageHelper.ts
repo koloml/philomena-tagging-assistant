@@ -1,57 +1,53 @@
 /**
- * Helper class to read and write JSON objects to the local storage.
- * @class
+ * Changes subscribe function. It receives changes with old and new value for keys of the storage.
  */
-class StorageHelper {
-  /**
-   * @type {chrome.storage.StorageArea}
-   */
-  #storageArea;
+export type StorageChangeSubscriber = (changes: Record<string, chrome.storage.StorageChange>) => void;
 
-  /**
-   * @param {chrome.storage.StorageArea} storageArea
-   */
-  constructor(storageArea) {
+/**
+ * Helper class to read and write JSON objects to the local storage.
+ */
+export default class StorageHelper {
+  readonly #storageArea: chrome.storage.StorageArea;
+
+  constructor(storageArea: chrome.storage.StorageArea) {
     this.#storageArea = storageArea;
   }
 
   /**
    * Read the following entry from the local storage as a JSON object.
    *
-   * @param {string} key Key of the entry to read.
-   * @param {any} defaultValue Default value to return if the entry does not exist.
+   * @param key Key of the entry to read.
+   * @param defaultValue Default value to return if the entry does not exist.
    *
-   * @return {Promise<any>} The JSON object or the default value if the entry does not exist.
+   * @return The JSON object or the default value if the entry does not exist.
    */
-  async read(key, defaultValue = null) {
+  async read<Type = any, DefaultType = any>(key: string, defaultValue: DefaultType | null = null): Promise<Type | DefaultType> {
     return (await this.#storageArea.get(key))?.[key] || defaultValue;
   }
 
   /**
    * Write the following JSON object to the local storage.
    *
-   * @param {string} key Key of the entry to write.
-   * @param {any} value JSON object to write.
+   * @param key Key of the entry to write.
+   * @param value Value to write.
    */
-  write(key, value) {
+  write(key: string, value: any): void {
     void this.#storageArea.set({[key]: value});
   }
 
   /**
    * Subscribe to changes in the local storage.
-   * @param {function(Record<string, chrome.storage.StorageChange>): void} callback
+   * @param callback Listener function to receive changes.
    */
-  subscribe(callback) {
+  subscribe(callback: StorageChangeSubscriber): void {
     this.#storageArea.onChanged.addListener(callback);
   }
 
   /**
    * Unsubscribe from changes in the local storage.
-   * @param {function(Record<string, chrome.storage.StorageChange>): void} callback
+   * @param callback Reference to the callback for unsubscribing.
    */
-  unsubscribe(callback) {
+  unsubscribe(callback: StorageChangeSubscriber): void {
     this.#storageArea.onChanged.removeListener(callback);
   }
 }
-
-export default StorageHelper;
