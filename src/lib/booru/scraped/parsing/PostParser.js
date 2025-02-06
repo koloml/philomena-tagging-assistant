@@ -1,5 +1,5 @@
 import PageParser from "$lib/booru/scraped/parsing/PageParser";
-import { buildTagsAndAliasesMap } from "$lib/booru/TagsUtils";
+import { buildTagsAndAliasesMap } from "$lib/booru/tag-utils";
 
 export default class PostParser extends PageParser {
   /** @type {HTMLFormElement} */
