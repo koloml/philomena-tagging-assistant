@@ -1,5 +1,7 @@
 import {BaseComponent} from "$lib/components/base/BaseComponent.js";
 import {getComponent} from "$lib/components/base/ComponentUtils.js";
+import {on} from "$lib/components/events/comms";
+import {eventMaintenanceStateChanged} from "$lib/components/events/maintenance-popup-events";
 
 export class MaintenanceStatusIcon extends BaseComponent {
   /** @type {import('MediaBoxTools.js').MediaBoxTools} */
@@ -16,7 +18,7 @@ export class MaintenanceStatusIcon extends BaseComponent {
       throw new Error('Status icon element initialized outside of the media box!');
     }
 
-    this.#mediaBoxTools.on('maintenance-state-change', this.#onMaintenanceStateChanged.bind(this));
+    on(this.#mediaBoxTools, eventMaintenanceStateChanged, this.#onMaintenanceStateChanged.bind(this));
   }
 
   /**

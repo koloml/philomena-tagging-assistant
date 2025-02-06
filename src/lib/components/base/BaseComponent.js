@@ -45,7 +45,6 @@ export class BaseComponent {
 
   /**
    * @return {HTMLElement}
-   * @protected
    */
   get container() {
     return this.#container;
