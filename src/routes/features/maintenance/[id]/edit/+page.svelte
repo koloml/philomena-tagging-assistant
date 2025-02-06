@@ -1,7 +1,7 @@
 <script>
     import Menu from "$components/ui/menu/Menu.svelte";
     import MenuItem from "$components/ui/menu/MenuItem.svelte";
-    import TagsEditor from "$components/web-components/TagsEditor.svelte";
+    import TagsEditor from "$components/tags/TagsEditor.svelte";
     import FormControl from "$components/ui/forms/FormControl.svelte";
     import TextField from "$components/ui/forms/TextField.svelte";
     import FormContainer from "$components/ui/forms/FormContainer.svelte";
