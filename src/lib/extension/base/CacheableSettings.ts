@@ -1,4 +1,4 @@
-import ConfigurationController from "$lib/extension/ConfigurationController.js";
+import ConfigurationController from "$lib/extension/ConfigurationController";
 
 export default class CacheableSettings<Fields> {
   #controller: ConfigurationController;

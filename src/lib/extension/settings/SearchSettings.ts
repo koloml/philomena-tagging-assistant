@@ -1,4 +1,4 @@
-import CacheableSettings from "$lib/extension/base/CacheableSettings.ts";
+import CacheableSettings from "$lib/extension/base/CacheableSettings";
 
 interface SearchSettingsFields {
   suggestProperties: boolean;

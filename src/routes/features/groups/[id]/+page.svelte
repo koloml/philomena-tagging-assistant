@@ -4,21 +4,21 @@
     import GroupView from "$components/features/GroupView.svelte";
     import Menu from "$components/ui/menu/Menu.svelte";
     import MenuItem from "$components/ui/menu/MenuItem.svelte";
-    import { tagGroupsStore } from "$stores/tag-groups-store.js";
+    import { tagGroupsStore } from "$stores/tag-groups-store";
 
     const groupId = $page.params.id;
-    /** @type {import('$entities/TagGroup.ts').default|null} */
+    /** @type {import('$entities/TagGroup').default|null} */
     let group = null;
 
-    if (groupId==='new') {
+    if (groupId === 'new') {
         goto('/features/groups/new/edit');
     }
 
     $: {
-        group = $tagGroupsStore.find(group => group.id===groupId) || null;
+        group = $tagGroupsStore.find(group => group.id === groupId) || null;
 
         if (!group) {
-            console.warn(`Group ${ groupId } not found.`);
+            console.warn(`Group ${groupId} not found.`);
             goto('/features/groups');
         }
     }

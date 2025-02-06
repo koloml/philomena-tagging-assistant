@@ -1,5 +1,5 @@
-import {BaseComponent} from "$lib/components/base/BaseComponent.js";
-import {getComponent} from "$lib/components/base/ComponentUtils.js";
+import { BaseComponent } from "$lib/components/base/BaseComponent";
+import { getComponent } from "$lib/components/base/ComponentUtils";
 
 export class TagsForm extends BaseComponent {
   /**

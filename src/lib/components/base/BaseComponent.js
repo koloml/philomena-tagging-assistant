@@ -1,4 +1,4 @@
-import {bindComponent} from "$lib/components/base/ComponentUtils.js";
+import { bindComponent } from "$lib/components/base/ComponentUtils";
 
 /**
  * @abstract

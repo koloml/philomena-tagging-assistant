@@ -1,13 +1,13 @@
 <script>
     import { page } from "$app/stores";
     import { goto } from "$app/navigation";
-    import { maintenanceProfilesStore } from "$stores/maintenance-profiles-store.js";
+    import { maintenanceProfilesStore } from "$stores/maintenance-profiles-store";
     import Menu from "$components/ui/menu/Menu.svelte";
     import MenuItem from "$components/ui/menu/MenuItem.svelte";
     import FormContainer from "$components/ui/forms/FormContainer.svelte";
     import FormControl from "$components/ui/forms/FormControl.svelte";
-    import EntitiesTransporter from "$lib/extension/EntitiesTransporter.ts";
-    import MaintenanceProfile from "$entities/MaintenanceProfile.ts";
+    import EntitiesTransporter from "$lib/extension/EntitiesTransporter";
+    import MaintenanceProfile from "$entities/MaintenanceProfile";
 
     const profileId = $page.params.id;
     const profile = $maintenanceProfilesStore.find(profile => profile.id === profileId);

@@ -4,7 +4,7 @@
     import FormControl from "$components/ui/forms/FormControl.svelte";
     import Menu from "$components/ui/menu/Menu.svelte";
     import MenuItem from "$components/ui/menu/MenuItem.svelte";
-    import { stripBlacklistedTagsEnabled } from "$stores/maintenance-preferences.ts";
+    import { stripBlacklistedTagsEnabled } from "$stores/maintenance-preferences";
 </script>
 
 <Menu>

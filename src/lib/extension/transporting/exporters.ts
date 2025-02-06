@@ -1,4 +1,4 @@
-import StorageEntity from "$lib/extension/base/StorageEntity.ts";
+import StorageEntity from "$lib/extension/base/StorageEntity";
 
 type ExportersMap = {
   [EntityName in keyof App.EntityNamesMap]: (entity: App.EntityNamesMap[EntityName]) => Record<string, any>

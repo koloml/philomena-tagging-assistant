@@ -1,8 +1,8 @@
-import {BaseComponent} from "$lib/components/base/BaseComponent.js";
-import {getComponent} from "$lib/components/base/ComponentUtils.js";
-import {buildTagsAndAliasesMap} from "$lib/booru/TagsUtils.js";
-import {on} from "$lib/components/events/comms";
-import {eventTagsUpdated} from "$lib/components/events/maintenance-popup-events";
+import { BaseComponent } from "$lib/components/base/BaseComponent";
+import { getComponent } from "$lib/components/base/ComponentUtils";
+import { buildTagsAndAliasesMap } from "$lib/booru/TagsUtils";
+import { on } from "$lib/components/events/comms";
+import { eventTagsUpdated } from "$lib/components/events/maintenance-popup-events";
 
 export class MediaBoxWrapper extends BaseComponent {
   #thumbnailContainer = null;

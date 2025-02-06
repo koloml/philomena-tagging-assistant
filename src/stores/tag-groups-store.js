@@ -1,5 +1,5 @@
-import {writable} from "svelte/store";
-import TagGroup from "$entities/TagGroup.ts";
+import { writable } from "svelte/store";
+import TagGroup from "$entities/TagGroup";
 
 /** @type {import('svelte/store').Writable<TagGroup[]>} */
 export const tagGroupsStore = writable([]);

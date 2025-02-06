@@ -5,13 +5,13 @@
     import FormControl from "$components/ui/forms/FormControl.svelte";
     import Menu from "$components/ui/menu/Menu.svelte";
     import MenuItem from "$components/ui/menu/MenuItem.svelte";
-    import TagGroup from "$entities/TagGroup.ts";
-    import EntitiesTransporter from "$lib/extension/EntitiesTransporter.ts";
-    import { tagGroupsStore } from "$stores/tag-groups-store.js";
+    import TagGroup from "$entities/TagGroup";
+    import EntitiesTransporter from "$lib/extension/EntitiesTransporter";
+    import { tagGroupsStore } from "$stores/tag-groups-store";
 
     const groupId = $page.params.id;
     const groupTransporter = new EntitiesTransporter(TagGroup);
-    const group = $tagGroupsStore.find(group => group.id===groupId);
+    const group = $tagGroupsStore.find(group => group.id === groupId);
 
     /** @type {string} */
     let rawExportedGroup;

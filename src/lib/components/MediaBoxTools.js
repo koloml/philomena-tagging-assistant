@@ -1,11 +1,11 @@
-import {BaseComponent} from "$lib/components/base/BaseComponent.js";
-import {getComponent} from "$lib/components/base/ComponentUtils.js";
-import {MaintenancePopup} from "$lib/components/MaintenancePopup.js";
-import {on} from "$lib/components/events/comms";
-import {eventActiveProfileChanged} from "$lib/components/events/maintenance-popup-events";
+import { BaseComponent } from "$lib/components/base/BaseComponent";
+import { getComponent } from "$lib/components/base/ComponentUtils";
+import { MaintenancePopup } from "$lib/components/MaintenancePopup";
+import { on } from "$lib/components/events/comms";
+import { eventActiveProfileChanged } from "$lib/components/events/maintenance-popup-events";
 
 export class MediaBoxTools extends BaseComponent {
-  /** @type {import('MediaBoxWrapper.js').MediaBoxWrapper|null} */
+  /** @type {import('./MediaBoxWrapper').MediaBoxWrapper|null} */
   #mediaBox;
 
   /** @type {MaintenancePopup|null} */
@@ -40,7 +40,7 @@ export class MediaBoxTools extends BaseComponent {
   }
 
   /**
-   * @param {CustomEvent<import('$entities/MaintenanceProfile.js').default|null>} profileChangedEvent
+   * @param {CustomEvent<import('$entities/MaintenanceProfile').default|null>} profileChangedEvent
    */
   #onActiveProfileChanged(profileChangedEvent) {
     this.container.classList.toggle('has-active-profile', profileChangedEvent.detail !== null);
@@ -54,7 +54,7 @@ export class MediaBoxTools extends BaseComponent {
   }
 
   /**
-   * @return {import('MediaBoxWrapper.js').MediaBoxWrapper|null}
+   * @return {import('./MediaBoxWrapper').MediaBoxWrapper|null}
    */
   get mediaBox() {
     return this.#mediaBox;

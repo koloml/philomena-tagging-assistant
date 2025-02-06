@@ -1,10 +1,10 @@
 <script>
     import Menu from "$components/ui/menu/Menu.svelte";
     import MenuItem from "$components/ui/menu/MenuItem.svelte";
-    import { activeProfileStore, maintenanceProfilesStore } from "$stores/maintenance-profiles-store.js";
+    import { activeProfileStore, maintenanceProfilesStore } from "$stores/maintenance-profiles-store";
     import MenuCheckboxItem from "$components/ui/menu/MenuCheckboxItem.svelte";
 
-    /** @type {import('$entities/MaintenanceProfile.ts').default|undefined} */
+    /** @type {import('$entities/MaintenanceProfile').default|undefined} */
     let activeProfile;
 
     $: activeProfile = $maintenanceProfilesStore.find(profile => profile.id === $activeProfileStore);

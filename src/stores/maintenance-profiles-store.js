@@ -1,6 +1,6 @@
-import {writable} from "svelte/store";
-import MaintenanceProfile from "$entities/MaintenanceProfile.ts";
-import MaintenanceSettings from "$lib/extension/settings/MaintenanceSettings.ts";
+import { writable } from "svelte/store";
+import MaintenanceProfile from "$entities/MaintenanceProfile";
+import MaintenanceSettings from "$lib/extension/settings/MaintenanceSettings";
 
 /**
  * Store for working with maintenance profiles in the Svelte popup.

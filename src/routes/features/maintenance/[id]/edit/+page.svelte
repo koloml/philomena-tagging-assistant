@@ -5,10 +5,10 @@
     import FormControl from "$components/ui/forms/FormControl.svelte";
     import TextField from "$components/ui/forms/TextField.svelte";
     import FormContainer from "$components/ui/forms/FormContainer.svelte";
-    import {page} from "$app/stores";
-    import {goto} from "$app/navigation";
-    import {maintenanceProfilesStore} from "$stores/maintenance-profiles-store.js";
-    import MaintenanceProfile from "$entities/MaintenanceProfile.ts";
+    import { page } from "$app/stores";
+    import { goto } from "$app/navigation";
+    import { maintenanceProfilesStore } from "$stores/maintenance-profiles-store";
+    import MaintenanceProfile from "$entities/MaintenanceProfile";
 
     /** @type {string} */
     let profileId = $page.params.id;

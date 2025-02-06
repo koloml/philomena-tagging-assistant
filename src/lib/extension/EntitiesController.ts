@@ -1,5 +1,5 @@
-import StorageHelper from "$lib/browser/StorageHelper.js";
-import type StorageEntity from "$lib/extension/base/StorageEntity.ts";
+import StorageHelper from "$lib/browser/StorageHelper";
+import type StorageEntity from "$lib/extension/base/StorageEntity";
 
 export default class EntitiesController {
   static #storageHelper = new StorageHelper(chrome.storage.local);

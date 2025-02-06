@@ -1,5 +1,5 @@
-import {BaseComponent} from "$lib/components/base/BaseComponent.js";
-import {SearchWrapper} from "$lib/components/SearchWrapper.js";
+import { BaseComponent } from "$lib/components/base/BaseComponent";
+import { SearchWrapper } from "$lib/components/SearchWrapper";
 
 class SiteHeaderWrapper extends BaseComponent {
   /** @type {SearchWrapper|null} */

@@ -4,12 +4,12 @@
  */
 class StorageHelper {
   /**
-   * @type {import('@types/chrome').storage.StorageArea}
+   * @type {chrome.storage.StorageArea}
    */
   #storageArea;
 
   /**
-   * @param {import('@types/chrome').storage.StorageArea} storageArea
+   * @param {chrome.storage.StorageArea} storageArea
    */
   constructor(storageArea) {
     this.#storageArea = storageArea;
@@ -39,7 +39,7 @@ class StorageHelper {
 
   /**
    * Subscribe to changes in the local storage.
-   * @param {function(Record<string, StorageChange>): void} callback
+   * @param {function(Record<string, chrome.storage.StorageChange>): void} callback
    */
   subscribe(callback) {
     this.#storageArea.onChanged.addListener(callback);
@@ -47,7 +47,7 @@ class StorageHelper {
 
   /**
    * Unsubscribe from changes in the local storage.
-   * @param {function(Record<string, StorageChange>): void} callback
+   * @param {function(Record<string, chrome.storage.StorageChange>): void} callback
    */
   unsubscribe(callback) {
     this.#storageArea.onChanged.removeListener(callback);

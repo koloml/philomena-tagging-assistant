@@ -1,5 +1,5 @@
-import MaintenanceProfile from "$entities/MaintenanceProfile.ts";
-import CacheableSettings from "$lib/extension/base/CacheableSettings.ts";
+import MaintenanceProfile from "$entities/MaintenanceProfile";
+import CacheableSettings from "$lib/extension/base/CacheableSettings";
 
 interface MaintenanceSettingsFields {
   activeProfile: string | null;

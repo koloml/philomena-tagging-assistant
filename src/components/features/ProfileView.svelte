@@ -1,5 +1,5 @@
 <script>
-    /** @type {import('$entities/MaintenanceProfile.ts').default} */
+    /** @type {import('$entities/MaintenanceProfile').default} */
     export let profile;
 
     const sortedTagsList = profile.settings.tags.sort((a, b) => a.localeCompare(b));
