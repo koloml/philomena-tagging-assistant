@@ -4,6 +4,12 @@ import {BaseComponent} from "$lib/components/base/BaseComponent.js";
 import {getComponent} from "$lib/components/base/ComponentUtils.js";
 import ScrapedAPI from "$lib/booru/scraped/ScrapedAPI.js";
 import {tagsBlacklist} from "$config/tags.ts";
+import {emitterAt} from "$lib/components/events/comms";
+import {
+  eventActiveProfileChanged,
+  eventMaintenanceStateChanged,
+  eventTagsUpdated
+} from "$lib/components/events/maintenance-popup-events";
 
 class BlackListedTagsEncounteredError extends Error {
   /**
@@ -44,6 +50,8 @@ export class MaintenancePopup extends BaseComponent {
 
   /** @type {number|null} */
   #tagsSubmissionTimer = null;
+
+  #emitter = emitterAt(this);
 
   /**
    * @protected
@@ -95,7 +103,8 @@ export class MaintenancePopup extends BaseComponent {
     this.#activeProfile = activeProfile;
     this.container.classList.toggle('is-active', activeProfile !== null);
     this.#refreshTagsList();
-    this.emit('active-profile-changed', activeProfile);
+
+    this.#emitter.emit(eventActiveProfileChanged, activeProfile);
   }
 
   #refreshTagsList() {
@@ -181,7 +190,7 @@ export class MaintenancePopup extends BaseComponent {
       }
 
       this.#isPlanningToSubmit = true;
-      this.emit('maintenance-state-change', 'waiting');
+      this.#emitter.emit(eventMaintenanceStateChanged, 'waiting');
     }
   }
 
@@ -208,7 +217,7 @@ export class MaintenancePopup extends BaseComponent {
     this.#isPlanningToSubmit = false;
     this.#isSubmitting = true;
 
-    this.emit('maintenance-state-change', 'processing');
+    this.#emitter.emit(eventMaintenanceStateChanged, 'processing');
 
     let maybeTagsAndAliasesAfterUpdate;
 
@@ -249,17 +258,18 @@ export class MaintenancePopup extends BaseComponent {
       }
 
       MaintenancePopup.#notifyAboutPendingSubmission(false);
-      this.emit('maintenance-state-change', 'failed');
+
+      this.#emitter.emit(eventMaintenanceStateChanged, 'failed');
       this.#isSubmitting = false;
 
       return;
     }
 
     if (maybeTagsAndAliasesAfterUpdate) {
-      this.emit('tags-updated', maybeTagsAndAliasesAfterUpdate);
+      this.#emitter.emit(eventTagsUpdated, maybeTagsAndAliasesAfterUpdate);
     }
 
-    this.emit('maintenance-state-change', 'complete');
+    this.#emitter.emit(eventMaintenanceStateChanged, 'complete');
 
     this.#tagsToAdd.clear();
     this.#tagsToRemove.clear();
