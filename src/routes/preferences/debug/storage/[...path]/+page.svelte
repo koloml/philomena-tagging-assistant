@@ -1,7 +1,7 @@
 <script>
     import StorageViewer from "$components/debugging/StorageViewer.svelte";
-    import {page} from "$app/stores";
-    import {goto} from "$app/navigation";
+    import { page } from "$app/stores";
+    import { goto } from "$app/navigation";
 
     let pathString = '';
     /** @type {string[]} */

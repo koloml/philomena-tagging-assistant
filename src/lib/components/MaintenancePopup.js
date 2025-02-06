@@ -1,10 +1,10 @@
-import MaintenanceSettings from "$lib/extension/settings/MaintenanceSettings.ts";
-import MaintenanceProfile from "$entities/MaintenanceProfile.ts";
-import {BaseComponent} from "$lib/components/base/BaseComponent.js";
-import {getComponent} from "$lib/components/base/ComponentUtils.js";
-import ScrapedAPI from "$lib/booru/scraped/ScrapedAPI.js";
-import {tagsBlacklist} from "$config/tags.ts";
-import {emitterAt} from "$lib/components/events/comms";
+import MaintenanceSettings from "$lib/extension/settings/MaintenanceSettings";
+import MaintenanceProfile from "$entities/MaintenanceProfile";
+import { BaseComponent } from "$lib/components/base/BaseComponent";
+import { getComponent } from "$lib/components/base/ComponentUtils";
+import ScrapedAPI from "$lib/booru/scraped/ScrapedAPI";
+import { tagsBlacklist } from "$config/tags";
+import { emitterAt } from "$lib/components/events/comms";
 import {
   eventActiveProfileChanged,
   eventMaintenanceStateChanged,
@@ -33,7 +33,7 @@ export class MaintenancePopup extends BaseComponent {
   /** @type {MaintenanceProfile|null} */
   #activeProfile = null;
 
-  /** @type {import('$lib/components/MediaBoxTools.js').MediaBoxTools} */
+  /** @type {import('$lib/components/MediaBoxTools').MediaBoxTools} */
   #mediaBoxTools = null;
 
   /** @type {Set<string>} */

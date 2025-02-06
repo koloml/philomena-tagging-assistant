@@ -1,5 +1,5 @@
-import type {MaintenancePopupEventsMap} from "$lib/components/events/maintenance-popup-events.ts";
-import {BaseComponent} from "$lib/components/base/BaseComponent";
+import type { MaintenancePopupEventsMap } from "$lib/components/events/maintenance-popup-events";
+import { BaseComponent } from "$lib/components/base/BaseComponent";
 
 interface EventsMapping extends MaintenancePopupEventsMap {
 }

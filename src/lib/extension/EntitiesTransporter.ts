@@ -1,7 +1,7 @@
-import {validateImportedEntity} from "$lib/extension/transporting/validators.js";
-import {exportEntityToObject} from "$lib/extension/transporting/exporters.ts";
-import StorageEntity from "$lib/extension/base/StorageEntity.ts";
-import {compressToEncodedURIComponent, decompressFromEncodedURIComponent} from "lz-string";
+import { validateImportedEntity } from "$lib/extension/transporting/validators";
+import { exportEntityToObject } from "$lib/extension/transporting/exporters";
+import StorageEntity from "$lib/extension/base/StorageEntity";
+import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from "lz-string";
 
 export default class EntitiesTransporter<EntityType> {
   readonly #targetEntityConstructor: new (...any: any[]) => EntityType;

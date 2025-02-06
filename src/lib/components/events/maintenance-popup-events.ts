@@ -1,4 +1,4 @@
-import type MaintenanceProfile from "$entities/MaintenanceProfile.ts";
+import type MaintenanceProfile from "$entities/MaintenanceProfile";
 
 export const eventActiveProfileChanged = 'active-profile-changed';
 export const eventMaintenanceStateChanged = 'maintenance-state-change';

@@ -1,5 +1,5 @@
-import {writable} from "svelte/store";
-import MiscSettings from "$lib/extension/settings/MiscSettings.ts";
+import { writable } from "svelte/store";
+import MiscSettings from "$lib/extension/settings/MiscSettings";
 
 export const fullScreenViewerEnabled = writable(true);
 

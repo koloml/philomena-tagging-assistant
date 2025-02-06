@@ -1,7 +1,7 @@
 <script>
     import MenuItem from "$components/ui/menu/MenuItem.svelte";
     import Menu from "$components/ui/menu/Menu.svelte";
-    import {storagesCollection} from "$stores/debug.js";
+    import { storagesCollection } from "$stores/debug";
 </script>
 
 <Menu>

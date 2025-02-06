@@ -5,9 +5,9 @@
     import FormControl from "$components/ui/forms/FormControl.svelte";
     import Menu from "$components/ui/menu/Menu.svelte";
     import MenuItem from "$components/ui/menu/MenuItem.svelte";
-    import TagGroup from "$entities/TagGroup.ts";
-    import EntitiesTransporter from "$lib/extension/EntitiesTransporter.ts";
-    import { tagGroupsStore } from "$stores/tag-groups-store.js";
+    import TagGroup from "$entities/TagGroup";
+    import EntitiesTransporter from "$lib/extension/EntitiesTransporter";
+    import { tagGroupsStore } from "$stores/tag-groups-store";
 
     const groupTransporter = new EntitiesTransporter(TagGroup);
 
@@ -42,11 +42,11 @@
         } catch (error) {
             errorMessage = error instanceof Error
                     ? error.message
-                    :'Unknown error';
+                    : 'Unknown error';
         }
 
         if (candidateGroup) {
-            existingGroup = $tagGroupsStore.find(group => group.id===candidateGroup?.id) ?? null;
+            existingGroup = $tagGroupsStore.find(group => group.id === candidateGroup?.id) ?? null;
         }
     }
 
@@ -66,7 +66,7 @@
         }
 
         const clonedProfile = new TagGroup(crypto.randomUUID(), candidateGroup.settings);
-        clonedProfile.settings.name += ` (Clone ${ new Date().toISOString() })`;
+        clonedProfile.settings.name += ` (Clone ${new Date().toISOString()})`;
         clonedProfile.save().then(() => {
             goto(`/features/groups`);
         });

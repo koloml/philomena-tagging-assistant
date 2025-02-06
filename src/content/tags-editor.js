@@ -1,3 +1,3 @@
-import {TagsForm} from "$lib/components/TagsForm.js";
+import { TagsForm } from "$lib/components/TagsForm";
 
 TagsForm.watchForEditors();

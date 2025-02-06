@@ -1,10 +1,10 @@
-import {BaseComponent} from "$lib/components/base/BaseComponent.js";
-import {getComponent} from "$lib/components/base/ComponentUtils.js";
-import {on} from "$lib/components/events/comms";
-import {eventMaintenanceStateChanged} from "$lib/components/events/maintenance-popup-events";
+import { BaseComponent } from "$lib/components/base/BaseComponent";
+import { getComponent } from "$lib/components/base/ComponentUtils";
+import { on } from "$lib/components/events/comms";
+import { eventMaintenanceStateChanged } from "$lib/components/events/maintenance-popup-events";
 
 export class MaintenanceStatusIcon extends BaseComponent {
-  /** @type {import('MediaBoxTools.js').MediaBoxTools} */
+  /** @type {import('./MediaBoxTools').MediaBoxTools} */
   #mediaBoxTools;
 
   build() {

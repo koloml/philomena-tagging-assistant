@@ -1,4 +1,4 @@
-import {initializeSiteHeader} from "$lib/components/SiteHeaderWrapper.js";
+import { initializeSiteHeader } from "$lib/components/SiteHeaderWrapper";
 
 const siteHeader = document.querySelector('.header');
 

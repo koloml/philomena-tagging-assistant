@@ -1,4 +1,4 @@
-import StorageEntity from "$lib/extension/base/StorageEntity.ts";
+import StorageEntity from "$lib/extension/base/StorageEntity";
 
 export interface TagGroupSettings {
   name: string;

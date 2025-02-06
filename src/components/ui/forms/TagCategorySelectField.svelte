@@ -1,6 +1,6 @@
 <script>
     import SelectField from "$components/ui/forms/SelectField.svelte";
-    import { categories } from "$lib/booru/tag-categories.js";
+    import { categories } from "$lib/booru/tag-categories";
 
     /** @type {string} */
     export let value = '';

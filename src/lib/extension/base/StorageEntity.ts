@@ -1,4 +1,4 @@
-import EntitiesController from "$lib/extension/EntitiesController.js";
+import EntitiesController from "$lib/extension/EntitiesController";
 
 export default abstract class StorageEntity<SettingsType extends Object = {}> {
   /**

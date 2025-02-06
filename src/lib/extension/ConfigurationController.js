@@ -1,4 +1,4 @@
-import StorageHelper from "$lib/browser/StorageHelper.js";
+import StorageHelper from "$lib/browser/StorageHelper";
 
 export default class ConfigurationController {
   /** @type {string} */

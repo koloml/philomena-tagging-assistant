@@ -1,6 +1,6 @@
-import type {TagDropdownWrapper} from "$lib/components/TagDropdownWrapper";
-import TagGroup from "$entities/TagGroup.ts";
-import {escapeRegExp} from "$lib/utils";
+import type { TagDropdownWrapper } from "$lib/components/TagDropdownWrapper";
+import TagGroup from "$entities/TagGroup";
+import { escapeRegExp } from "$lib/utils";
 
 export default class CustomCategoriesResolver {
   #tagCategories = new Map<string, string>();

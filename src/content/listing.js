@@ -1,8 +1,8 @@
-import {createMaintenancePopup} from "$lib/components/MaintenancePopup.js";
-import {createMediaBoxTools} from "$lib/components/MediaBoxTools.js";
-import {calculateMediaBoxesPositions, initializeMediaBox} from "$lib/components/MediaBoxWrapper.js";
-import {createMaintenanceStatusIcon} from "$lib/components/MaintenanceStatusIcon.js";
-import {createImageShowFullscreenButton} from "$lib/components/ImageShowFullscreenButton.js";
+import { createMaintenancePopup } from "$lib/components/MaintenancePopup";
+import { createMediaBoxTools } from "$lib/components/MediaBoxTools";
+import { calculateMediaBoxesPositions, initializeMediaBox } from "$lib/components/MediaBoxWrapper";
+import { createMaintenanceStatusIcon } from "$lib/components/MaintenanceStatusIcon";
+import { createImageShowFullscreenButton } from "$lib/components/ImageShowFullscreenButton";
 
 /** @type {NodeListOf<HTMLElement>} */
 const mediaBoxes = document.querySelectorAll('.media-box');

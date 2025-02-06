@@ -4,7 +4,7 @@
     import FormContainer from "$components/ui/forms/FormContainer.svelte";
     import FormControl from "$components/ui/forms/FormControl.svelte";
     import CheckboxField from "$components/ui/forms/CheckboxField.svelte";
-    import {fullScreenViewerEnabled} from "$stores/misc-preferences.js";
+    import { fullScreenViewerEnabled } from "$stores/misc-preferences";
 </script>
 
 <Menu>

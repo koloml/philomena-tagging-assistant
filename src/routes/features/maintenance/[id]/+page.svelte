@@ -1,22 +1,22 @@
 <script>
     import Menu from "$components/ui/menu/Menu.svelte";
     import MenuItem from "$components/ui/menu/MenuItem.svelte";
-    import {page} from "$app/stores";
-    import {goto} from "$app/navigation";
-    import {activeProfileStore, maintenanceProfilesStore} from "$stores/maintenance-profiles-store.js";
+    import { page } from "$app/stores";
+    import { goto } from "$app/navigation";
+    import { activeProfileStore, maintenanceProfilesStore } from "$stores/maintenance-profiles-store";
     import ProfileView from "$components/features/ProfileView.svelte";
     import MenuCheckboxItem from "$components/ui/menu/MenuCheckboxItem.svelte";
 
     const profileId = $page.params.id;
-    /** @type {import('$entities/MaintenanceProfile.ts').default|null} */
+    /** @type {import('$entities/MaintenanceProfile').default|null} */
     let profile = null;
 
-    if (profileId==='new') {
+    if (profileId === 'new') {
         goto('/features/maintenance/new/edit');
     }
 
     $: {
-        const resolvedProfile = $maintenanceProfilesStore.find(profile => profile.id===profileId);
+        const resolvedProfile = $maintenanceProfilesStore.find(profile => profile.id === profileId);
 
         if (resolvedProfile) {
             profile = resolvedProfile;
@@ -26,14 +26,14 @@
         }
     }
 
-    let isActiveProfile = $activeProfileStore===profileId;
+    let isActiveProfile = $activeProfileStore === profileId;
 
     $: {
-        if (isActiveProfile && $activeProfileStore!==profileId) {
+        if (isActiveProfile && $activeProfileStore !== profileId) {
             $activeProfileStore = profileId;
         }
 
-        if (!isActiveProfile && $activeProfileStore===profileId) {
+        if (!isActiveProfile && $activeProfileStore === profileId) {
             $activeProfileStore = null;
         }
     }
