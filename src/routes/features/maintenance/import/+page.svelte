@@ -4,7 +4,7 @@
     import FormContainer from "$components/ui/forms/FormContainer.svelte";
     import MaintenanceProfile from "$entities/MaintenanceProfile.ts";
     import FormControl from "$components/ui/forms/FormControl.svelte";
-    import ProfileView from "$components/maintenance/ProfileView.svelte";
+    import ProfileView from "$components/features/ProfileView.svelte";
     import {maintenanceProfilesStore} from "$stores/maintenance-profiles-store.js";
     import {goto} from "$app/navigation";
     import EntitiesTransporter from "$lib/extension/EntitiesTransporter.ts";

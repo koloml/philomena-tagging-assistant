@@ -4,7 +4,7 @@
     import {page} from "$app/stores";
     import {goto} from "$app/navigation";
     import {activeProfileStore, maintenanceProfilesStore} from "$stores/maintenance-profiles-store.js";
-    import ProfileView from "$components/maintenance/ProfileView.svelte";
+    import ProfileView from "$components/features/ProfileView.svelte";
     import MenuCheckboxItem from "$components/ui/menu/MenuCheckboxItem.svelte";
 
     const profileId = $page.params.id;
