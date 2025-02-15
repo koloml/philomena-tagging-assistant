@@ -19,22 +19,22 @@
       top: -1px;
       bottom: 0;
       z-index: 8;
-      background: colors.$footer;
-      border-top: 23px solid colors.$media-box-border;
+      background: booru-vars.$background-color;
+      border-top: 23px solid booru-vars.$media-box-color;
     }
 
     &:before {
       right: calc(100% - 1px);
       left: -50%;
-      border-left: 1px solid colors.$media-box-border;
-      box-shadow: colors.$footer -10px 0 10px;
+      border-left: 1px solid booru-vars.$media-border;
+      box-shadow: booru-vars.$background-color -10px 0 10px;
     }
 
     &:after {
       left: calc(100% - 1px);
       right: -50%;
-      border-right: 1px solid colors.$media-box-border;
-      box-shadow: colors.$footer 10px 0 10px;
+      border-right: 1px solid booru-vars.$media-border;
+      box-shadow: booru-vars.$background-color 10px 0 10px;
     }
   }
 
@@ -46,8 +46,8 @@
     left: -50%;
     right: -50%;
     z-index: 8;
-    background: colors.$footer;
-    border: 1px solid colors.$media-box-border;
+    background: booru-vars.$background-color;
+    border: 1px solid booru-vars.$media-border;
     border-top: 0;
 
     .tags-list {
