@@ -1,5 +1,5 @@
 @use '$styles/colors';
-@use '$styles/booru-colors';
+@use '$styles/booru-vars';
 
 // This will fix wierd misplacing of the modified media boxes in the listing.
 .js-resizable-media-container {
@@ -67,8 +67,8 @@
       user-select: none;
 
       &:hover {
-        background: booru-colors.$resolved-tag-color;
-        color: booru-colors.$resolved-tag-background;
+        background: booru-vars.$resolved-tag-color;
+        color: booru-vars.$resolved-tag-background;
       }
 
       &.is-missing:not(.is-added),
