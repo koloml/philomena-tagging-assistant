@@ -1,7 +1,7 @@
 import MaintenanceSettings from "$lib/extension/settings/MaintenanceSettings";
 import MaintenanceProfile from "$entities/MaintenanceProfile";
 import { BaseComponent } from "$lib/components/base/BaseComponent";
-import { getComponent } from "$lib/components/base/ComponentUtils";
+import { getComponent } from "$lib/components/base/component-utils";
 import ScrapedAPI from "$lib/booru/scraped/ScrapedAPI";
 import { tagsBlacklist } from "$config/tags";
 import { emitterAt } from "$lib/components/events/comms";

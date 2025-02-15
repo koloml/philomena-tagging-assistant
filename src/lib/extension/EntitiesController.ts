@@ -1,4 +1,4 @@
-import StorageHelper from "$lib/browser/StorageHelper";
+import StorageHelper, { type StorageChangeSubscriber } from "$lib/browser/StorageHelper";
 import type StorageEntity from "$lib/extension/base/StorageEntity";
 
 export default class EntitiesController {
@@ -71,7 +71,7 @@ export default class EntitiesController {
     /**
      * Watch the changes made to the storage and call the callback when the entity changes.
      */
-    const storageChangesSubscriber = (changes: Record<string, chrome.storage.StorageChange>) => {
+    const subscriber: StorageChangeSubscriber = changes => {
       if (!changes[entityName]) {
         return;
       }
@@ -80,8 +80,8 @@ export default class EntitiesController {
         .then(callback);
     }
 
-    this.#storageHelper.subscribe(storageChangesSubscriber);
+    this.#storageHelper.subscribe(subscriber);
 
-    return () => this.#storageHelper.unsubscribe(storageChangesSubscriber);
+    return () => this.#storageHelper.unsubscribe(subscriber);
   }
 }

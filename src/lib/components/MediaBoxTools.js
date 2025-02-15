@@ -1,5 +1,5 @@
 import { BaseComponent } from "$lib/components/base/BaseComponent";
-import { getComponent } from "$lib/components/base/ComponentUtils";
+import { getComponent } from "$lib/components/base/component-utils";
 import { MaintenancePopup } from "$lib/components/MaintenancePopup";
 import { on } from "$lib/components/events/comms";
 import { eventActiveProfileChanged } from "$lib/components/events/maintenance-popup-events";

@@ -1,5 +1,5 @@
 import { BaseComponent } from "$lib/components/base/BaseComponent";
-import { getComponent } from "$lib/components/base/ComponentUtils";
+import { getComponent } from "$lib/components/base/component-utils";
 import MiscSettings from "$lib/extension/settings/MiscSettings";
 import { FullscreenViewer } from "$lib/components/FullscreenViewer";
 

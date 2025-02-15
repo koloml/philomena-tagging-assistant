@@ -1,8 +1,8 @@
 export class Token {
-  index;
-  value;
+  readonly index: number;
+  readonly value: string;
 
-  constructor(index, value) {
+  constructor(index: number, value: string) {
     this.index = index;
     this.value = value;
   }
@@ -28,12 +28,9 @@ export class BoostToken extends Token {
 }
 
 export class QuotedTermToken extends Token {
-  /**
-   * @type {string}
-   */
-  #quotedValue;
+  readonly #quotedValue: string;
 
-  constructor(index, value, quotedValue) {
+  constructor(index: number, value: string, quotedValue: string) {
     super(index, value);
 
     this.#quotedValue = quotedValue;
@@ -43,24 +40,20 @@ export class QuotedTermToken extends Token {
     return QuotedTermToken.decode(this.#quotedValue);
   }
 
-  /**
-   * @param {string} value
-   * @return {string}
-   */
-  static decode(value) {
+  static decode(value: string): string {
     return value.replace(/\\([\\"])/g, "$1");
   }
 
-  /**
-   * @param {string} value
-   * @return {string}
-   */
-  static encode(value) {
+  static encode(value: string): string {
     return value.replace(/[\\"]/g, "\\$&");
   }
 }
 
 export class TermToken extends Token {
+}
+
+type MatchResultCarry = {
+  match?: RegExpMatchArray | null
 }
 
 /**
@@ -70,38 +63,28 @@ export class TermToken extends Token {
 export class QueryLexer {
   /**
    * The original value to be parsed.
-   * @type {string}
    */
-  #value;
+  readonly #value: string;
 
   /**
    * Current position of the parser in the value.
-   * @type {number}
    */
-  #index = 0;
+  #index: number = 0;
 
-  /**
-   * @param {string} value
-   */
-  constructor(value) {
+  constructor(value: string) {
     this.#value = value;
   }
 
   /**
    * Parse the query and get the list of tokens.
    *
-   * @return {Token[]} List of tokens.
+   * @return List of tokens.
    */
-  parse() {
-    /** @type {Token[]} */
-    const tokens = [];
+  parse(): Token[] {
+    const tokens: Token[] = [];
+    const result: MatchResultCarry = {};
 
-    /**
-     * @type {{match: RegExpMatchArray|null}}
-     */
-    const result = {};
-
-    let dirtyText;
+    let dirtyText: string;
 
     while (this.#index < this.#value.length) {
       if (this.#value[this.#index] === QueryLexer.#commaCharacter) {
@@ -111,26 +94,26 @@ export class QueryLexer {
       }
 
       if (this.#match(QueryLexer.#negotiationOperator, result)) {
-        tokens.push(new NotToken(this.#index, result.match[0]));
-        this.#index += result.match[0].length;
+        tokens.push(new NotToken(this.#index, result.match![0]));
+        this.#index += result.match![0].length;
         continue;
       }
 
       if (this.#match(QueryLexer.#andOperator, result)) {
-        tokens.push(new AndToken(this.#index, result.match[0]));
-        this.#index += result.match[0].length;
+        tokens.push(new AndToken(this.#index, result.match![0]));
+        this.#index += result.match![0].length;
         continue;
       }
 
       if (this.#match(QueryLexer.#orOperator, result)) {
-        tokens.push(new OrToken(this.#index, result.match[0]));
-        this.#index += result.match[0].length;
+        tokens.push(new OrToken(this.#index, result.match![0]));
+        this.#index += result.match![0].length;
         continue;
       }
 
       if (this.#match(QueryLexer.#notOperator, result)) {
-        tokens.push(new NotToken(this.#index, result.match[0]));
-        this.#index += result.match[0].length;
+        tokens.push(new NotToken(this.#index, result.match![0]));
+        this.#index += result.match![0].length;
         continue;
       }
 
@@ -147,19 +130,19 @@ export class QueryLexer {
       }
 
       if (this.#match(QueryLexer.#boostOperator, result)) {
-        tokens.push(new BoostToken(this.#index, result.match[0]));
-        this.#index += result.match[0].length;
+        tokens.push(new BoostToken(this.#index, result.match![0]));
+        this.#index += result.match![0].length;
         continue;
       }
 
       if (this.#match(QueryLexer.#whitespaces, result)) {
-        this.#index += result.match[0].length;
+        this.#index += result.match![0].length;
         continue;
       }
 
       if (this.#match(QueryLexer.#quotedText, result)) {
-        tokens.push(new QuotedTermToken(this.#index, result.match[0], result.match[1]));
-        this.#index += result.match[0].length;
+        tokens.push(new QuotedTermToken(this.#index, result.match![0], result.match![1]));
+        this.#index += result.match![0].length;
         continue;
       }
 
@@ -180,25 +163,25 @@ export class QueryLexer {
   /**
    * Match the provided regular expression on the string with the current parser position.
    *
-   * @param {RegExp} targetRegExp Target RegExp to parse with.
-   * @param {{match: any}} [resultCarrier] Object for passing the results into.
+   * @param targetRegExp Target RegExp to parse with.
+   * @param [resultCarrier] Object for passing the results into.
    *
-   * @return {boolean} Is there a match?
+   * @return Is there a match?
    */
-  #match(targetRegExp, resultCarrier = {}) {
+  #match(targetRegExp: RegExp, resultCarrier: MatchResultCarry = {}): boolean {
     return this.#matchAt(targetRegExp, this.#index, resultCarrier);
   }
 
   /**
    * Match the provided regular expression in the string with the specific index.
    *
-   * @param {RegExp} targetRegExp Target RegExp to parse with.
-   * @param {number} index Index to match the expression from.
-   * @param {{match: any}} [resultCarrier] Object for passing the results into.
+   * @param targetRegExp Target RegExp to parse with.
+   * @param index Index to match the expression from.
+   * @param [resultCarrier] Object for passing the results into.
    *
-   * @return {boolean} Is there a match?
+   * @return Is there a match?
    */
-  #matchAt(targetRegExp, index, resultCarrier = {}) {
+  #matchAt(targetRegExp: RegExp, index: number, resultCarrier: MatchResultCarry = {}): boolean {
     targetRegExp.lastIndex = index;
     resultCarrier.match = this.#value.match(targetRegExp);
 
@@ -212,11 +195,10 @@ export class QueryLexer {
    *
    * @return {string} Matched text.
    */
-  #parseDirtyText(index) {
-    let resultValue = '';
+  #parseDirtyText(index: number): string {
+    let resultValue: string = '';
 
-    /** @type {{match: RegExpMatchArray|null}} */
-    const result = {match: null};
+    const result: MatchResultCarry = {match: null};
 
     // Loop over
     while (index < this.#value.length) {
@@ -226,8 +208,8 @@ export class QueryLexer {
       }
 
       if (this.#matchAt(QueryLexer.#dirtyTextContent, index, result)) {
-        resultValue += result.match[0];
-        index += result.match[0].length;
+        resultValue += result.match![0];
+        index += result.match![0].length;
         continue;
       }
 

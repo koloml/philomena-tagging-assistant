@@ -1,25 +1,24 @@
-import StorageHelper from "$lib/browser/StorageHelper";
+import StorageHelper, { type StorageChangeSubscriber } from "$lib/browser/StorageHelper";
 
 export default class ConfigurationController {
-  /** @type {string} */
-  #configurationName;
+  readonly #configurationName: string;
 
   /**
    * @param {string} configurationName Name of the configuration to work with.
    */
-  constructor(configurationName) {
+  constructor(configurationName: string) {
     this.#configurationName = configurationName;
   }
 
   /**
    * Read the setting with the given name.
    *
-   * @param {string} settingName Setting name.
-   * @param {any} [defaultValue] Default value to return if the setting does not exist. Defaults to `null`.
+   * @param settingName Setting name.
+   * @param [defaultValue] Default value to return if the setting does not exist. Defaults to `null`.
    *
-   * @return {Promise<any|null>} The setting value or the default value if the setting does not exist.
+   * @return The setting value or the default value if the setting does not exist.
    */
-  async readSetting(settingName, defaultValue = null) {
+  async readSetting<Type = any, DefaultType = any>(settingName: string, defaultValue: DefaultType | null = null): Promise<Type | DefaultType> {
     const settings = await ConfigurationController.#storageHelper.read(this.#configurationName, {});
     return settings[settingName] ?? defaultValue;
   }
@@ -27,12 +26,12 @@ export default class ConfigurationController {
   /**
    * Write the given value to the setting.
    *
-   * @param {string} settingName Setting name.
-   * @param {any} value Value to write.
+   * @param settingName Setting name.
+   * @param value Value to write.
    *
    * @return {Promise<void>}
    */
-  async writeSetting(settingName, value) {
+  async writeSetting(settingName: string, value: any): Promise<void> {
     const settings = await ConfigurationController.#storageHelper.read(this.#configurationName, {});
 
     settings[settingName] = value;
@@ -44,10 +43,8 @@ export default class ConfigurationController {
    * Delete the specific setting.
    *
    * @param {string} settingName Setting name to delete.
-   *
-   * @return {Promise<void>}
    */
-  async deleteSetting(settingName) {
+  async deleteSetting(settingName: string): Promise<void> {
     const settings = await ConfigurationController.#storageHelper.read(this.#configurationName, {});
 
     delete settings[settingName];
@@ -63,9 +60,8 @@ export default class ConfigurationController {
    *
    * @return {function(): void} Unsubscribe function.
    */
-  subscribeToChanges(callback) {
-    /** @param {Record<string, StorageChange>} changes */
-    const changesSubscriber = changes => {
+  subscribeToChanges(callback: (record: Record<string, any>) => void): () => void {
+    const subscriber: StorageChangeSubscriber = changes => {
       if (!changes[this.#configurationName]) {
         return;
       }
@@ -73,9 +69,9 @@ export default class ConfigurationController {
       callback(changes[this.#configurationName].newValue);
     }
 
-    ConfigurationController.#storageHelper.subscribe(changesSubscriber);
+    ConfigurationController.#storageHelper.subscribe(subscriber);
 
-    return () => ConfigurationController.#storageHelper.unsubscribe(changesSubscriber);
+    return () => ConfigurationController.#storageHelper.unsubscribe(subscriber);
   }
 
   static #storageHelper = new StorageHelper(chrome.storage.local);
