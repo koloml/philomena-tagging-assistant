@@ -112,6 +112,9 @@ export async function buildStyle(buildOptions) {
         }
       },
       emptyOutDir: false,
+    },
+    resolve: {
+      alias: makeAliases(buildOptions.rootDir)
     }
   });
 
