@@ -1,4 +1,4 @@
-import {bindComponent} from "$lib/components/base/ComponentUtils.js";
+import { bindComponent } from "$lib/components/base/component-utils";
 
 /**
  * @abstract
@@ -45,7 +45,6 @@ export class BaseComponent {
 
   /**
    * @return {HTMLElement}
-   * @protected
    */
   get container() {
     return this.#container;

@@ -1,13 +1,13 @@
-import {BaseComponent} from "$lib/components/base/BaseComponent.js";
-import {getComponent} from "$lib/components/base/ComponentUtils.js";
-import MiscSettings from "$lib/extension/settings/MiscSettings.ts";
-import {FullscreenViewer} from "$lib/components/FullscreenViewer.js";
+import { BaseComponent } from "$lib/components/base/BaseComponent";
+import { getComponent } from "$lib/components/base/component-utils";
+import MiscSettings from "$lib/extension/settings/MiscSettings";
+import { FullscreenViewer } from "$lib/components/FullscreenViewer";
 
 export class ImageShowFullscreenButton extends BaseComponent {
   /**
-   * @type {MediaBoxTools}
+   * @type {import('./MediaBoxTools').MediaBoxTools|null}
    */
-  #mediaBoxTools;
+  #mediaBoxTools= null;
   #isFullscreenButtonEnabled = false;
 
   build() {

@@ -2,12 +2,12 @@
     import Menu from "$components/ui/menu/Menu.svelte";
     import MenuItem from "$components/ui/menu/MenuItem.svelte";
     import FormContainer from "$components/ui/forms/FormContainer.svelte";
-    import MaintenanceProfile from "$entities/MaintenanceProfile.ts";
+    import MaintenanceProfile from "$entities/MaintenanceProfile";
     import FormControl from "$components/ui/forms/FormControl.svelte";
-    import ProfileView from "$components/maintenance/ProfileView.svelte";
-    import {maintenanceProfilesStore} from "$stores/maintenance-profiles-store.js";
-    import {goto} from "$app/navigation";
-    import EntitiesTransporter from "$lib/extension/EntitiesTransporter.ts";
+    import ProfileView from "$components/features/ProfileView.svelte";
+    import { maintenanceProfilesStore } from "$stores/maintenance-profiles-store";
+    import { goto } from "$app/navigation";
+    import EntitiesTransporter from "$lib/extension/EntitiesTransporter";
 
     const profilesTransporter = new EntitiesTransporter(MaintenanceProfile);
 

@@ -1,4 +1,5 @@
-@use '../colors';
+@use '$styles/colors';
+@use '$styles/booru-vars';
 
 // This will fix wierd misplacing of the modified media boxes in the listing.
 .js-resizable-media-container {
@@ -18,22 +19,22 @@
       top: -1px;
       bottom: 0;
       z-index: 8;
-      background: colors.$footer;
-      border-top: 23px solid colors.$media-box-border;
+      background: booru-vars.$background-color;
+      border-top: 23px solid booru-vars.$media-box-color;
     }
 
     &:before {
       right: calc(100% - 1px);
       left: -50%;
-      border-left: 1px solid colors.$media-box-border;
-      box-shadow: colors.$footer -10px 0 10px;
+      border-left: booru-vars.$media-border;
+      box-shadow: booru-vars.$background-color -10px 0 10px;
     }
 
     &:after {
       left: calc(100% - 1px);
       right: -50%;
-      border-right: 1px solid colors.$media-box-border;
-      box-shadow: colors.$footer 10px 0 10px;
+      border-right: booru-vars.$media-border;
+      box-shadow: booru-vars.$background-color 10px 0 10px;
     }
   }
 
@@ -45,9 +46,12 @@
     left: -50%;
     right: -50%;
     z-index: 8;
-    background: colors.$footer;
-    border: 1px solid colors.$media-box-border;
-    border-top: 0;
+    background: booru-vars.$background-color;
+    border: {
+      left: booru-vars.$media-border;
+      right: booru-vars.$media-border;
+      bottom: booru-vars.$media-border;
+    };
 
     .tags-list {
       display: flex;
@@ -62,17 +66,12 @@
 
     .tag {
       cursor: pointer;
-      padding: 0 6px;
+      padding: 5px;
       user-select: none;
 
       &:hover {
-        background: colors.$tag-text;
-        color: colors.$tag-background;
-      }
-
-      &[data-tag-category=error]:hover {
-        background: colors.$tag-error-text;
-        color: colors.$tag-error-background;
+        background: booru-vars.$resolved-tag-color;
+        color: booru-vars.$resolved-tag-background;
       }
 
       &.is-missing:not(.is-added),

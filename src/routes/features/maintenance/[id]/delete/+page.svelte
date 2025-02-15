@@ -3,10 +3,10 @@
     import Menu from "$components/ui/menu/Menu.svelte";
     import MenuItem from "$components/ui/menu/MenuItem.svelte";
     import { page } from "$app/stores";
-    import { maintenanceProfilesStore } from "$stores/maintenance-profiles-store.js";
+    import { maintenanceProfilesStore } from "$stores/maintenance-profiles-store";
 
     const profileId = $page.params.id;
-    const targetProfile = $maintenanceProfilesStore.find(profile => profile.id===profileId);
+    const targetProfile = $maintenanceProfilesStore.find(profile => profile.id === profileId);
 
     if (!targetProfile) {
         void goto('/features/maintenance');

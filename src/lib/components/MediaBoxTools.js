@@ -1,9 +1,11 @@
-import {BaseComponent} from "$lib/components/base/BaseComponent.js";
-import {getComponent} from "$lib/components/base/ComponentUtils.js";
-import {MaintenancePopup} from "$lib/components/MaintenancePopup.js";
+import { BaseComponent } from "$lib/components/base/BaseComponent";
+import { getComponent } from "$lib/components/base/component-utils";
+import { MaintenancePopup } from "$lib/components/MaintenancePopup";
+import { on } from "$lib/components/events/comms";
+import { eventActiveProfileChanged } from "$lib/components/events/maintenance-popup-events";
 
 export class MediaBoxTools extends BaseComponent {
-  /** @type {import('MediaBoxWrapper.js').MediaBoxWrapper|null} */
+  /** @type {import('./MediaBoxWrapper').MediaBoxWrapper|null} */
   #mediaBox;
 
   /** @type {MaintenancePopup|null} */
@@ -34,11 +36,11 @@ export class MediaBoxTools extends BaseComponent {
       }
     }
 
-    this.on('active-profile-changed', this.#onActiveProfileChanged.bind(this));
+    on(this, eventActiveProfileChanged, this.#onActiveProfileChanged.bind(this));
   }
 
   /**
-   * @param {CustomEvent<MaintenanceProfile|null>} profileChangedEvent
+   * @param {CustomEvent<import('$entities/MaintenanceProfile').default|null>} profileChangedEvent
    */
   #onActiveProfileChanged(profileChangedEvent) {
     this.container.classList.toggle('has-active-profile', profileChangedEvent.detail !== null);
@@ -52,7 +54,7 @@ export class MediaBoxTools extends BaseComponent {
   }
 
   /**
-   * @return {import('MediaBoxWrapper.js').MediaBoxWrapper|null}
+   * @return {import('./MediaBoxWrapper').MediaBoxWrapper|null}
    */
   get mediaBox() {
     return this.#mediaBox;
@@ -61,7 +63,7 @@ export class MediaBoxTools extends BaseComponent {
 
 /**
  * Create a maintenance popup element.
- * @param {HTMLElement} childrenElements List of children elements to append to the component.
+ * @param {HTMLElement[]} childrenElements List of children elements to append to the component.
  * @return {HTMLElement} The maintenance popup element.
  */
 export function createMediaBoxTools(...childrenElements) {

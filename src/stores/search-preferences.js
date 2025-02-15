@@ -1,5 +1,5 @@
-import {writable} from "svelte/store";
-import SearchSettings from "$lib/extension/settings/SearchSettings.ts";
+import { writable } from "svelte/store";
+import SearchSettings from "$lib/extension/settings/SearchSettings";
 
 export const searchPropertiesSuggestionsEnabled = writable(false);
 

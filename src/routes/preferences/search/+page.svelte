@@ -6,7 +6,7 @@
     import {
         searchPropertiesSuggestionsEnabled,
         searchPropertiesSuggestionsPosition
-    } from "$stores/search-preferences.js";
+    } from "$stores/search-preferences";
     import CheckboxField from "$components/ui/forms/CheckboxField.svelte";
     import SelectField from "$components/ui/forms/SelectField.svelte";
 

@@ -1,9 +1,9 @@
 <script>
     import Menu from "$components/ui/menu/Menu.svelte";
     import MenuItem from "$components/ui/menu/MenuItem.svelte";
-    import { tagGroupsStore } from "$stores/tag-groups-store.js";
+    import { tagGroupsStore } from "$stores/tag-groups-store";
 
-    /** @type {import('$entities/TagGroup.ts').default[]} */
+    /** @type {import('$entities/TagGroup').default[]} */
     let groups = [];
 
     $: groups = $tagGroupsStore.sort((a, b) => a.settings.name.localeCompare(b.settings.name));

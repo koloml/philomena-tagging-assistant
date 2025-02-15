@@ -1,0 +1,8 @@
+$background-color: var(--background-color);
+$media-border: var(--media-border);
+$media-box-color: var(--media-box-color);
+
+// These variables are defined dynamically based on the category of the tag
+$resolved-tag-background: var(--tag-background);
+$resolved-tag-border: var(--tag-border);
+$resolved-tag-color: var(--tag-color);

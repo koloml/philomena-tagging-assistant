@@ -1,4 +1,4 @@
-import PostParser from "$lib/booru/scraped/parsing/PostParser.js";
+import PostParser from "$lib/booru/scraped/parsing/PostParser";
 
 export default class ScrapedAPI {
   /**

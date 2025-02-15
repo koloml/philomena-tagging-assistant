@@ -1,4 +1,4 @@
-import {writable} from "svelte/store";
+import { writable } from "svelte/store";
 
 /**
  * This is readable version of storages. Any changes made to these objects will not be sent to the local storage.

@@ -1,5 +1,5 @@
-import {writable} from "svelte/store";
-import MaintenanceSettings from "$lib/extension/settings/MaintenanceSettings.ts";
+import { writable } from "svelte/store";
+import MaintenanceSettings from "$lib/extension/settings/MaintenanceSettings";
 
 export const stripBlacklistedTagsEnabled = writable(true);
 

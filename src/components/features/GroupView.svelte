@@ -2,7 +2,7 @@
     import TagsColorContainer from "$components/tags/TagsColorContainer.svelte";
 
     /**
-     * @type {import('$entities/TagGroup.ts').default}
+     * @type {import('$entities/TagGroup').default}
      */
     export let group;
 

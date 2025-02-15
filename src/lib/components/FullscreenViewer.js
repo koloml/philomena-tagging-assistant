@@ -1,5 +1,5 @@
-import {BaseComponent} from "$lib/components/base/BaseComponent.js";
-import MiscSettings from "$lib/extension/settings/MiscSettings.ts";
+import { BaseComponent } from "$lib/components/base/BaseComponent";
+import MiscSettings from "$lib/extension/settings/MiscSettings";
 
 export class FullscreenViewer extends BaseComponent {
   /** @type {HTMLVideoElement} */
@@ -189,7 +189,7 @@ export class FullscreenViewer extends BaseComponent {
   }
 
   /**
-   * @param {import("$lib/extension/settings/MiscSettings.js").FullscreenViewerSize} size
+   * @param {import("$lib/extension/settings/MiscSettings").FullscreenViewerSize} size
    */
   #onSizeResolved(size) {
     this.#sizeSelectorElement.value = size;
@@ -325,7 +325,7 @@ export class FullscreenViewer extends BaseComponent {
   static #minRequiredDistance = 50;
 
   /**
-   * @type {Record<import("$lib/extension/settings/MiscSettings.js").FullscreenViewerSize, string>}
+   * @type {Record<import("$lib/extension/settings/MiscSettings").FullscreenViewerSize, string>}
    */
   static #previewSizes = {
     full: 'Full',

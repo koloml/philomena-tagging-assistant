@@ -1,9 +1,9 @@
 <script>
     import Menu from "$components/ui/menu/Menu.svelte";
     import MenuItem from "$components/ui/menu/MenuItem.svelte";
-    import {storagesCollection} from "$stores/debug.js";
-    import {goto} from "$app/navigation";
-    import {findDeepObject} from "$lib/utils.js";
+    import { storagesCollection } from "$stores/debug";
+    import { goto } from "$app/navigation";
+    import { findDeepObject } from "$lib/utils";
 
     /** @type {string} */
     export let storage;

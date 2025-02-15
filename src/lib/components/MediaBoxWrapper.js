@@ -1,6 +1,8 @@
-import {BaseComponent} from "$lib/components/base/BaseComponent.js";
-import {getComponent} from "$lib/components/base/ComponentUtils.js";
-import {buildTagsAndAliasesMap} from "$lib/booru/TagsUtils.js";
+import { BaseComponent } from "$lib/components/base/BaseComponent";
+import { getComponent } from "$lib/components/base/component-utils";
+import { buildTagsAndAliasesMap } from "$lib/booru/tag-utils";
+import { on } from "$lib/components/events/comms";
+import { eventTagsUpdated } from "$lib/components/events/maintenance-popup-events";
 
 export class MediaBoxWrapper extends BaseComponent {
   #thumbnailContainer = null;
@@ -13,11 +15,11 @@ export class MediaBoxWrapper extends BaseComponent {
     this.#thumbnailContainer = this.container.querySelector('.image-container');
     this.#imageLinkElement = this.#thumbnailContainer.querySelector('a');
 
-    this.on('tags-updated', this.#onTagsUpdatedRefreshTagsAndAliases.bind(this));
+    on(this, eventTagsUpdated, this.#onTagsUpdatedRefreshTagsAndAliases.bind(this));
   }
 
   /**
-   * @param {CustomEvent<Map<string,string>>} tagsUpdatedEvent
+   * @param {CustomEvent<Map<string,string>|null>} tagsUpdatedEvent
    */
   #onTagsUpdatedRefreshTagsAndAliases(tagsUpdatedEvent) {
     const updatedMap = tagsUpdatedEvent.detail;

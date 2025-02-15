@@ -1,6 +1,6 @@
 <script>
-    import {goto} from "$app/navigation";
-    import {page} from "$app/stores";
+    import { goto } from "$app/navigation";
+    import { page } from "$app/stores";
     import TagsColorContainer from "$components/tags/TagsColorContainer.svelte";
     import FormContainer from "$components/ui/forms/FormContainer.svelte";
     import FormControl from "$components/ui/forms/FormControl.svelte";
@@ -8,9 +8,9 @@
     import TextField from "$components/ui/forms/TextField.svelte";
     import Menu from "$components/ui/menu/Menu.svelte";
     import MenuItem from "$components/ui/menu/MenuItem.svelte";
-    import TagsEditor from "$components/web-components/TagsEditor.svelte";
-    import TagGroup from "$entities/TagGroup.ts";
-    import {tagGroupsStore} from "$stores/tag-groups-store.js";
+    import TagsEditor from "$components/tags/TagsEditor.svelte";
+    import TagGroup from "$entities/TagGroup";
+    import { tagGroupsStore } from "$stores/tag-groups-store";
 
     const groupId = $page.params.id;
     /** @type {TagGroup|null} */
@@ -23,10 +23,10 @@
     let prefixesList = [];
     let tagCategory = '';
 
-    if (groupId==='new') {
+    if (groupId === 'new') {
         targetGroup = new TagGroup(crypto.randomUUID(), {});
     } else {
-        targetGroup = $tagGroupsStore.find(group => group.id===groupId) || null;
+        targetGroup = $tagGroupsStore.find(group => group.id === groupId) || null;
 
         if (targetGroup) {
             groupName = targetGroup.settings.name;
