@@ -1,8 +1,7 @@
-import { writable } from "svelte/store";
+import { type Writable, writable } from "svelte/store";
 import TagGroup from "$entities/TagGroup";
 
-/** @type {import('svelte/store').Writable<TagGroup[]>} */
-export const tagGroupsStore = writable([]);
+export const tagGroupsStore: Writable<TagGroup[]> = writable([]);
 
 TagGroup
   .readAll()
