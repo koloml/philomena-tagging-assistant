@@ -3,10 +3,10 @@
     import { page } from "$app/stores";
     import Menu from "$components/ui/menu/Menu.svelte";
     import MenuItem from "$components/ui/menu/MenuItem.svelte";
-    import { tagGroupsStore } from "$stores/tag-groups-store";
+    import { tagGroups } from "$stores/entities/tag-groups";
 
     const groupId = $page.params.id;
-    const targetGroup = $tagGroupsStore.find(group => group.id === groupId);
+    const targetGroup = $tagGroups.find(group => group.id === groupId);
 
     if (!targetGroup) {
         void goto('/features/groups');

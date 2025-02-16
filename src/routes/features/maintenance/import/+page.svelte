@@ -5,7 +5,7 @@
     import MaintenanceProfile from "$entities/MaintenanceProfile";
     import FormControl from "$components/ui/forms/FormControl.svelte";
     import ProfileView from "$components/features/ProfileView.svelte";
-    import { maintenanceProfilesStore } from "$stores/maintenance-profiles-store";
+    import { maintenanceProfiles } from "$stores/entities/maintenance-profiles";
     import { goto } from "$app/navigation";
     import EntitiesTransporter from "$lib/extension/EntitiesTransporter";
 
@@ -46,7 +46,7 @@
         }
 
         if (candidateProfile) {
-            existingProfile = $maintenanceProfilesStore.find(profile => profile.id === candidateProfile?.id) ?? null;
+            existingProfile = $maintenanceProfiles.find(profile => profile.id === candidateProfile?.id) ?? null;
         }
     }
 

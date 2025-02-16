@@ -7,7 +7,7 @@
     import MenuItem from "$components/ui/menu/MenuItem.svelte";
     import TagGroup from "$entities/TagGroup";
     import EntitiesTransporter from "$lib/extension/EntitiesTransporter";
-    import { tagGroupsStore } from "$stores/tag-groups-store";
+    import { tagGroups } from "$stores/entities/tag-groups";
 
     const groupTransporter = new EntitiesTransporter(TagGroup);
 
@@ -46,7 +46,7 @@
         }
 
         if (candidateGroup) {
-            existingGroup = $tagGroupsStore.find(group => group.id === candidateGroup?.id) ?? null;
+            existingGroup = $tagGroups.find(group => group.id === candidateGroup?.id) ?? null;
         }
     }
 

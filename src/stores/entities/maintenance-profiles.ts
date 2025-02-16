@@ -5,7 +5,7 @@ import MaintenanceSettings from "$lib/extension/settings/MaintenanceSettings";
 /**
  * Store for working with maintenance profiles in the Svelte popup.
  */
-export const maintenanceProfilesStore: Writable<MaintenanceProfile[]> = writable([]);
+export const maintenanceProfiles: Writable<MaintenanceProfile[]> = writable([]);
 
 /**
  * Store for the active maintenance profile ID.
@@ -22,7 +22,7 @@ let lastActiveProfileId: string|null = null;
 Promise.allSettled([
   // Read the initial values from the storages first
   MaintenanceProfile.readAll().then(profiles => {
-    maintenanceProfilesStore.set(profiles);
+    maintenanceProfiles.set(profiles);
   }),
   maintenanceSettings.resolveActiveProfileId().then(activeProfileId => {
     activeProfileStore.set(activeProfileId);
@@ -30,7 +30,7 @@ Promise.allSettled([
 ]).then(() => {
   // And only after initial values are loaded, start watching for changes from storage and from user's interaction
   MaintenanceProfile.subscribe(profiles => {
-    maintenanceProfilesStore.set(profiles);
+    maintenanceProfiles.set(profiles);
   });
 
   maintenanceSettings.subscribe(settings => {
