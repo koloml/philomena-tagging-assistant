@@ -7,7 +7,7 @@
     import FormContainer from "$components/ui/forms/FormContainer.svelte";
     import { page } from "$app/stores";
     import { goto } from "$app/navigation";
-    import { maintenanceProfilesStore } from "$stores/maintenance-profiles-store";
+    import { maintenanceProfiles } from "$stores/entities/maintenance-profiles";
     import MaintenanceProfile from "$entities/MaintenanceProfile";
 
     /** @type {string} */
@@ -23,7 +23,7 @@
     if (profileId === 'new') {
         targetProfile = new MaintenanceProfile(crypto.randomUUID(), {});
     } else {
-        const maybeExistingProfile = $maintenanceProfilesStore.find(profile => profile.id === profileId);
+        const maybeExistingProfile = $maintenanceProfiles.find(profile => profile.id === profileId);
 
         if (maybeExistingProfile) {
             targetProfile = maybeExistingProfile;

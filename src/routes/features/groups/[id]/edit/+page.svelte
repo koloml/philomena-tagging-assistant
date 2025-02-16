@@ -10,7 +10,7 @@
     import MenuItem from "$components/ui/menu/MenuItem.svelte";
     import TagsEditor from "$components/tags/TagsEditor.svelte";
     import TagGroup from "$entities/TagGroup";
-    import { tagGroupsStore } from "$stores/tag-groups-store";
+    import { tagGroups } from "$stores/entities/tag-groups";
 
     const groupId = $page.params.id;
     /** @type {TagGroup|null} */
@@ -26,7 +26,7 @@
     if (groupId === 'new') {
         targetGroup = new TagGroup(crypto.randomUUID(), {});
     } else {
-        targetGroup = $tagGroupsStore.find(group => group.id === groupId) || null;
+        targetGroup = $tagGroups.find(group => group.id === groupId) || null;
 
         if (targetGroup) {
             groupName = targetGroup.settings.name;

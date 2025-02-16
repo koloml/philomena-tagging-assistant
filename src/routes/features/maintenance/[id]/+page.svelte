@@ -3,7 +3,7 @@
     import MenuItem from "$components/ui/menu/MenuItem.svelte";
     import { page } from "$app/stores";
     import { goto } from "$app/navigation";
-    import { activeProfileStore, maintenanceProfilesStore } from "$stores/maintenance-profiles-store";
+    import { activeProfileStore, maintenanceProfiles } from "$stores/entities/maintenance-profiles";
     import ProfileView from "$components/features/ProfileView.svelte";
     import MenuCheckboxItem from "$components/ui/menu/MenuCheckboxItem.svelte";
 
@@ -16,7 +16,7 @@
     }
 
     $: {
-        const resolvedProfile = $maintenanceProfilesStore.find(profile => profile.id === profileId);
+        const resolvedProfile = $maintenanceProfiles.find(profile => profile.id === profileId);
 
         if (resolvedProfile) {
             profile = resolvedProfile;

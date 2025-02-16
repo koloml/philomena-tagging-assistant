@@ -1,7 +1,7 @@
 <script>
     import { page } from "$app/stores";
     import { goto } from "$app/navigation";
-    import { maintenanceProfilesStore } from "$stores/maintenance-profiles-store";
+    import { maintenanceProfiles } from "$stores/entities/maintenance-profiles";
     import Menu from "$components/ui/menu/Menu.svelte";
     import MenuItem from "$components/ui/menu/MenuItem.svelte";
     import FormContainer from "$components/ui/forms/FormContainer.svelte";
@@ -10,7 +10,7 @@
     import MaintenanceProfile from "$entities/MaintenanceProfile";
 
     const profileId = $page.params.id;
-    const profile = $maintenanceProfilesStore.find(profile => profile.id === profileId);
+    const profile = $maintenanceProfiles.find(profile => profile.id === profileId);
 
     const profilesTransporter = new EntitiesTransporter(MaintenanceProfile);
     /** @type {string} */
