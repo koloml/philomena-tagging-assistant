@@ -55,6 +55,39 @@
                 ? findDeepObject(targetStorage, path)
                 : null;
     }
+
+    /**
+     * Helper function to resolve type, including the null.
+     * @param {*} value Value to resolve type from.
+     * @return {string} Type of the value, including "null" for null.
+     */
+    function resolveType(value) {
+        /** @type {string} */
+        let typeName = typeof value;
+
+        if (typeName === 'object' && value === null) {
+            typeName = 'null';
+        }
+
+        return typeName;
+    }
+
+    /**
+     * Helper function to resolve value, including values like null or undefined.
+     * @param {*} value Value to resolve.
+     * @return {string} String representation of the value.
+     */
+    function resolveValue(value) {
+        if (value === null) {
+            return "null";
+        }
+
+        if (value === undefined) {
+            return "undefined";
+        }
+
+        return value?.toString() ?? '';
+    }
 </script>
 
 <Menu>
@@ -77,7 +110,7 @@
                 </MenuItem>
             {:else}
                 <MenuItem>
-                    {key}: {typeof targetObject[key]} = {targetObject[key]}
+                    {key}: {resolveType(targetObject[key])} = {resolveValue(targetObject[key])}
                 </MenuItem>
             {/if}
         {/each}
