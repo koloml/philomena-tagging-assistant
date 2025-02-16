@@ -1,8 +1,10 @@
 import CacheableSettings from "$lib/extension/base/CacheableSettings";
 
+export type SuggestionsPosition = "start" | "end";
+
 interface SearchSettingsFields {
   suggestProperties: boolean;
-  suggestPropertiesPosition: "start" | "end";
+  suggestPropertiesPosition: SuggestionsPosition;
 }
 
 export default class SearchSettings extends CacheableSettings<SearchSettingsFields> {
