@@ -1,12 +1,15 @@
-import { writable } from "svelte/store";
+import { type Writable, writable } from "svelte/store";
+
+// todo: Maybe this could be dynamically resolved using map of entities and not currently existing list of all settings
+//  classes. For now it's just generic record.
+type StorageContents = Record<string, any>;
 
 /**
  * This is readable version of storages. Any changes made to these objects will not be sent to the local storage.
- * @type {Writable<Record<string, Object>>}
  */
-export const storagesCollection = writable({});
+export const storagesCollection: Writable<StorageContents> = writable({});
 
-chrome.storage.local.get(storages => {
+void chrome.storage.local.get<StorageContents>(null, storages => {
   storagesCollection.set(storages);
 });
 
