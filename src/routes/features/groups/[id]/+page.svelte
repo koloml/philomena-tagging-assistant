@@ -4,7 +4,7 @@
     import GroupView from "$components/features/GroupView.svelte";
     import Menu from "$components/ui/menu/Menu.svelte";
     import MenuItem from "$components/ui/menu/MenuItem.svelte";
-    import { tagGroupsStore } from "$stores/tag-groups-store";
+    import { tagGroups } from "$stores/entities/tag-groups";
 
     const groupId = $page.params.id;
     /** @type {import('$entities/TagGroup').default|null} */
@@ -15,7 +15,7 @@
     }
 
     $: {
-        group = $tagGroupsStore.find(group => group.id === groupId) || null;
+        group = $tagGroups.find(group => group.id === groupId) || null;
 
         if (!group) {
             console.warn(`Group ${groupId} not found.`);

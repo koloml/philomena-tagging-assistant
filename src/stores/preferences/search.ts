@@ -1,10 +1,9 @@
-import { writable } from "svelte/store";
-import SearchSettings from "$lib/extension/settings/SearchSettings";
+import { type Writable, writable } from "svelte/store";
+import SearchSettings, { type SuggestionsPosition } from "$lib/extension/settings/SearchSettings";
 
 export const searchPropertiesSuggestionsEnabled = writable(false);
 
-/** @type {import('svelte/store').Writable<"start"|"end">} */
-export const searchPropertiesSuggestionsPosition = writable('start');
+export const searchPropertiesSuggestionsPosition: Writable<SuggestionsPosition> = writable('start');
 
 const searchSettings = new SearchSettings();
 

@@ -7,11 +7,11 @@
     import MenuItem from "$components/ui/menu/MenuItem.svelte";
     import TagGroup from "$entities/TagGroup";
     import EntitiesTransporter from "$lib/extension/EntitiesTransporter";
-    import { tagGroupsStore } from "$stores/tag-groups-store";
+    import { tagGroups } from "$stores/entities/tag-groups";
 
     const groupId = $page.params.id;
     const groupTransporter = new EntitiesTransporter(TagGroup);
-    const group = $tagGroupsStore.find(group => group.id === groupId);
+    const group = $tagGroups.find(group => group.id === groupId);
 
     /** @type {string} */
     let rawExportedGroup;

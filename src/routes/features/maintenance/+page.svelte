@@ -2,12 +2,12 @@
     import Menu from "$components/ui/menu/Menu.svelte";
     import MenuItem from "$components/ui/menu/MenuItem.svelte";
     import MenuRadioItem from "$components/ui/menu/MenuRadioItem.svelte";
-    import { activeProfileStore, maintenanceProfilesStore } from "$stores/maintenance-profiles-store";
+    import { activeProfileStore, maintenanceProfiles } from "$stores/entities/maintenance-profiles";
 
     /** @type {import('$entities/MaintenanceProfile').default[]} */
     let profiles = [];
 
-    $: profiles = $maintenanceProfilesStore.sort((a, b) => a.settings.name.localeCompare(b.settings.name));
+    $: profiles = $maintenanceProfiles.sort((a, b) => a.settings.name.localeCompare(b.settings.name));
 
     function resetActiveProfile() {
         $activeProfileStore = null;
