@@ -5,11 +5,13 @@ import { EVENT_PRESET_TAG_CHANGE_APPLIED } from "$content/components/events/pres
 import { createFontAwesomeIcon } from "$lib/dom-utils";
 
 export default class PresetTableRow extends BaseComponent {
-  #preset: TagEditorPreset;
+  readonly #preset: TagEditorPreset;
+  readonly #applyAllButton = document.createElement('button');
+  readonly #removeAllButton = document.createElement('button');
+  readonly #exclusiveWarning = document.createElement('div');
+  readonly #alternateColorDummy = document.createElement('span');
+
   #tagsList: HTMLElement[] = [];
-  #applyAllButton = document.createElement('button');
-  #removeAllButton = document.createElement('button');
-  #exclusiveWarning = document.createElement('div');
 
   constructor(container: HTMLElement, preset: TagEditorPreset) {
     super(container);
@@ -78,6 +80,8 @@ export default class PresetTableRow extends BaseComponent {
       tagsCell,
       actionsCell,
     );
+
+    this.#alternateColorDummy.style.display = 'none';
   }
 
   protected init() {
@@ -146,6 +150,26 @@ export default class PresetTableRow extends BaseComponent {
     });
   }
 
+  #maybeRefreshVisibilityFromTags(sourceTags: Set<string>) {
+    if (!this.#preset.settings.conditional || this.#isMatchesConditional(sourceTags)) {
+      this.container.style.display = '';
+      this.#alternateColorDummy.remove();
+      return;
+    }
+
+    this.container.style.display = 'none';
+    this.container.after(this.#alternateColorDummy);
+  }
+
+  #isMatchesConditional(sourceTags: Set<string>): boolean {
+    const listOfRequiredTags = this.#preset.settings.requiredTags;
+
+    return Boolean(
+      listOfRequiredTags.length
+      && listOfRequiredTags.some(tagName => sourceTags.has(tagName))
+    );
+  }
+
   updateTags(tags: Set<string>) {
     let presentTagsAmount = 0;
 
@@ -171,6 +195,8 @@ export default class PresetTableRow extends BaseComponent {
         this.#exclusiveWarning.style.display = 'none';
       }
     }
+
+    this.#maybeRefreshVisibilityFromTags(tags);
   }
 
   remove() {

@@ -25,6 +25,8 @@
   let presetName = $state('');
   let tagsList = $state<string[]>([]);
   let isExclusive = $state(false);
+  let isConditional = $state<boolean>(false);
+  let requiredTags = $state<string[]>([]);
 
   $effect(() => {
     if (presetId === 'new') {
@@ -42,6 +44,8 @@
     presetName = targetPreset.settings.name;
     tagsList = [...targetPreset.settings.tags].sort((a, b) => a.localeCompare(b));
     isExclusive = targetPreset.settings.exclusive;
+    isConditional = targetPreset.settings.conditional;
+    requiredTags = [...targetPreset.settings.requiredTags].sort((a, b) => a.localeCompare(b));
   });
 
   async function savePreset() {
@@ -53,6 +57,8 @@
     targetPreset.settings.name = presetName;
     targetPreset.settings.tags = [...tagsList];
     targetPreset.settings.exclusive = isExclusive;
+    targetPreset.settings.conditional = isConditional;
+    targetPreset.settings.requiredTags = [...requiredTags];
 
     await targetPreset.save();
     await goto(`/features/presets/${targetPreset.id}`);
@@ -76,6 +82,16 @@
       Keep only one tag from this preset active at a time.
     </CheckboxField>
   </FormControl>
+  <FormControl>
+    <CheckboxField bind:checked={isConditional}>
+      Show this preset only when any of specified tags are provided.
+    </CheckboxField>
+  </FormControl>
+  {#if isConditional}
+    <FormControl label="Required Tags">
+      <TagsEditor bind:tags={requiredTags}></TagsEditor>
+    </FormControl>
+  {/if}
 </FormContainer>
 <Menu>
   <hr>

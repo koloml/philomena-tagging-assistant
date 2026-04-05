@@ -43,6 +43,8 @@ const entitiesExporters: ExportersMap = {
       name: entity.settings.name,
       tags: entity.settings.tags,
       exclusive: entity.settings.exclusive,
+      conditional: entity.settings.conditional,
+      requiredTags: entity.settings.requiredTags,
     }
   }
 };

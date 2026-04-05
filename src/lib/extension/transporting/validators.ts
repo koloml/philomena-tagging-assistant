@@ -29,7 +29,15 @@ function validateRequiredString(value: unknown): boolean {
  * @param value Value to be checked.
  */
 function validateOptionalArray(value: unknown): boolean {
-  return typeof value === 'undefined' || value === null || Array.isArray(value);
+  return value === undefined || value === null || Array.isArray(value);
+}
+
+/**
+ * Check if the following value is not set or is a valid boolean.
+ * @param value Value to be checked.
+ */
+function validateOptionalBoolean(value: unknown): boolean {
+  return value === undefined || typeof value === 'boolean';
 }
 
 /**
@@ -73,6 +81,9 @@ const entitiesValidators: EntitiesValidationMap = {
       !validateRequiredString(importedObject?.id)
       || !validateRequiredString(importedObject?.name)
       || !validateOptionalArray(importedObject?.tags)
+      || !validateOptionalBoolean(importedObject?.exclusive)
+      || !validateOptionalBoolean(importedObject?.conditional)
+      || !validateOptionalArray(importedObject?.requiredTags)
     ) {
       throw new Error('Invalid preset format detected!');
     }
