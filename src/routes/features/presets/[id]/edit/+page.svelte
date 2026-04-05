@@ -10,6 +10,7 @@
   import FormControl from "$components/ui/forms/FormControl.svelte";
   import TextField from "$components/ui/forms/TextField.svelte";
   import TagsEditor from "$components/tags/TagsEditor.svelte";
+  import CheckboxField from "$components/ui/forms/CheckboxField.svelte";
 
   let presetId = $derived(page.params.id);
 
@@ -23,6 +24,8 @@
 
   let presetName = $state('');
   let tagsList = $state<string[]>([]);
+  let isConditional = $state<boolean>(false);
+  let requiredTags = $state<string[]>([]);
 
   $effect(() => {
     if (presetId === 'new') {
@@ -39,6 +42,8 @@
 
     presetName = targetPreset.settings.name;
     tagsList = [...targetPreset.settings.tags].sort((a, b) => a.localeCompare(b));
+    isConditional = targetPreset.settings.conditional;
+    requiredTags = [...targetPreset.settings.requiredTags].sort((a, b) => a.localeCompare(b));
   });
 
   async function savePreset() {
@@ -49,6 +54,8 @@
 
     targetPreset.settings.name = presetName;
     targetPreset.settings.tags = [...tagsList];
+    targetPreset.settings.conditional = isConditional;
+    targetPreset.settings.requiredTags = [...requiredTags];
 
     await targetPreset.save();
     await goto(`/features/presets/${targetPreset.id}`);
@@ -67,6 +74,16 @@
   <FormControl label="Tags">
     <TagsEditor bind:tags={tagsList}></TagsEditor>
   </FormControl>
+  <FormControl>
+    <CheckboxField bind:checked={isConditional}>
+      Show this preset only when specified tags are provided.
+    </CheckboxField>
+  </FormControl>
+  {#if isConditional}
+    <FormControl label="Required Tags">
+      <TagsEditor bind:tags={requiredTags}></TagsEditor>
+    </FormControl>
+  {/if}
 </FormContainer>
 <Menu>
   <hr>

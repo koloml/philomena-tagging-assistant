@@ -73,6 +73,8 @@ const entitiesValidators: EntitiesValidationMap = {
       !validateRequiredString(importedObject?.id)
       || !validateRequiredString(importedObject?.name)
       || !validateOptionalArray(importedObject?.tags)
+      || typeof importedObject.conditional !== 'boolean'
+      || !validateOptionalArray(importedObject?.requiredTags)
     ) {
       throw new Error('Invalid preset format detected!');
     }
