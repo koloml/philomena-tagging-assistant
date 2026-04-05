@@ -3,6 +3,7 @@
 .block.tag-presets {
   .tag {
     cursor: pointer;
+    user-select: none;
 
     &.is-missing {
       opacity: 0.5;
