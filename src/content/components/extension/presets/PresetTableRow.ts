@@ -5,12 +5,13 @@ import { EVENT_PRESET_TAG_CHANGE_APPLIED } from "$content/components/events/pres
 import { createFontAwesomeIcon } from "$lib/dom-utils";
 
 export default class PresetTableRow extends BaseComponent {
-  #preset: TagEditorPreset;
+  readonly #preset: TagEditorPreset;
+  readonly #applyAllButton = document.createElement('button');
+  readonly #removeAllButton = document.createElement('button');
+  readonly #exclusiveWarning = document.createElement('div');
+  readonly #alternateColorDummy = document.createElement('span');
+
   #tagsList: HTMLElement[] = [];
-  #applyAllButton = document.createElement('button');
-  #removeAllButton = document.createElement('button');
-  #exclusiveWarning = document.createElement('div');
-  #alternateColorDummy = document.createElement('span');
 
   constructor(container: HTMLElement, preset: TagEditorPreset) {
     super(container);
