@@ -7,9 +7,9 @@ import { tagsBlacklist } from "$config/tags";
 import { emitterAt } from "$content/components/events/comms";
 import {
   EVENT_ACTIVE_PROFILE_CHANGED,
-  EVENT_MAINTENANCE_STATE_CHANGED,
+  EVENT_PROFILE_POPUP_STATE_CHANGED,
   EVENT_TAGS_UPDATED
-} from "$content/components/events/maintenance-popup-events";
+} from "$content/components/events/tagging-profile-popup-events";
 import type { MediaBoxTools } from "$content/components/extension/MediaBoxTools";
 import { resolveTagCategoryFromTagName } from "$lib/philomena/tag-utils";
 
@@ -183,7 +183,20 @@ export class TaggingProfilePopup extends BaseComponent {
       }
 
       this.#isPlanningToSubmit = true;
-      this.#emitter.emit(EVENT_MAINTENANCE_STATE_CHANGED, 'waiting');
+      this.#emitter.emit(EVENT_PROFILE_POPUP_STATE_CHANGED, 'waiting');
+    }
+
+    // Whenever user undoes the change they wanted to do in the popup, it's better to not send the submission and just
+    // do nothing.
+    if (!this.#tagsToAdd.size && !this.#tagsToRemove.size && this.#isPlanningToSubmit) {
+      this.#isPlanningToSubmit = false;
+      this.#emitter.emit(EVENT_PROFILE_POPUP_STATE_CHANGED, 'ready');
+      TaggingProfilePopup.#notifyAboutPendingSubmission(false);
+
+      // Probably shouldn't ever happen, but make sure we cancel any delayed submission.
+      if (this.#tagsSubmissionTimer) {
+        clearTimeout(this.#tagsSubmissionTimer);
+      }
     }
   }
 
@@ -210,7 +223,7 @@ export class TaggingProfilePopup extends BaseComponent {
     this.#isPlanningToSubmit = false;
     this.#isSubmitting = true;
 
-    this.#emitter.emit(EVENT_MAINTENANCE_STATE_CHANGED, 'processing');
+    this.#emitter.emit(EVENT_PROFILE_POPUP_STATE_CHANGED, 'processing');
 
     let maybeTagsAndAliasesAfterUpdate;
 
@@ -252,7 +265,7 @@ export class TaggingProfilePopup extends BaseComponent {
 
       TaggingProfilePopup.#notifyAboutPendingSubmission(false);
 
-      this.#emitter.emit(EVENT_MAINTENANCE_STATE_CHANGED, 'failed');
+      this.#emitter.emit(EVENT_PROFILE_POPUP_STATE_CHANGED, 'failed');
       this.#isSubmitting = false;
 
       return;
@@ -262,7 +275,7 @@ export class TaggingProfilePopup extends BaseComponent {
       this.#emitter.emit(EVENT_TAGS_UPDATED, maybeTagsAndAliasesAfterUpdate);
     }
 
-    this.#emitter.emit(EVENT_MAINTENANCE_STATE_CHANGED, 'complete');
+    this.#emitter.emit(EVENT_PROFILE_POPUP_STATE_CHANGED, 'complete');
 
     this.#tagsToAdd.clear();
     this.#tagsToRemove.clear();
@@ -360,7 +373,7 @@ export class TaggingProfilePopup extends BaseComponent {
       }
     });
 
-    const unsubscribeFromMaintenanceSettings = this.#preferences.subscribe(settings => {
+    const unsubscribeFromPreferences = this.#preferences.subscribe(settings => {
       if (settings.activeProfile === lastActiveProfileId) {
         return;
       }
@@ -382,7 +395,7 @@ export class TaggingProfilePopup extends BaseComponent {
 
     return () => {
       unsubscribeFromProfilesChanges();
-      unsubscribeFromMaintenanceSettings();
+      unsubscribeFromPreferences();
     }
   }
 

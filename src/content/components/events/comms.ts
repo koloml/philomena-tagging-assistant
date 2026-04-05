@@ -1,4 +1,4 @@
-import type { MaintenancePopupEventsMap } from "$content/components/events/maintenance-popup-events";
+import type { TaggingProfilePopupEventsMap } from "$content/components/events/tagging-profile-popup-events";
 import { BaseComponent } from "$content/components/base/BaseComponent";
 import type { FullscreenViewerEventsMap } from "$content/components/events/fullscreen-viewer-events";
 import type { BooruEventsMap } from "$content/components/events/booru-events";
@@ -7,7 +7,7 @@ import type { TagDropdownEvents } from "$content/components/events/tag-dropdown-
 import type { PresetBlockEventsMap } from "$content/components/events/preset-block-events";
 
 type EventsMapping =
-  MaintenancePopupEventsMap
+  TaggingProfilePopupEventsMap
   & FullscreenViewerEventsMap
   & BooruEventsMap
   & TagsFormEventsMap

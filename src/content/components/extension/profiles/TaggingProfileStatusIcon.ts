@@ -1,7 +1,10 @@
 import { BaseComponent } from "$content/components/base/BaseComponent";
 import { getComponent } from "$content/components/base/component-utils";
 import { on } from "$content/components/events/comms";
-import { EVENT_MAINTENANCE_STATE_CHANGED } from "$content/components/events/maintenance-popup-events";
+import {
+  EVENT_PROFILE_POPUP_STATE_CHANGED,
+  type ProfilePopupState
+} from "$content/components/events/tagging-profile-popup-events";
 import type { MediaBoxTools } from "$content/components/extension/MediaBoxTools";
 
 export class TaggingProfileStatusIcon extends BaseComponent {
@@ -22,10 +25,10 @@ export class TaggingProfileStatusIcon extends BaseComponent {
       throw new Error('Status icon element initialized outside of the media box!');
     }
 
-    on(this.#mediaBoxTools, EVENT_MAINTENANCE_STATE_CHANGED, this.#onMaintenanceStateChanged.bind(this));
+    on(this.#mediaBoxTools, EVENT_PROFILE_POPUP_STATE_CHANGED, this.#onPopupStateChanged.bind(this));
   }
 
-  #onMaintenanceStateChanged(stateChangeEvent: CustomEvent<string>) {
+  #onPopupStateChanged(stateChangeEvent: CustomEvent<ProfilePopupState>) {
     // TODO Replace those with FontAwesome icons later. Those icons can probably be sourced from the website itself.
     switch (stateChangeEvent.detail) {
       case "ready":
