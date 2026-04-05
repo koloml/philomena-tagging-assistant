@@ -9,6 +9,7 @@ export default class PresetTableRow extends BaseComponent {
   #tagsList: HTMLElement[] = [];
   #applyAllButton = document.createElement('button');
   #removeAllButton = document.createElement('button');
+  #alternateColorDummy = document.createElement('span');
 
   constructor(container: HTMLElement, preset: TagEditorPreset) {
     super(container);
@@ -64,6 +65,8 @@ export default class PresetTableRow extends BaseComponent {
       tagsCell,
       actionsCell,
     );
+
+    this.#alternateColorDummy.style.display = 'none';
   }
 
   protected init() {
@@ -108,6 +111,26 @@ export default class PresetTableRow extends BaseComponent {
     });
   }
 
+  #maybeRefreshVisibilityFromTags(sourceTags: Set<string>) {
+    if (!this.#preset.settings.conditional || this.#isMatchesConditional(sourceTags)) {
+      this.container.style.display = '';
+      this.#alternateColorDummy.remove();
+      return;
+    }
+
+    this.container.style.display = 'none';
+    this.container.after(this.#alternateColorDummy);
+  }
+
+  #isMatchesConditional(sourceTags: Set<string>): boolean {
+    const listOfRequiredTags = this.#preset.settings.requiredTags;
+
+    return Boolean(
+      listOfRequiredTags.length
+      && listOfRequiredTags.some(tagName => sourceTags.has(tagName))
+    );
+  }
+
   updateTags(tags: Set<string>) {
     for (const tagElement of this.#tagsList) {
       tagElement.classList.toggle(
@@ -115,6 +138,8 @@ export default class PresetTableRow extends BaseComponent {
         !tags.has(tagElement.dataset.tagName || ''),
       );
     }
+
+    this.#maybeRefreshVisibilityFromTags(tags);
   }
 
   remove() {
