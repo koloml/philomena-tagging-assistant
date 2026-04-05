@@ -172,6 +172,7 @@ export class TagsForm extends BaseComponent {
   }
 
   #onTagChangeRequested(event: CustomEvent<PresetTagChange>) {
+    const targetElement = event.target instanceof HTMLElement ? event.target : null;
     const { addedTags = null, removedTags = null } = event.detail;
     let tagChangeList: string[] = [];
 
@@ -187,20 +188,22 @@ export class TagsForm extends BaseComponent {
       );
     }
 
-    const offsetBeforeSubmission = this.#presetsList.container.offsetTop;
+    const containerOffset = this.#presetsList.container.offsetTop;
+    const presetOffset = targetElement?.offsetTop || 0;
 
     this.#applyTagChangesWithFancyTagEditor(
       tagChangeList.join(',')
     );
 
-    const offsetDifference = this.#presetsList.container.offsetTop - offsetBeforeSubmission;
+    const containerOffsetDifference = this.#presetsList.container.offsetTop - containerOffset;
+    const presetOffsetDifference = (targetElement?.offsetTop || 0) - presetOffset;
 
     // Compensating for the layout shift: when user clicks on a tag (or on "add/remove all tags"), tag editor might
     // overflow the current line and wrap tags around to the next line, causing presets section to shift. We need to
     // avoid that for better UX.
-    if (offsetDifference !== 0) {
+    if (containerOffsetDifference !== 0 || presetOffsetDifference !== 0) {
       window.scrollTo({
-        top: window.scrollY + offsetDifference,
+        top: window.scrollY + containerOffsetDifference + presetOffsetDifference,
         behavior: 'instant',
       });
     }
