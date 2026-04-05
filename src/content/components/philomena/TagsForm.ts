@@ -196,7 +196,13 @@ export class TagsForm extends BaseComponent {
     );
 
     const containerOffsetDifference = this.#presetsList.container.offsetTop - containerOffset;
-    const presetOffsetDifference = (targetElement?.offsetTop || 0) - presetOffset;
+    let presetOffsetDifference = (targetElement?.offsetTop || 0) - presetOffset;
+
+    // If target element is no longer visible, then there is no need to apply scrolling fix, otherwise it will shift
+    // user up. Invisible elements are always report 0 offset.
+    if (targetElement?.checkVisibility() === false) {
+      presetOffsetDifference = 0;
+    }
 
     // Compensating for the layout shift: when user clicks on a tag (or on "add/remove all tags"), tag editor might
     // overflow the current line and wrap tags around to the next line, causing presets section to shift. We need to
