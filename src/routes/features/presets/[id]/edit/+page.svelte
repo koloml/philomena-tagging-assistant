@@ -84,7 +84,7 @@
   </FormControl>
   <FormControl>
     <CheckboxField bind:checked={isConditional}>
-      Show this preset only when specified tags are provided.
+      Show this preset only when any of specified tags are provided.
     </CheckboxField>
   </FormControl>
   {#if isConditional}
