@@ -29,7 +29,7 @@ function validateRequiredString(value: unknown): boolean {
  * @param value Value to be checked.
  */
 function validateOptionalArray(value: unknown): boolean {
-  return typeof value === 'undefined' || value === null || Array.isArray(value);
+  return value === undefined || value === null || Array.isArray(value);
 }
 
 /**
@@ -37,7 +37,7 @@ function validateOptionalArray(value: unknown): boolean {
  * @param value Value to be checked.
  */
 function validateOptionalBoolean(value: unknown): boolean {
-  return typeof value === 'undefined' || typeof value === 'boolean';
+  return value === undefined || typeof value === 'boolean';
 }
 
 /**
