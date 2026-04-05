@@ -9,8 +9,8 @@ import { EVENT_PRESET_TAG_CHANGE_APPLIED, type PresetTagChange } from "$content/
 export class TagsForm extends BaseComponent {
   #togglePresetsButton: HTMLButtonElement = document.createElement('button');
   #presetsList = EditorPresetsBlock.create();
-  #plainEditorTextarea: HTMLTextAreaElement|null = null;
-  #fancyEditorInput: HTMLInputElement|null = null;
+  #plainEditorTextarea: HTMLTextAreaElement | null = null;
+  #fancyEditorInput: HTMLInputElement | null = null;
   #tagsSet: Set<string> = new Set();
 
   protected build() {
@@ -172,7 +172,8 @@ export class TagsForm extends BaseComponent {
   }
 
   #onTagChangeRequested(event: CustomEvent<PresetTagChange>) {
-    const { addedTags = null, removedTags = null } = event.detail;
+    const targetElement = event.target instanceof HTMLElement ? event.target : null;
+    const {addedTags = null, removedTags = null} = event.detail;
     let tagChangeList: string[] = [];
 
     if (addedTags) {
@@ -187,23 +188,33 @@ export class TagsForm extends BaseComponent {
       );
     }
 
-    const offsetBeforeSubmission = this.#presetsList.container.offsetTop;
-
-    this.#applyTagChangesWithFancyTagEditor(
-      tagChangeList.join(',')
+    this.#executeAndCompensateForLayoutShift(
+      () => this.#applyTagChangesWithFancyTagEditor(tagChangeList.join(',')),
+      [this.#presetsList.container, targetElement],
     );
+  }
 
-    const offsetDifference = this.#presetsList.container.offsetTop - offsetBeforeSubmission;
+  #executeAndCompensateForLayoutShift(executeOperation: () => void, elements: (HTMLElement | null)[]) {
+    const offsetsListBefore = TagsForm.#gatherOffsetsFromElements(elements);
+    executeOperation();
+    const offsetsListAfter = TagsForm.#gatherOffsetsFromElements(elements);
 
-    // Compensating for the layout shift: when user clicks on a tag (or on "add/remove all tags"), tag editor might
-    // overflow the current line and wrap tags around to the next line, causing presets section to shift. We need to
-    // avoid that for better UX.
-    if (offsetDifference !== 0) {
-      window.scrollTo({
-        top: window.scrollY + offsetDifference,
-        behavior: 'instant',
-      });
+    const resultDifference = offsetsListAfter
+      .map((offsetAfter, index) =>
+        offsetAfter !== null && offsetsListBefore[index] !== null
+          ? offsetAfter - offsetsListBefore[index]
+          : null)
+      .filter(difference => difference !== null)
+      .reduce((summary, difference) => summary + difference, 0);
+
+    if (resultDifference === 0) {
+      return;
     }
+
+    window.scrollTo({
+      top: scrollY + resultDifference,
+      behavior: 'instant',
+    })
   }
 
   #applyTagChangesWithFancyTagEditor(tagsListWithChanges: string): void {
@@ -232,7 +243,7 @@ export class TagsForm extends BaseComponent {
     this.refreshTagColors();
   }
 
-  #onPlainEditorReloadRequested(event: CustomEvent<ReloadCustomOptions|null>) {
+  #onPlainEditorReloadRequested(event: CustomEvent<ReloadCustomOptions | null>) {
     if (!event.detail?.skipTagColorRefresh) {
       this.refreshTagColors();
     }
@@ -240,6 +251,14 @@ export class TagsForm extends BaseComponent {
     if (!event.detail?.skipTagRefresh) {
       this.#refreshTagsListForPresets();
     }
+  }
+
+  static #gatherOffsetsFromElements(elements: (HTMLElement | null)[]): (number | null)[] {
+    return elements.map(
+      maybeElement => maybeElement?.checkVisibility()
+        ? maybeElement?.offsetTop
+        : null
+    );
   }
 
   static watchForEditors() {
