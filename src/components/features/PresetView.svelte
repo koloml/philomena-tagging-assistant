@@ -18,3 +18,9 @@
 <DetailsBlock title="Tags">
   <TagsList tags={sortedTagsList}></TagsList>
 </DetailsBlock>
+{#if preset.settings.exclusive}
+  <DetailsBlock title="Exclusivity">
+    Only one tag in this preset should be active at a time. If you will click on other non-active tag, other tags will
+    be automatically removed from the editor.
+  </DetailsBlock>
+{/if}
