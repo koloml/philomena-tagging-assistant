@@ -3,6 +3,9 @@ import StorageEntity from "$lib/extension/base/StorageEntity";
 interface TagEditorPresetSettings {
   name: string;
   tags: string[];
+  exclusive: boolean;
+  conditional: boolean;
+  requiredTags: string[];
 }
 
 export default class TagEditorPreset extends StorageEntity<TagEditorPresetSettings> {
@@ -10,6 +13,9 @@ export default class TagEditorPreset extends StorageEntity<TagEditorPresetSettin
     super(id, {
       name: settings.name || '',
       tags: settings.tags || [],
+      exclusive: settings.exclusive ?? false,
+      conditional: settings.conditional || false,
+      requiredTags: settings.requiredTags || [],
     });
   }
 

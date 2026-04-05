@@ -5,10 +5,13 @@ import { EVENT_PRESET_TAG_CHANGE_APPLIED } from "$content/components/events/pres
 import { createFontAwesomeIcon } from "$lib/dom-utils";
 
 export default class PresetTableRow extends BaseComponent {
-  #preset: TagEditorPreset;
+  readonly #preset: TagEditorPreset;
+  readonly #applyAllButton = document.createElement('button');
+  readonly #removeAllButton = document.createElement('button');
+  readonly #exclusiveWarning = document.createElement('div');
+  readonly #alternateColorDummy = document.createElement('span');
+
   #tagsList: HTMLElement[] = [];
-  #applyAllButton = document.createElement('button');
-  #removeAllButton = document.createElement('button');
 
   constructor(container: HTMLElement, preset: TagEditorPreset) {
     super(container);
@@ -32,6 +35,7 @@ export default class PresetTableRow extends BaseComponent {
     nameCell.textContent = this.#preset.settings.name;
 
     const tagsCell = document.createElement('td');
+    tagsCell.style.width = '70%';
 
     const tagsListContainer = document.createElement('div');
     tagsListContainer.classList.add('tag-list');
@@ -52,6 +56,18 @@ export default class PresetTableRow extends BaseComponent {
     this.#removeAllButton.append(createFontAwesomeIcon('circle-minus'));
     this.#removeAllButton.title = 'Remove all tags from this preset from the editor';
 
+    if (this.#preset.settings.exclusive) {
+      this.#applyAllButton.disabled = true;
+      this.#applyAllButton.title = "You can't add all tags from this preset since it only allows one tag to be active";
+
+      this.#exclusiveWarning.classList.add('block', 'block--fixed', 'block--warning');
+      this.#exclusiveWarning.textContent = ' Multiple tags from this preset present in the editor! If you will click one of the tags here, other tags will be cleared automatically.'
+      this.#exclusiveWarning.prepend(createFontAwesomeIcon('triangle-exclamation'));
+      this.#exclusiveWarning.style.display = 'none';
+
+      tagsCell.append(this.#exclusiveWarning);
+    }
+
     actionsContainer.append(
       this.#applyAllButton,
       this.#removeAllButton,
@@ -64,6 +80,8 @@ export default class PresetTableRow extends BaseComponent {
       tagsCell,
       actionsCell,
     );
+
+    this.#alternateColorDummy.style.display = 'none';
   }
 
   protected init() {
@@ -84,6 +102,30 @@ export default class PresetTableRow extends BaseComponent {
 
     const tagName = targetElement.dataset.tagName;
     const isMissing = targetElement.classList.contains(PresetTableRow.#tagMissingClassName);
+
+    if (!tagName) {
+      return;
+    }
+
+    // If a user clicks on the tag which was missing, then we have to remove all other active tags that are in this
+    // preset. But only when clicking on a tag which is missing, just so they will be able to remove any cases where
+    // multiple tags from exclusive present are active.
+    if (this.#preset.settings.exclusive && isMissing) {
+      const tagNamesToRemove = this.#tagsList
+        .filter(
+          tagElement => tagElement !== targetElement
+            && !tagElement.classList.contains(PresetTableRow.#tagMissingClassName)
+        )
+        .map(tagElement => tagElement.dataset.tagName)
+        .filter(tagName => typeof tagName === 'string');
+
+      emit(this, EVENT_PRESET_TAG_CHANGE_APPLIED, {
+        addedTags: new Set([tagName]),
+        removedTags: new Set(tagNamesToRemove)
+      });
+
+      return;
+    }
 
     emit(this, EVENT_PRESET_TAG_CHANGE_APPLIED, {
       [isMissing ? 'addedTags' : 'removedTags']: new Set([tagName])
@@ -108,13 +150,53 @@ export default class PresetTableRow extends BaseComponent {
     });
   }
 
+  #maybeRefreshVisibilityFromTags(sourceTags: Set<string>) {
+    if (!this.#preset.settings.conditional || this.#isMatchesConditional(sourceTags)) {
+      this.container.style.display = '';
+      this.#alternateColorDummy.remove();
+      return;
+    }
+
+    this.container.style.display = 'none';
+    this.container.after(this.#alternateColorDummy);
+  }
+
+  #isMatchesConditional(sourceTags: Set<string>): boolean {
+    const listOfRequiredTags = this.#preset.settings.requiredTags;
+
+    return Boolean(
+      listOfRequiredTags.length
+      && listOfRequiredTags.some(tagName => sourceTags.has(tagName))
+    );
+  }
+
   updateTags(tags: Set<string>) {
+    let presentTagsAmount = 0;
+
     for (const tagElement of this.#tagsList) {
-      tagElement.classList.toggle(
+      const isTagMissing = tagElement.classList.toggle(
         PresetTableRow.#tagMissingClassName,
         !tags.has(tagElement.dataset.tagName || ''),
       );
+
+      if (!isTagMissing) {
+        presentTagsAmount++;
+      }
     }
+
+    if (this.#preset.settings.exclusive) {
+      const multipleTagsInExclusivePreset = presentTagsAmount > 1;
+
+      this.container.classList.toggle(PresetTableRow.#presetWarningClassName, multipleTagsInExclusivePreset);
+
+      if (multipleTagsInExclusivePreset) {
+        this.#exclusiveWarning.style.removeProperty('display');
+      } else {
+        this.#exclusiveWarning.style.display = 'none';
+      }
+    }
+
+    this.#maybeRefreshVisibilityFromTags(tags);
   }
 
   remove() {
@@ -126,4 +208,5 @@ export default class PresetTableRow extends BaseComponent {
   }
 
   static #tagMissingClassName = 'is-missing';
+  static #presetWarningClassName = 'has-warning';
 }

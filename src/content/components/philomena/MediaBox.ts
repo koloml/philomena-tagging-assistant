@@ -2,7 +2,7 @@ import { BaseComponent } from "$content/components/base/BaseComponent";
 import { getComponent } from "$content/components/base/component-utils";
 import { buildTagsAndAliasesMap } from "$lib/philomena/tag-utils";
 import { on } from "$content/components/events/comms";
-import { EVENT_TAGS_UPDATED } from "$content/components/events/maintenance-popup-events";
+import { EVENT_TAGS_UPDATED } from "$content/components/events/tagging-profile-popup-events";
 
 export class MediaBox extends BaseComponent {
   #thumbnailContainer: HTMLElement | null = null;

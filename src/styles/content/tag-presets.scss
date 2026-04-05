@@ -3,6 +3,7 @@
 .block.tag-presets {
   .tag {
     cursor: pointer;
+    user-select: none;
 
     &.is-missing {
       opacity: 0.5;
@@ -11,6 +12,13 @@
     &:hover {
       color: booru-vars.$resolved-tag-background;
       background: booru-vars.$resolved-tag-color;
+    }
+  }
+
+  .block.block--fixed.block--warning {
+    margin: {
+      top: booru-vars.$block-spacing;
+      bottom: 0;
     }
   }
 }
