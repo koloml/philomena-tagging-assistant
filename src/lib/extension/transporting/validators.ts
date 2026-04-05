@@ -33,6 +33,14 @@ function validateOptionalArray(value: unknown): boolean {
 }
 
 /**
+ * Check if the following value is not set or is a valid boolean.
+ * @param value Value to be checked.
+ */
+function validateOptionalBoolean(value: unknown): boolean {
+  return typeof value === 'undefined' || typeof value === 'boolean';
+}
+
+/**
  * Map of validators for each entity. Function should throw the error if validation failed.
  */
 const entitiesValidators: EntitiesValidationMap = {
@@ -73,7 +81,8 @@ const entitiesValidators: EntitiesValidationMap = {
       !validateRequiredString(importedObject?.id)
       || !validateRequiredString(importedObject?.name)
       || !validateOptionalArray(importedObject?.tags)
-      || typeof importedObject.conditional !== 'boolean'
+      || !validateOptionalBoolean(importedObject?.exclusive)
+      || !validateOptionalBoolean(importedObject?.conditional)
       || !validateOptionalArray(importedObject?.requiredTags)
     ) {
       throw new Error('Invalid preset format detected!');
