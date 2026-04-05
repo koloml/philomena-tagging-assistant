@@ -13,4 +13,11 @@
       background: booru-vars.$resolved-tag-color;
     }
   }
+
+  .block.block--fixed.block--warning {
+    margin: {
+      top: booru-vars.$block-spacing;
+      bottom: 0;
+    }
+  }
 }

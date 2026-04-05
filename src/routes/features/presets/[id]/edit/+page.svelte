@@ -10,6 +10,7 @@
   import FormControl from "$components/ui/forms/FormControl.svelte";
   import TextField from "$components/ui/forms/TextField.svelte";
   import TagsEditor from "$components/tags/TagsEditor.svelte";
+  import CheckboxField from "$components/ui/forms/CheckboxField.svelte";
 
   let presetId = $derived(page.params.id);
 
@@ -23,6 +24,7 @@
 
   let presetName = $state('');
   let tagsList = $state<string[]>([]);
+  let isExclusive = $state(false);
 
   $effect(() => {
     if (presetId === 'new') {
@@ -39,6 +41,7 @@
 
     presetName = targetPreset.settings.name;
     tagsList = [...targetPreset.settings.tags].sort((a, b) => a.localeCompare(b));
+    isExclusive = targetPreset.settings.exclusive;
   });
 
   async function savePreset() {
@@ -49,6 +52,7 @@
 
     targetPreset.settings.name = presetName;
     targetPreset.settings.tags = [...tagsList];
+    targetPreset.settings.exclusive = isExclusive;
 
     await targetPreset.save();
     await goto(`/features/presets/${targetPreset.id}`);
@@ -66,6 +70,11 @@
   </FormControl>
   <FormControl label="Tags">
     <TagsEditor bind:tags={tagsList}></TagsEditor>
+  </FormControl>
+  <FormControl>
+    <CheckboxField bind:checked={isExclusive}>
+      Keep only one tag from this preset active at a time.
+    </CheckboxField>
   </FormControl>
 </FormContainer>
 <Menu>
