@@ -34,7 +34,7 @@
   <MenuItem href={currentSiteUrl} icon="globe" target="_blank">
     Visit {__CURRENT_SITE_NAME__}
   </MenuItem>
-  <MenuItem href="https://github.com/koloml/furbooru-tagging-assistant" icon="info-circle" target="_blank">
+  <MenuItem href="https://github.com/koloml/philomena-tagging-assistant" icon="info-circle" target="_blank">
     GitHub Repo
   </MenuItem>
 </Menu>
