@@ -41,19 +41,25 @@ export class QuotedTermToken extends Token {
   }
 
   static decode(value: string): string {
-    return value.replace(/\\([\\"])/g, "$1");
+    return value
+      .replaceAll(/\\([\\"])/g, "$1")
+      .replaceAll(/^"|"$/g, '');
   }
 
   static encode(value: string): string {
-    return value.replace(/[\\"]/g, "\\$&");
+    return `"${value.replaceAll(/[\\"]/g, "\\$&")}"`;
   }
 }
 
 export class TermToken extends Token {
 }
 
-type MatchResultCarry = {
+interface MatchResultCarry {
   match?: RegExpMatchArray | null
+}
+
+interface SuccessfulMatchResultCarry {
+  match: RegExpMatchArray;
 }
 
 /**
@@ -94,26 +100,26 @@ export class QueryLexer {
       }
 
       if (this.#match(QueryLexer.#negotiationOperator, result)) {
-        tokens.push(new NotToken(this.#index, result.match![0]));
-        this.#index += result.match![0].length;
+        tokens.push(new NotToken(this.#index, result.match[0]));
+        this.#index += result.match[0].length;
         continue;
       }
 
       if (this.#match(QueryLexer.#andOperator, result)) {
-        tokens.push(new AndToken(this.#index, result.match![0]));
-        this.#index += result.match![0].length;
+        tokens.push(new AndToken(this.#index, result.match[0]));
+        this.#index += result.match[0].length;
         continue;
       }
 
       if (this.#match(QueryLexer.#orOperator, result)) {
-        tokens.push(new OrToken(this.#index, result.match![0]));
-        this.#index += result.match![0].length;
+        tokens.push(new OrToken(this.#index, result.match[0]));
+        this.#index += result.match[0].length;
         continue;
       }
 
       if (this.#match(QueryLexer.#notOperator, result)) {
-        tokens.push(new NotToken(this.#index, result.match![0]));
-        this.#index += result.match![0].length;
+        tokens.push(new NotToken(this.#index, result.match[0]));
+        this.#index += result.match[0].length;
         continue;
       }
 
@@ -130,26 +136,26 @@ export class QueryLexer {
       }
 
       if (this.#match(QueryLexer.#boostOperator, result)) {
-        tokens.push(new BoostToken(this.#index, result.match![0]));
-        this.#index += result.match![0].length;
+        tokens.push(new BoostToken(this.#index, result.match[0]));
+        this.#index += result.match[0].length;
         continue;
       }
 
       if (this.#match(QueryLexer.#whitespaces, result)) {
-        this.#index += result.match![0].length;
+        this.#index += result.match[0].length;
         continue;
       }
 
       if (this.#match(QueryLexer.#quotedText, result)) {
-        tokens.push(new QuotedTermToken(this.#index, result.match![0], result.match![1]));
-        this.#index += result.match![0].length;
+        tokens.push(new QuotedTermToken(this.#index, result.match[0], result.match[1]));
+        this.#index += result.match[0].length;
         continue;
       }
 
       dirtyText = this.#parseDirtyText(this.#index);
 
       if (dirtyText) {
-        tokens.push(new TermToken(this.#index, dirtyText));
+        tokens.push(new TermToken(this.#index, dirtyText.trim()));
         this.#index += dirtyText.length;
         continue;
       }
@@ -168,7 +174,7 @@ export class QueryLexer {
    *
    * @return Is there a match?
    */
-  #match(targetRegExp: RegExp, resultCarrier: MatchResultCarry = {}): boolean {
+  #match(targetRegExp: RegExp, resultCarrier: MatchResultCarry = {}): resultCarrier is SuccessfulMatchResultCarry {
     return this.#matchAt(targetRegExp, this.#index, resultCarrier);
   }
 
@@ -181,9 +187,9 @@ export class QueryLexer {
    *
    * @return Is there a match?
    */
-  #matchAt(targetRegExp: RegExp, index: number, resultCarrier: MatchResultCarry = {}): boolean {
+  #matchAt(targetRegExp: RegExp, index: number, resultCarrier: MatchResultCarry = {}): resultCarrier is SuccessfulMatchResultCarry {
     targetRegExp.lastIndex = index;
-    resultCarrier.match = this.#value.match(targetRegExp);
+    resultCarrier.match = targetRegExp.exec(this.#value);
 
     return resultCarrier.match !== null;
   }
@@ -207,16 +213,10 @@ export class QueryLexer {
         break;
       }
 
-      if (this.#matchAt(QueryLexer.#dirtyTextContent, index, result)) {
-        resultValue += result.match![0];
-        index += result.match![0].length;
-        continue;
-      }
-
       if (this.#value[index] === QueryLexer.#bracketsOpenCharacter) {
         let bracketsContent = QueryLexer.#bracketsOpenCharacter + this.#parseDirtyText(index + 1);
 
-        if (this.#value[index + bracketsContent.length + 1] === QueryLexer.#bracketsCloseCharacter) {
+        if (this.#value[index + bracketsContent.length] === QueryLexer.#bracketsCloseCharacter) {
           bracketsContent += QueryLexer.#bracketsCloseCharacter;
         }
 
@@ -227,22 +227,28 @@ export class QueryLexer {
         continue;
       }
 
+      if (this.#matchAt(QueryLexer.#dirtyTextContent, index, result)) {
+        resultValue += result.match[0];
+        index += result.match[0].length;
+        continue;
+      }
+
       break;
     }
 
     return resultValue;
   }
 
-  static #commaCharacter = ',';
-  static #negotiationOperator = /[!-]/y;
-  static #andOperator = /\s+(?:AND|&&)\s+/y;
-  static #orOperator = /\s+(?:OR|\|\|)\s+/y;
-  static #notOperator = /NOT\s+/y;
-  static #bracketsOpenCharacter = "(";
-  static #bracketsCloseCharacter = ")";
-  static #boostOperator = /\^[+-]?\d+(?:\.\d+)?/y;
-  static #whitespaces = /\s+/y;
-  static #quotedText = /"((?:\\.|[^\\"])+)"/y;
-  static #dirtyTextStopWords = /,|\s+(?:AND|&&|OR|\|\|)\s+|\s+(?:\)|\^[+-]?\d+(?:\.\d+)?)/y;
-  static #dirtyTextContent = /\\.|[^()]/y;
+  static readonly #commaCharacter = ',';
+  static readonly #negotiationOperator = /[!-]/y;
+  static readonly #andOperator = /\s+(?:AND|&&)\s+/y;
+  static readonly #orOperator = /\s+(?:OR|\|\|)\s+/y;
+  static readonly #notOperator = /NOT\s+/y;
+  static readonly #bracketsOpenCharacter = "(";
+  static readonly #bracketsCloseCharacter = ")";
+  static readonly #boostOperator = /\^[+-]?\d+(?:\.\d+)?/y;
+  static readonly #whitespaces = /\s+/y;
+  static readonly #quotedText = /"\s*((?:\\.|[^\\"])+?)\s*"/y;
+  static readonly #dirtyTextStopWords = /,|\s+(?:AND|&&|OR|\|\|)\s+|\s*(?:\)|\^[+-]?\d+(?:\.\d+)?)/y;
+  static readonly #dirtyTextContent = /\\.|[^()]/y;
 }
