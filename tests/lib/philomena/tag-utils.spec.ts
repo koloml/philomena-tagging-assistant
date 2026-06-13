@@ -11,7 +11,6 @@ describe('tag-utils', () => {
     }
 
     describe('Parsing from /search/?q=tag links', () => {
-      // Test cases for tags separated by commas
       it('should resolve a single tag from /search URLs', () => {
         expect(resolveFromSearchQuery('safe')).toBe('safe');
       });
@@ -19,6 +18,11 @@ describe('tag-utils', () => {
       it('should return null for queries with multiple comma-separated tags', () => {
         // Comma acts as a separator in the query, resulting in multiple tokens
         expect(resolveFromSearchQuery('safe, suggestive')).toBe(null);
+      });
+
+      it('should return null if query is empty or not a term', () => {
+        expect(resolveFromSearchQuery('')).toBe(null);
+        expect(resolveFromSearchQuery('!')).toBe(null);
       });
 
       it('should properly treat parentheses in the query with single tag', () => {
