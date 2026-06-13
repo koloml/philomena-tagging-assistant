@@ -42,7 +42,7 @@ const tagLinkRegExp = /\/tags\/(?<encodedTagName>[^/?#]+)/;
  *
  * @see https://github.com/philomena-dev/philomena/blob/6086757b654da8792ae52adb2a2f501ea6c30d12/lib/philomena/slug.ex#L52-L57
  */
-const slugEncodedCharacters: Map<string, string> = new Map([
+export const slugEncodedCharacters: Map<string, string> = new Map([
   ['-dash-', '-'],
   ['-fwslash-', '/'],
   ['-bwslash-', '\\'],
