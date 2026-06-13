@@ -51,6 +51,37 @@ describe('QueryLexer', () => {
     expect(quotedTermWithSpaces instanceof QuotedTermToken && quotedTermWithSpaces.decodedValue || new Error('Wrong token')).toBe('avali');
   });
 
+  it('should properly differentiate between word-like operators and parts of tags', () => {
+    expect(parseQueryTypes('safe AND sound')).toEqual([TermToken, AndToken, TermToken]);
+    expect(parseQueryTypes('NOT safe AND dangerous')).toEqual([NotToken, TermToken, AndToken, TermToken]);
+  });
+
+  it('should only detect word-like operators when spaces are in place', () => {
+    // Require whitespace between operator and other tokens
+    expect(parseQueryTypes('NOT safeANDsound')).toEqual([NotToken, TermToken]);
+
+    // If none are there, just should treat it as a part of a term
+    expect(parseQuery('safeAND sound')[0].value).toEqual('safeAND sound');
+
+    // All operators should be in all caps, otherwise it's just a term
+    const [lowercaseOperatorWords] = parseQuery('avali are cute and you know it or else');
+    expect(lowercaseOperatorWords.value).toBe('avali are cute and you know it or else');
+
+    // And if it in caps, but part of some word, then it's just a word
+    const [wordsInCapsContainingOperators] = parseQuery('THAT POOR KNOT IS PLAIN AS SAND');
+    expect(wordsInCapsContainingOperators.value).toBe('THAT POOR KNOT IS PLAIN AS SAND');
+  });
+
+  it('should not treat any operators inside the quoted term as actual operators', () => {
+    const tokens = parseQuery('"this AND that OR these NOT there || () && ^123"');
+    const [quotedTermToken] = tokens;
+
+    expect(tokens).toHaveLength(1);
+
+    expect(quotedTermToken instanceof QuotedTermToken && quotedTermToken.decodedValue || null)
+      .toBe('this AND that OR these NOT there || () && ^123');
+  });
+
   describe('QuotedTermToken', () => {
     it('should decode and encode quotes and backslash', () => {
       const encodedQuote = `"term with \\\" inside of it"`;
