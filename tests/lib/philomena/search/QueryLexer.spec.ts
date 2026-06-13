@@ -20,6 +20,7 @@ describe('QueryLexer', () => {
 
   it('should properly parse different kinds of queries', () => {
     expect(parseQueryTypes('safe')).toEqual([TermToken]);
+    expect(parseQueryTypes('safe^1')).toEqual([TermToken, BoostToken]);
     expect(parseQueryTypes('safe, avali')).toEqual([TermToken, AndToken, TermToken]);
     expect(parseQueryTypes('!avali')).toEqual([NotToken, TermToken]);
     expect(parseQueryTypes('avali || 4 ears')).toEqual([TermToken, OrToken, TermToken]);
