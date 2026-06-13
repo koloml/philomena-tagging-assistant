@@ -189,7 +189,7 @@ export class QueryLexer {
    */
   #matchAt(targetRegExp: RegExp, index: number, resultCarrier: MatchResultCarry = {}): resultCarrier is SuccessfulMatchResultCarry {
     targetRegExp.lastIndex = index;
-    resultCarrier.match = this.#value.match(targetRegExp);
+    resultCarrier.match = targetRegExp.exec(this.#value);
 
     return resultCarrier.match !== null;
   }
