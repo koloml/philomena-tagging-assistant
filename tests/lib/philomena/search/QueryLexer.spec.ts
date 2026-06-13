@@ -25,7 +25,7 @@ describe('QueryLexer', () => {
     expect(parseQueryTypes('avali || 4 ears')).toEqual([TermToken, OrToken, TermToken]);
     expect(parseQueryTypes('avali && !4 ears')).toEqual([TermToken, AndToken, NotToken, TermToken]);
 
-    expect(parseQueryTypes('avali AND (!4 ears OR -3 fingers)')).toEqual([
+    expect(parseQueryTypes('avali AND (NOT 4 ears OR -3 fingers)')).toEqual([
       TermToken, AndToken, GroupStartToken, NotToken, TermToken, OrToken, NotToken, TermToken, GroupEndToken,
     ]);
   });
