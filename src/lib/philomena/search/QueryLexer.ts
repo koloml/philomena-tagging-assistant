@@ -151,7 +151,7 @@ export class QueryLexer {
       dirtyText = this.#parseDirtyText(this.#index);
 
       if (dirtyText) {
-        tokens.push(new TermToken(this.#index, dirtyText));
+        tokens.push(new TermToken(this.#index, dirtyText.trim()));
         this.#index += dirtyText.length;
         continue;
       }
@@ -244,7 +244,7 @@ export class QueryLexer {
   static #bracketsCloseCharacter = ")";
   static #boostOperator = /\^[+-]?\d+(?:\.\d+)?/y;
   static #whitespaces = /\s+/y;
-  static #quotedText = /"((?:\\.|[^\\"])+)"/y;
+  static #quotedText = /"\s*((?:\\.|[^\\"])+?)\s*"/y;
   static #dirtyTextStopWords = /,|\s+(?:AND|&&|OR|\|\|)\s+|\s*(?:\)|\^[+-]?\d+(?:\.\d+)?)/y;
   static #dirtyTextContent = /\\.|[^()]/y;
 }
