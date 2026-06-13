@@ -235,16 +235,16 @@ export class QueryLexer {
     return resultValue;
   }
 
-  static #commaCharacter = ',';
-  static #negotiationOperator = /[!-]/y;
-  static #andOperator = /\s+(?:AND|&&)\s+/y;
-  static #orOperator = /\s+(?:OR|\|\|)\s+/y;
-  static #notOperator = /NOT\s+/y;
-  static #bracketsOpenCharacter = "(";
-  static #bracketsCloseCharacter = ")";
-  static #boostOperator = /\^[+-]?\d+(?:\.\d+)?/y;
-  static #whitespaces = /\s+/y;
-  static #quotedText = /"\s*((?:\\.|[^\\"])+?)\s*"/y;
-  static #dirtyTextStopWords = /,|\s+(?:AND|&&|OR|\|\|)\s+|\s*(?:\)|\^[+-]?\d+(?:\.\d+)?)/y;
-  static #dirtyTextContent = /\\.|[^()]/y;
+  static readonly #commaCharacter = ',';
+  static readonly #negotiationOperator = /[!-]/y;
+  static readonly #andOperator = /\s+(?:AND|&&)\s+/y;
+  static readonly #orOperator = /\s+(?:OR|\|\|)\s+/y;
+  static readonly #notOperator = /NOT\s+/y;
+  static readonly #bracketsOpenCharacter = "(";
+  static readonly #bracketsCloseCharacter = ")";
+  static readonly #boostOperator = /\^[+-]?\d+(?:\.\d+)?/y;
+  static readonly #whitespaces = /\s+/y;
+  static readonly #quotedText = /"\s*((?:\\.|[^\\"])+?)\s*"/y;
+  static readonly #dirtyTextStopWords = /,|\s+(?:AND|&&|OR|\|\|)\s+|\s*(?:\)|\^[+-]?\d+(?:\.\d+)?)/y;
+  static readonly #dirtyTextContent = /\\.|[^()]/y;
 }
