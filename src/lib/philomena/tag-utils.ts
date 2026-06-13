@@ -101,8 +101,8 @@ export function resolveTagNameFromLink(tagLink: URL): string | null {
   }
 
   return decodeURIComponent(encodedTagName)
-    .replaceAll(/-[a-z]+-/gi, match => slugEncodedCharacters.get(match) ?? match)
-    .replaceAll('+', ' ');
+    .replaceAll('+', ' ')
+    .replaceAll(/-[a-z]+-/gi, match => slugEncodedCharacters.get(match) ?? match);
 }
 
 /**
