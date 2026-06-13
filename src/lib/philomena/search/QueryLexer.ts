@@ -207,12 +207,6 @@ export class QueryLexer {
         break;
       }
 
-      if (this.#matchAt(QueryLexer.#dirtyTextContent, index, result)) {
-        resultValue += result.match![0];
-        index += result.match![0].length;
-        continue;
-      }
-
       if (this.#value[index] === QueryLexer.#bracketsOpenCharacter) {
         let bracketsContent = QueryLexer.#bracketsOpenCharacter + this.#parseDirtyText(index + 1);
 
@@ -224,6 +218,12 @@ export class QueryLexer {
 
         resultValue += bracketsContent;
         index += bracketsContent.length;
+        continue;
+      }
+
+      if (this.#matchAt(QueryLexer.#dirtyTextContent, index, result)) {
+        resultValue += result.match![0];
+        index += result.match![0].length;
         continue;
       }
 
