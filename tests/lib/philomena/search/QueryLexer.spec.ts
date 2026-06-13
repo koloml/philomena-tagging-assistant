@@ -1,5 +1,8 @@
 import {
-  AndToken, GroupEndToken, GroupStartToken,
+  AndToken,
+  BoostToken,
+  GroupEndToken,
+  GroupStartToken,
   NotToken,
   OrToken,
   QueryLexer,
