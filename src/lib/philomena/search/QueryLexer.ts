@@ -210,7 +210,7 @@ export class QueryLexer {
       if (this.#value[index] === QueryLexer.#bracketsOpenCharacter) {
         let bracketsContent = QueryLexer.#bracketsOpenCharacter + this.#parseDirtyText(index + 1);
 
-        if (this.#value[index + bracketsContent.length + 1] === QueryLexer.#bracketsCloseCharacter) {
+        if (this.#value[index + bracketsContent.length] === QueryLexer.#bracketsCloseCharacter) {
           bracketsContent += QueryLexer.#bracketsCloseCharacter;
         }
 
