@@ -243,6 +243,6 @@ export class QueryLexer {
   static #boostOperator = /\^[+-]?\d+(?:\.\d+)?/y;
   static #whitespaces = /\s+/y;
   static #quotedText = /"((?:\\.|[^\\"])+)"/y;
-  static #dirtyTextStopWords = /,|\s+(?:AND|&&|OR|\|\|)\s+|\s+(?:\)|\^[+-]?\d+(?:\.\d+)?)/y;
+  static #dirtyTextStopWords = /,|\s+(?:AND|&&|OR|\|\|)\s+|\s*(?:\)|\^[+-]?\d+(?:\.\d+)?)/y;
   static #dirtyTextContent = /\\.|[^()]/y;
 }
