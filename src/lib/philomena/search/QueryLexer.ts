@@ -54,8 +54,12 @@ export class QuotedTermToken extends Token {
 export class TermToken extends Token {
 }
 
-type MatchResultCarry = {
+interface MatchResultCarry {
   match?: RegExpMatchArray | null
+}
+
+interface SuccessfulMatchResultCarry {
+  match: RegExpMatchArray;
 }
 
 /**
@@ -96,26 +100,26 @@ export class QueryLexer {
       }
 
       if (this.#match(QueryLexer.#negotiationOperator, result)) {
-        tokens.push(new NotToken(this.#index, result.match![0]));
-        this.#index += result.match![0].length;
+        tokens.push(new NotToken(this.#index, result.match[0]));
+        this.#index += result.match[0].length;
         continue;
       }
 
       if (this.#match(QueryLexer.#andOperator, result)) {
-        tokens.push(new AndToken(this.#index, result.match![0]));
-        this.#index += result.match![0].length;
+        tokens.push(new AndToken(this.#index, result.match[0]));
+        this.#index += result.match[0].length;
         continue;
       }
 
       if (this.#match(QueryLexer.#orOperator, result)) {
-        tokens.push(new OrToken(this.#index, result.match![0]));
-        this.#index += result.match![0].length;
+        tokens.push(new OrToken(this.#index, result.match[0]));
+        this.#index += result.match[0].length;
         continue;
       }
 
       if (this.#match(QueryLexer.#notOperator, result)) {
-        tokens.push(new NotToken(this.#index, result.match![0]));
-        this.#index += result.match![0].length;
+        tokens.push(new NotToken(this.#index, result.match[0]));
+        this.#index += result.match[0].length;
         continue;
       }
 
@@ -132,19 +136,19 @@ export class QueryLexer {
       }
 
       if (this.#match(QueryLexer.#boostOperator, result)) {
-        tokens.push(new BoostToken(this.#index, result.match![0]));
-        this.#index += result.match![0].length;
+        tokens.push(new BoostToken(this.#index, result.match[0]));
+        this.#index += result.match[0].length;
         continue;
       }
 
       if (this.#match(QueryLexer.#whitespaces, result)) {
-        this.#index += result.match![0].length;
+        this.#index += result.match[0].length;
         continue;
       }
 
       if (this.#match(QueryLexer.#quotedText, result)) {
-        tokens.push(new QuotedTermToken(this.#index, result.match![0], result.match![1]));
-        this.#index += result.match![0].length;
+        tokens.push(new QuotedTermToken(this.#index, result.match[0], result.match[1]));
+        this.#index += result.match[0].length;
         continue;
       }
 
@@ -170,7 +174,7 @@ export class QueryLexer {
    *
    * @return Is there a match?
    */
-  #match(targetRegExp: RegExp, resultCarrier: MatchResultCarry = {}): boolean {
+  #match(targetRegExp: RegExp, resultCarrier: MatchResultCarry = {}): resultCarrier is SuccessfulMatchResultCarry {
     return this.#matchAt(targetRegExp, this.#index, resultCarrier);
   }
 
@@ -183,7 +187,7 @@ export class QueryLexer {
    *
    * @return Is there a match?
    */
-  #matchAt(targetRegExp: RegExp, index: number, resultCarrier: MatchResultCarry = {}): boolean {
+  #matchAt(targetRegExp: RegExp, index: number, resultCarrier: MatchResultCarry = {}): resultCarrier is SuccessfulMatchResultCarry {
     targetRegExp.lastIndex = index;
     resultCarrier.match = this.#value.match(targetRegExp);
 
@@ -224,8 +228,8 @@ export class QueryLexer {
       }
 
       if (this.#matchAt(QueryLexer.#dirtyTextContent, index, result)) {
-        resultValue += result.match![0];
-        index += result.match![0].length;
+        resultValue += result.match[0];
+        index += result.match[0].length;
         continue;
       }
 
