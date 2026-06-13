@@ -3,7 +3,7 @@
 </script>
 
 <footer>
-  <a href="https://github.com/koloml/furbooru-tagging-assistant/releases/tag/{version}" target="_blank">
+  <a href="https://github.com/koloml/philomena-tagging-assistant/releases/tag/{version}" target="_blank">
     v{version}
   </a>
   <span>, made with ♥ by KoloMl.</span>
