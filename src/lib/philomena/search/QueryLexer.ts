@@ -41,11 +41,13 @@ export class QuotedTermToken extends Token {
   }
 
   static decode(value: string): string {
-    return value.replace(/\\([\\"])/g, "$1");
+    return value
+      .replaceAll(/\\([\\"])/g, "$1")
+      .replaceAll(/^"|"$/g, '');
   }
 
   static encode(value: string): string {
-    return value.replace(/[\\"]/g, "\\$&");
+    return `"${value.replaceAll(/[\\"]/g, "\\$&")}"`;
   }
 }
 
