@@ -27,13 +27,13 @@
         "@sveltejs/vite-plugin-svelte": "^6.2.4",
         "@types/chrome": "^0.1.37",
         "@types/node": "^25.5.0",
-        "@vitest/coverage-v8": "^4.1.0",
+        "@vitest/coverage-v8": "^4.1.8",
         "cheerio": "^1.2.0",
         "cross-env": "^10.1.0",
         "jsdom": "^28.1.0",
         "svelte-check": "^4.4.5",
         "typescript": "^5.9.3",
         "vite": "^7.3.5",
-        "vitest": "^4.1.0"
+        "vitest": "^4.1.8"
     }
 }
