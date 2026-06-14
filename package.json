@@ -25,7 +25,7 @@
     },
     "devDependencies": {
         "@sveltejs/vite-plugin-svelte": "^6.2.4",
-        "@types/chrome": "^0.1.37",
+        "@types/chrome": "^0.1.43",
         "@types/node": "^25.5.0",
         "@vitest/coverage-v8": "^4.1.8",
         "cheerio": "^1.2.0",
