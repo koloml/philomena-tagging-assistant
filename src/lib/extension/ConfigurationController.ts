@@ -70,7 +70,7 @@ export default class ConfigurationController {
         return;
       }
 
-      callback(changes[this.#configurationName].newValue);
+      callback(changes[this.#configurationName].newValue as Record<string, any>);
     }
 
     this.#storage.subscribe(subscriber);
