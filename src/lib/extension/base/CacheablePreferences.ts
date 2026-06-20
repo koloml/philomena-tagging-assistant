@@ -95,10 +95,11 @@ export default abstract class CacheablePreferences<Fields> {
 
   /**
    * @param settingsNamespace Name of the field inside the extension storage where these preferences stored.
+   * @param [controller] Configuration controller. If not provided, default controller will be used.
    * @protected
    */
-  protected constructor(settingsNamespace: string) {
-    this.#controller = new ConfigurationController(settingsNamespace);
+  protected constructor(settingsNamespace: string, controller: ConfigurationController = new ConfigurationController(settingsNamespace)) {
+    this.#controller = controller;
 
     this.#disposables.push(
       this.#controller.subscribeToChanges(settings => {
