@@ -89,9 +89,9 @@ export type WithFields<FieldsType extends Record<string, any>> = {
  * API.
  */
 export default abstract class CacheablePreferences<Fields> {
-  #controller: ConfigurationController;
-  #cachedValues: Map<keyof Fields, any> = new Map();
-  #disposables: Function[] = [];
+  readonly #controller: ConfigurationController;
+  readonly #cachedValues: Map<keyof Fields, any> = new Map();
+  readonly #disposables: Function[] = [];
 
   /**
    * @param settingsNamespace Name of the field inside the extension storage where these preferences stored.
