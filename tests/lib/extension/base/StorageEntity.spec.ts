@@ -1,26 +1,9 @@
-import StorageEntity from "$lib/extension/base/StorageEntity";
 import ChromeStorageArea from "$tests/mocks/ChromeStorageArea";
 import StorageHelper from "$lib/browser/StorageHelper";
 import { randomString } from "$tests/utils";
 import { randomInt } from "crypto";
 import EntitiesController from "$lib/extension/EntitiesController";
-
-
-interface TestedSettings {
-  stringField: string;
-  numberField: number;
-  nested?: {
-    field: boolean;
-  };
-}
-
-class TestedEntity extends StorageEntity<TestedSettings> {
-  static readonly _entityName = "entity";
-
-  constructor(id: string, settings: TestedSettings) {
-    super(id, settings);
-  }
-}
+import { TestedEntity } from "$tests/stubs/Entity";
 
 describe("StorageEntity", () => {
   let mockedStorageArea: ChromeStorageArea;
