@@ -5,6 +5,8 @@
   import { activeTaggingProfile, taggingProfiles } from "$stores/entities/tagging-profiles";
   import TaggingProfile from "$entities/TaggingProfile";
   import { popupTitle } from "$stores/popup";
+  import { user } from "$stores/preferences/user";
+  import Notice from "$components/ui/Notice.svelte";
 
   $popupTitle = 'Tagging Profiles';
 
@@ -28,6 +30,18 @@
 <Menu>
   <MenuItem href="/" icon="arrow-left">Back</MenuItem>
   <MenuItem href="/features/profiles/new/edit" icon="plus">Create New</MenuItem>
+</Menu>
+{#if $user?.isAuthorized === false}
+  <Menu>
+    <hr>
+  </Menu>
+  <Notice level="warning">
+    <strong>Tagging profiles will only work when you're signed in!</strong>
+    <br><br>
+    Unauthorized users have to solve the captcha before sending any submissions to the site.
+  </Notice>
+{/if}
+<Menu>
   {#if profiles.length}
     <hr>
   {/if}
