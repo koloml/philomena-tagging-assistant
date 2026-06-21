@@ -2,6 +2,12 @@ import StorageHelper, { type StorageChangeSubscriber } from "$lib/browser/Storag
 import type StorageEntity from "$lib/extension/base/StorageEntity";
 
 export default class EntitiesController {
+  /**
+   * Instance of storage helper used to store/read/subscribe to storage changes.
+   *
+   * Mainly exposed for the testing purposes. When class is loaded outside of extension context, will hold `null`
+   * instead. Any operations of entities will throw an error in this case.
+   */
   static storage: StorageHelper | null = typeof chrome !== 'undefined'
     ? new StorageHelper(chrome.storage.local)
     : null;
