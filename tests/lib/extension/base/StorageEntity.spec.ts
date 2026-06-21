@@ -137,9 +137,9 @@ describe("StorageEntity", () => {
 
       // Saving is not notified about immediately.
       await vi.waitFor(() => {
-        expect(subscriber).toHaveBeenCalledTimes(1);
+        expect(subscriber).toHaveBeenCalledOnce();
         expect(subscriber).toHaveBeenCalledWith([entity]);
-      });
+      }, {timeout: 10, interval: 1});
     });
 
     it("should notify about entity updates", async () => {
@@ -154,8 +154,8 @@ describe("StorageEntity", () => {
       await entity.save();
 
       await vi.waitFor(() => {
-        expect(subscriber).toHaveBeenCalledTimes(1);
-      });
+        expect(subscriber).toHaveBeenCalledOnce();
+      }, {interval: 1, timeout: 10});
 
       subscriber.mockReset();
 
@@ -163,9 +163,9 @@ describe("StorageEntity", () => {
       await entity.save();
 
       await vi.waitFor(() => {
-        expect(subscriber).toHaveBeenCalledTimes(1);
+        expect(subscriber).toHaveBeenCalledOnce();
         expect(subscriber).toHaveBeenCalledWith([entity]);
-      });
+      }, {interval: 1, timeout: 10});
     });
 
     it("should notify about entity deletion", async () => {
@@ -182,7 +182,7 @@ describe("StorageEntity", () => {
 
       await vi.waitFor(() => {
         expect(subscriber).toHaveBeenCalledTimes(2);
-      });
+      }, {interval: 1, timeout: 10});
 
       expect(subscriber).toHaveBeenCalledWith([entity]);
       expect(subscriber).toHaveBeenCalledWith([]);
