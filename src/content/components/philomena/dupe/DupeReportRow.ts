@@ -1,6 +1,7 @@
 import { BaseComponent } from "$content/components/base/BaseComponent";
 import DupeDiff from "$content/components/philomena/dupe/DupeDiff";
 import DupeImage from "$content/components/philomena/dupe/DupeImage";
+import { ratingTags } from "$config/tags";
 
 export default class DupeReportRow extends BaseComponent {
   #leftImage: DupeImage;
@@ -23,6 +24,7 @@ export default class DupeReportRow extends BaseComponent {
 
   protected init() {
     this.#extractAndRenderSourcesIcons();
+    this.#extractAndDisplayRatings();
   }
 
   #extractAndRenderSourcesIcons() {
@@ -30,5 +32,16 @@ export default class DupeReportRow extends BaseComponent {
       this.#leftImage.imageContainer.extractSources(),
       this.#rightImage.imageContainer.extractSources(),
     );
+  }
+
+  #extractAndDisplayRatings() {
+    this.#difference.renderRatings(
+      DupeReportRow.#extractRating(this.#leftImage),
+      DupeReportRow.#extractRating(this.#rightImage),
+    );
+  }
+
+  static #extractRating(image: DupeImage): string | null {
+    return image.imageContainer.extractActualTags().find(tagName => ratingTags.includes(tagName)) || null;
   }
 }

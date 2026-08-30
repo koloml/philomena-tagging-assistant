@@ -128,3 +128,15 @@ export const tagsBlacklist: string[] = (__CURRENT_SITE__ === 'furbooru' ? [
   "solo oc",
   "tag your shit"
 ]);
+
+/**
+ * Core rating tags used in the Philomena. These rarely change, so they're pretty safe to hardcode into the source code.
+ */
+export const ratingTags: string[] = [
+  'safe',
+  'suggestive',
+  'questionable',
+  'explicit',
+  'grimdark',
+  'grotesque',
+];

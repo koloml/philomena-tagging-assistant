@@ -8,13 +8,16 @@ const twitterIcon = ['x-twitter', brandsSubtype];
 
 export default class DupeDiff extends BaseComponent {
   #sourcesLine: HTMLElement | null = null;
+  #ratingsLine: HTMLElement | null = null;
 
   protected init() {
     const {
       "6": sourcesLine,
+      "7": ratingsLine,
     } = this.container.querySelectorAll<HTMLElement>('table tr > td')
 
     this.#sourcesLine = sourcesLine;
+    this.#ratingsLine = ratingsLine;
   }
 
   renderSources(leftSources: string[], rightSources: string[]): void {
@@ -37,6 +40,26 @@ export default class DupeDiff extends BaseComponent {
     );
 
     this.#sourcesLine.append(sourceIconsContainer);
+  }
+
+  renderRatings(leftRating: string | null, rightRating: string | null) {
+    if (!this.#ratingsLine) {
+      return;
+    }
+
+    for (const childElement of this.#ratingsLine.children) {
+      childElement.remove();
+    }
+
+    if (leftRating === rightRating) {
+      return;
+    }
+
+    const ratingDifference = document.createElement('span');
+    ratingDifference.classList.add('ratings-difference');
+    ratingDifference.textContent = `(${leftRating || '(none)'} vs ${rightRating || '(none)'})`;
+
+    this.#ratingsLine.append(ratingDifference);
   }
 
   #renderSourceIcons(sourcesList: string[]): HTMLElement {
