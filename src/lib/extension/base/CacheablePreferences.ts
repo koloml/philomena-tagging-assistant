@@ -70,6 +70,10 @@ export class PreferenceField<
   set(value: Fields[Key]) {
     return this.#preferences.writeRaw(this.#fieldKey, value);
   }
+
+  get key(): Key {
+    return this.#fieldKey;
+  }
 }
 
 /**
