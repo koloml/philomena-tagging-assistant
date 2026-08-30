@@ -28,7 +28,8 @@
                 "*://*.furbooru.org/*"
             ],
             "js": [
-                "src/content/deps/amd.ts"
+                "src/content/deps/amd.ts",
+                "src/content/user-details.ts"
             ]
         },
         {
