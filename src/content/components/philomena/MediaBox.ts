@@ -3,15 +3,18 @@ import { getComponent } from "$content/components/base/component-utils";
 import { buildTagsAndAliasesMap } from "$lib/philomena/tag-utils";
 import { on } from "$content/components/events/comms";
 import { EVENT_TAGS_UPDATED } from "$content/components/events/tagging-profile-popup-events";
+import ImageContainer from "$content/components/philomena/ImageContainer";
 
 export class MediaBox extends BaseComponent {
-  #thumbnailContainer: HTMLElement | null = null;
-  #imageLinkElement: HTMLAnchorElement | null = null;
+  #imageContainer: ImageContainer | null = null;
   #tagsAndAliases: Map<string, string> | null = null;
 
   init() {
-    this.#thumbnailContainer = this.container.querySelector('.image-container');
-    this.#imageLinkElement = this.#thumbnailContainer?.querySelector('a') || null;
+    const imageContainerElement = this.container.querySelector('.image-container');
+
+    this.#imageContainer = imageContainerElement instanceof HTMLElement
+      ? new ImageContainer(imageContainerElement)
+      : null;
 
     on(this, EVENT_TAGS_UPDATED, this.#onTagsUpdatedRefreshTagsAndAliases.bind(this));
   }
@@ -27,8 +30,8 @@ export class MediaBox extends BaseComponent {
   }
 
   #calculateMediaBoxTags() {
-    const tagAliases: string[] = this.#thumbnailContainer?.dataset.imageTagAliases?.split(', ') || [];
-    const actualTags = this.#imageLinkElement?.title.split(' | Tagged: ')[1]?.split(', ') || [];
+    const tagAliases = this.#imageContainer?.extractTagsAndAliases() || [];
+    const actualTags = this.#imageContainer?.extractActualTags() || [];
 
     return buildTagsAndAliasesMap(tagAliases, actualTags);
   }
@@ -52,13 +55,13 @@ export class MediaBox extends BaseComponent {
   }
 
   get imageLinks(): App.ImageURIs {
-    const jsonUris = this.#thumbnailContainer?.dataset.uris;
+    const sourceUrls = this.#imageContainer?.extractImageLinks();
 
-    if (!jsonUris) {
-      throw new Error('Missing URIs!');
+    if (!sourceUrls) {
+      throw new Error('Missing image container!');
     }
 
-    return JSON.parse(jsonUris);
+    return sourceUrls;
   }
 
   /**
