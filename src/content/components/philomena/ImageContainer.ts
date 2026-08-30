@@ -24,4 +24,17 @@ export default class ImageContainer extends BaseComponent {
 
     return JSON.parse(jsonUris);
   }
+
+  extractSources(): string[] {
+    const jsonSourceUrls = this.container.dataset.sourceUrls;
+    let sourceUrls: string[] | null = null;
+
+    try {
+      sourceUrls = JSON.parse(jsonSourceUrls || '[]');
+    } catch (e) {
+      console.warn('Failed to parse source URLs for the image!', this, e);
+    }
+
+    return sourceUrls || [];
+  }
 }

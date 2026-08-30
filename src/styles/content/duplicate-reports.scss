@@ -1,0 +1,10 @@
+.dr__diff {
+  .source-icons {
+    margin-left: .5em;
+
+    &__list {
+      display: inline-flex;
+      gap: .25em;
+    }
+  }
+}
