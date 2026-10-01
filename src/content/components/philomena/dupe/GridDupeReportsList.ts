@@ -5,22 +5,16 @@ export default class GridDupeReportsList extends BaseComponent {
   readonly #reports: DupeReportRow[] = [];
 
   protected build() {
-    const childrenElements = this.container.children;
+    const repotRowsList = this.container.querySelectorAll('tbody > tr');
 
-    for (let cellIndex = 0; cellIndex < this.container.childElementCount; cellIndex += 4) {
-      const startingCell = childrenElements.item(cellIndex);
-
-      // First 4 cells are actually table headers, skipping them.
-      if (!(startingCell instanceof HTMLElement) || startingCell.tagName === 'P') {
-        continue;
-      }
-
-      const rightImageCell = startingCell.nextElementSibling;
+    for (const reportRow of repotRowsList) {
+      const startingCell = reportRow.firstElementChild;
+      const rightImageCell = startingCell?.nextElementSibling || null;
       const diffCell = rightImageCell?.nextElementSibling || null;
       const reportOptionsCell = diffCell?.nextElementSibling || null;
 
-      if (!(rightImageCell instanceof HTMLElement) || !(diffCell instanceof HTMLElement) || !(reportOptionsCell instanceof HTMLElement)) {
-        console.error(`Unable to capture duplicate report row from starting cell at index ${cellIndex}!`);
+      if (!(startingCell instanceof HTMLElement) || !(rightImageCell instanceof HTMLElement) || !(diffCell instanceof HTMLElement) || !(reportOptionsCell instanceof HTMLElement)) {
+        console.error(`Unable to capture duplicate report!`, reportRow);
         continue;
       }
 
@@ -42,7 +36,7 @@ export default class GridDupeReportsList extends BaseComponent {
   }
 
   static findAndInitialize() {
-    for (const container of document.querySelectorAll<HTMLElement>('.grid--dupe-report-list')) {
+    for (const container of document.querySelectorAll<HTMLElement>('.dupe-report-list')) {
       new GridDupeReportsList(container).initialize();
     }
   }
