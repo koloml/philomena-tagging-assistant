@@ -244,7 +244,7 @@ export class FullscreenViewer extends BaseComponent {
     }
 
     if (sourceTogglerContainer !== this.#profileTagsToggler.container) {
-      this.#imageTagsToggler.refreshStateFromChanges();
+      this.#profileTagsToggler.refreshStateFromChanges();
     }
 
     this.#currentMediaBox?.tools?.popup?.tagsToggler.refreshStateFromChanges();
