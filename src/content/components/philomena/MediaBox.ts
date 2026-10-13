@@ -16,6 +16,8 @@ export class MediaBox extends BaseComponent {
       ? new ImageContainer(imageContainerElement)
       : null;
 
+    this.#imageContainer?.initialize();
+
     on(this, EVENT_TAGS_UPDATED, this.#onTagsUpdatedRefreshTagsAndAliases.bind(this));
   }
 
