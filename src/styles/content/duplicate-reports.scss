@@ -1,0 +1,46 @@
+.dr__diff {
+  .source-icons {
+    &__list {
+      display: inline-flex;
+      gap: .25em;
+    }
+  }
+
+  td {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: .5em;
+  }
+}
+
+// Trying to make it more usable on mobile by regrouping table cells into grid.
+@media screen and (max-width: 800px) {
+  .dupe-report-list {
+    & > thead {
+      display: none;
+    }
+
+    & > tbody > tr {
+      display: grid;
+      grid-template-areas: "source target" "diff actions";
+      grid-template-columns: 1fr 1fr;
+
+      .dupe-report-list--image {
+        grid-area: source;
+        width: auto;
+
+        + .dupe-report-list--image {
+          grid-area: target;
+        }
+      }
+
+      .dr__diff {
+        grid-area: diff;
+
+        & + td {
+          grid-area: actions;
+        }
+      }
+    }
+  }
+}
