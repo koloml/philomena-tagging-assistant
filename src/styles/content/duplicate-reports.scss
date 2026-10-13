@@ -16,3 +16,35 @@
     @extend %with-margin;
   }
 }
+
+// Trying to make it more usable on mobile by regrouping table cells into grid.
+@media screen and (max-width: 800px) {
+  .dupe-report-list {
+    & > thead {
+      display: none;
+    }
+
+    & > tbody > tr {
+      display: grid;
+      grid-template-areas: "source target" "diff actions";
+      grid-template-columns: 1fr 1fr;
+
+      .dupe-report-list--image {
+        grid-area: source;
+        width: auto;
+
+        + .dupe-report-list--image {
+          grid-area: target;
+        }
+      }
+
+      .dr__diff {
+        grid-area: diff;
+
+        & + td {
+          grid-area: actions;
+        }
+      }
+    }
+  }
+}
