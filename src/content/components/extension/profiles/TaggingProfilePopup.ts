@@ -4,31 +4,21 @@ import { BaseComponent } from "$content/components/base/BaseComponent";
 import { getComponent } from "$content/components/base/component-utils";
 import ScrapedAPI from "$lib/philomena/scraping/ScrapedAPI";
 import { tagsBlacklist } from "$config/tags";
-import { emitterAt } from "$content/components/events/comms";
+import { emitterAt, on } from "$content/components/events/comms";
 import {
   EVENT_ACTIVE_PROFILE_CHANGED,
   EVENT_PROFILE_POPUP_STATE_CHANGED,
   EVENT_TAGS_UPDATED
 } from "$content/components/events/tagging-profile-popup-events";
 import type { MediaBoxTools } from "$content/components/extension/MediaBoxTools";
-import { resolveTagCategoryFromTagName } from "$lib/philomena/tag-utils";
+import TagsListToggler, { BlackListedTagsEncounteredError } from "$content/components/extension/profiles/TagsListToggler";
+import { EVENT_TAG_TOGGLED } from "$content/components/events/tags-list-toggler-events";
 
-class BlackListedTagsEncounteredError extends Error {
-  constructor(tagName: string) {
-    super(`This tag is blacklisted and prevents submission: ${tagName}`, {
-      cause: tagName
-    });
-  }
-}
 
 export class TaggingProfilePopup extends BaseComponent {
-  #tagsListElement: HTMLElement = document.createElement('div');
-  #tagsList: HTMLElement[] = [];
-  #suggestedInvalidTags: Map<string, HTMLElement> = new Map();
+  #tagsListToggler = TagsListToggler.create();
   #activeProfile: TaggingProfile | null = null;
   #mediaBoxTools: MediaBoxTools | null = null;
-  #tagsToRemove: Set<string> = new Set();
-  #tagsToAdd: Set<string> = new Set();
   #isPlanningToSubmit: boolean = false;
   #isSubmitting: boolean = false;
   #tagsSubmissionTimer: Timeout | null = null;
@@ -41,11 +31,8 @@ export class TaggingProfilePopup extends BaseComponent {
     this.container.innerHTML = '';
     this.container.classList.add('maintenance-popup');
 
-    this.#tagsListElement.classList.add('tags-list');
-
-    this.container.append(
-      this.#tagsListElement,
-    );
+    this.#tagsListToggler.initialize();
+    this.container.append(this.#tagsListToggler.container);
   }
 
   /**
@@ -67,7 +54,7 @@ export class TaggingProfilePopup extends BaseComponent {
     this.#mediaBoxTools = mediaBoxTools;
 
     TaggingProfilePopup.#watchActiveProfile(this.#onActiveProfileChanged.bind(this));
-    this.#tagsListElement.addEventListener('click', this.#handleTagClick.bind(this));
+    on(this.#tagsListToggler, EVENT_TAG_TOGGLED, this.#onTagToggled.bind(this));
 
     const mediaBox = this.#mediaBoxTools.mediaBox;
 
@@ -82,101 +69,30 @@ export class TaggingProfilePopup extends BaseComponent {
   #onActiveProfileChanged(activeProfile: TaggingProfile | null) {
     this.#activeProfile = activeProfile;
     this.container.classList.toggle('is-active', activeProfile !== null);
-    this.#refreshTagsList();
+
+    this.#refreshTagsToggler();
 
     this.#emitter.emit(EVENT_ACTIVE_PROFILE_CHANGED, activeProfile);
   }
 
-  #refreshTagsList() {
+  #refreshTagsToggler() {
     if (!this.#mediaBoxTools?.mediaBox) {
       return;
     }
 
     const activeProfileTagsList: string[] = this.#activeProfile?.settings.tags || [];
+    const currentPostTags = new Set(this.#mediaBoxTools.mediaBox.tagsAndAliases?.keys() || []);
 
-    for (const tagElement of this.#tagsList) {
-      tagElement.remove();
-    }
-
-    for (const tagElement of this.#suggestedInvalidTags.values()) {
-      tagElement.remove();
-    }
-
-    this.#tagsList = new Array(activeProfileTagsList.length);
-    this.#suggestedInvalidTags.clear();
-
-    const currentPostTags = this.#mediaBoxTools.mediaBox.tagsAndAliases;
-
-    activeProfileTagsList
-      .sort((a, b) => a.localeCompare(b))
-      .forEach((tagName, index) => {
-        const tagElement = TaggingProfilePopup.#buildTagElement(tagName);
-        this.#tagsList[index] = tagElement;
-        this.#tagsListElement.appendChild(tagElement);
-
-        const isPresent = currentPostTags?.has(tagName);
-
-        tagElement.classList.toggle('is-present', isPresent);
-        tagElement.classList.toggle('is-missing', !isPresent);
-        tagElement.classList.toggle('is-aliased', isPresent && currentPostTags?.get(tagName) !== tagName);
-
-        // Just to prevent duplication, we need to include this tag to the map of suggested invalid tags
-        if (tagsBlacklist.includes(tagName)) {
-          TaggingProfilePopup.#markTagElementWithCategory(tagElement, 'error');
-          this.#suggestedInvalidTags.set(tagName, tagElement);
-        } else {
-          TaggingProfilePopup.#markTagElementWithCategory(
-            tagElement,
-            resolveTagCategoryFromTagName(tagName) ?? '',
-          );
-        }
-      });
+    this.#tagsListToggler.replaceTags(activeProfileTagsList, currentPostTags);
   }
 
   /**
    * Detect and process clicks made directly to the tags.
    */
-  #handleTagClick(event: MouseEvent) {
-    const targetObject = event.target;
+  #onTagToggled() {
+    const hasPendingChanges = this.#tagsListToggler.hasChanges;
 
-
-    if (!targetObject || !(targetObject instanceof HTMLElement)) {
-      return;
-    }
-
-    let tagElement: HTMLElement | null = targetObject;
-
-    if (!tagElement.classList.contains('tag')) {
-      tagElement = tagElement.closest<HTMLElement>('.tag');
-    }
-
-    if (!tagElement?.dataset.name) {
-      return;
-    }
-
-    const tagName = tagElement.dataset.name;
-
-    if (tagElement.classList.contains('is-present')) {
-      const isToBeRemoved = tagElement.classList.toggle('is-removed');
-
-      if (isToBeRemoved) {
-        this.#tagsToRemove.add(tagName);
-      } else {
-        this.#tagsToRemove.delete(tagName);
-      }
-    }
-
-    if (tagElement.classList.contains('is-missing')) {
-      const isToBeAdded = tagElement.classList.toggle('is-added');
-
-      if (isToBeAdded) {
-        this.#tagsToAdd.add(tagName);
-      } else {
-        this.#tagsToAdd.delete(tagName);
-      }
-    }
-
-    if (this.#tagsToAdd.size || this.#tagsToRemove.size) {
+    if (hasPendingChanges) {
       // Notify only once, when first planning to submit
       if (!this.#isPlanningToSubmit) {
         TaggingProfilePopup.#notifyAboutPendingSubmission(true);
@@ -188,7 +104,7 @@ export class TaggingProfilePopup extends BaseComponent {
 
     // Whenever user undoes the change they wanted to do in the popup, it's better to not send the submission and just
     // do nothing.
-    if (!this.#tagsToAdd.size && !this.#tagsToRemove.size && this.#isPlanningToSubmit) {
+    if (!hasPendingChanges && this.#isPlanningToSubmit) {
       this.#isPlanningToSubmit = false;
       this.#emitter.emit(EVENT_PROFILE_POPUP_STATE_CHANGED, 'ready');
       TaggingProfilePopup.#notifyAboutPendingSubmission(false);
@@ -232,29 +148,7 @@ export class TaggingProfilePopup extends BaseComponent {
     try {
       maybeTagsAndAliasesAfterUpdate = await TaggingProfilePopup.#scrapedAPI.updateImageTags(
         this.#mediaBoxTools.mediaBox.imageId,
-        tagsList => {
-          for (let tagName of this.#tagsToRemove) {
-            tagsList.delete(tagName);
-          }
-
-          for (let tagName of this.#tagsToAdd) {
-            tagsList.add(tagName);
-          }
-
-          if (shouldAutoRemove) {
-            for (let tagName of tagsBlacklist) {
-              tagsList.delete(tagName);
-            }
-          } else {
-            for (let tagName of tagsList) {
-              if (tagsBlacklist.includes(tagName)) {
-                throw new BlackListedTagsEncounteredError(tagName);
-              }
-            }
-          }
-
-          return tagsList;
-        }
+        this.#tagsListToggler.createTagsUpdater(shouldAutoRemove),
       );
     } catch (e) {
       if (e instanceof BlackListedTagsEncounteredError) {
@@ -277,10 +171,7 @@ export class TaggingProfilePopup extends BaseComponent {
 
     this.#emitter.emit(EVENT_PROFILE_POPUP_STATE_CHANGED, 'complete');
 
-    this.#tagsToAdd.clear();
-    this.#tagsToRemove.clear();
-
-    this.#refreshTagsList();
+    this.#refreshTagsToggler();
     TaggingProfilePopup.#notifyAboutPendingSubmission(false);
 
     this.#isSubmitting = false;
@@ -291,37 +182,13 @@ export class TaggingProfilePopup extends BaseComponent {
       return;
     }
 
-    const tagsAndAliases = this.#mediaBoxTools.mediaBox.tagsAndAliases;
+    const activeTags = new Set(this.#mediaBoxTools.mediaBox.tagsAndAliases?.keys() || []);
 
-    if (!tagsAndAliases) {
+    if (!activeTags.size) {
       return;
     }
 
-    const firstTagInList = this.#tagsList[0];
-
-    for (let tagName of tagsBlacklist) {
-      if (tagsAndAliases.has(tagName)) {
-        if (this.#suggestedInvalidTags.has(tagName)) {
-          continue;
-        }
-
-        const tagElement = TaggingProfilePopup.#buildTagElement(tagName);
-        TaggingProfilePopup.#markTagElementWithCategory(tagElement, 'error');
-        tagElement.classList.add('is-present');
-
-        this.#suggestedInvalidTags.set(tagName, tagElement);
-
-        if (firstTagInList && firstTagInList.isConnected) {
-          this.#tagsListElement.insertBefore(tagElement, firstTagInList);
-        } else {
-          this.#tagsListElement.appendChild(tagElement);
-        }
-      }
-    }
-  }
-
-  get isActive() {
-    return this.container.classList.contains('is-active');
+    this.#tagsListToggler.prependTags(tagsBlacklist, activeTags);
   }
 
   static create(): HTMLElement {
@@ -332,24 +199,6 @@ export class TaggingProfilePopup extends BaseComponent {
     return container;
   }
 
-  static #buildTagElement(tagName: string): HTMLElement {
-    const tagElement = document.createElement('span');
-    tagElement.classList.add('tag');
-    tagElement.innerText = tagName;
-    tagElement.dataset.name = tagName;
-
-    return tagElement;
-  }
-
-  /**
-   * Mark the tag element with specified category.
-   * @param tagElement Element to mark.
-   * @param category Code name of category to mark.
-   */
-  static #markTagElementWithCategory(tagElement: HTMLElement, category: string) {
-    tagElement.dataset.tagCategory = category;
-    tagElement.setAttribute('data-tag-category', category);
-  }
 
   /**
    * Controller with maintenance settings.
@@ -433,5 +282,5 @@ export class TaggingProfilePopup extends BaseComponent {
   /**
    * Amount of pending submissions or NULL if logic was not yet initialized.
    */
-  static #pendingSubmissionCount: number|null = null;
+  static #pendingSubmissionCount: number | null = null;
 }
