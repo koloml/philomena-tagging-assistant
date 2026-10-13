@@ -5,7 +5,7 @@ export default class GridDupeReportsList extends BaseComponent {
   readonly #reports: DupeReportRow[] = [];
 
   protected build() {
-    const repotRowsList = this.container.querySelectorAll('tbody > tr');
+    const repotRowsList = this.container.querySelectorAll(':scope > tbody > tr');
 
     for (const reportRow of repotRowsList) {
       const startingCell = reportRow.firstElementChild;
