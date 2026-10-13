@@ -104,6 +104,18 @@
             "css": [
                 "src/styles/content/tag-presets.scss"
             ]
+        },
+        {
+            "matches": [
+                "*://*.furbooru.org/duplicate_reports",
+                "*://*.furbooru.org/duplicate_reports?*"
+            ],
+            "js": [
+                "src/content/duplicate-reports.ts"
+            ],
+            "css": [
+                "src/styles/content/duplicate-reports.scss"
+            ]
         }
     ],
     "action": {
