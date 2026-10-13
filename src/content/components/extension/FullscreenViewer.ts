@@ -1,28 +1,50 @@
 import { BaseComponent } from "$content/components/base/BaseComponent";
 import MiscPreferences, { type FullscreenViewerSize } from "$lib/extension/preferences/MiscPreferences";
-import { emit, on } from "$content/components/events/comms";
+import { emit, on, type UnsubscribeFunction } from "$content/components/events/comms";
 import { EVENT_SIZE_LOADED } from "$content/components/events/fullscreen-viewer-events";
+import type { MediaBox } from "$content/components/philomena/MediaBox";
+import TagsListToggler from "$content/components/extension/profiles/TagsListToggler";
+import { EVENT_ACTIVE_PROFILE_CHANGED } from "$content/components/events/tagging-profile-popup-events";
+import type TaggingProfile from "$entities/TaggingProfile";
+import { EVENT_TAG_TOGGLED } from "$content/components/events/tags-list-toggler-events";
+import type { TaggingProfilePopup } from "$content/components/extension/profiles/TaggingProfilePopup";
 
 export class FullscreenViewer extends BaseComponent {
+  #currentMediaBox: MediaBox | null = null;
   #videoElement: HTMLVideoElement = document.createElement('video');
   #imageElement: HTMLImageElement = document.createElement('img');
   #spinnerElement: HTMLElement = document.createElement('i');
   #sizeSelectorElement: HTMLSelectElement = document.createElement('select');
   #closeButtonElement: HTMLElement = document.createElement('i');
+  #tagsPopupElement: HTMLElement = document.createElement('div');
+  #imageTagsToggler: TagsListToggler = TagsListToggler.create();
+  #profileTagsToggler: TagsListToggler = TagsListToggler.create();
+  #activeProfileListenerUnsubscriber: UnsubscribeFunction | null = null;
   #touchId: number | null = null;
   #startX: number | null = null;
   #startY: number | null = null;
   #isClosingSwipeStarted: boolean | null = null;
   #isSizeFetched: boolean = false;
-  #currentURIs: App.ImageURIs | null = null;
 
   protected build() {
     this.container.classList.add('fullscreen-viewer');
+
+    this.#imageTagsToggler.initialize();
+    this.#profileTagsToggler.initialize();
+
+    this.#tagsPopupElement.append(
+      this.#profileTagsToggler.container,
+      document.createElement('hr'),
+      this.#imageTagsToggler.container,
+    );
+
+    this.#tagsPopupElement.classList.add('tags-panel');
 
     this.container.append(
       this.#spinnerElement,
       this.#sizeSelectorElement,
       this.#closeButtonElement,
+      this.#tagsPopupElement,
     );
 
     this.#spinnerElement.classList.add('spinner', 'fa', 'fa-circle-notch', 'fa-spin');
@@ -52,11 +74,15 @@ export class FullscreenViewer extends BaseComponent {
     this.#videoElement.addEventListener('loadeddata', this.#onLoaded.bind(this));
     this.#imageElement.addEventListener('load', this.#onLoaded.bind(this));
     this.#sizeSelectorElement.addEventListener('click', event => event.stopPropagation());
+    this.#tagsPopupElement.addEventListener('click', event => event.stopPropagation());
 
     FullscreenViewer.#preferences
       .fullscreenViewerSize.get()
       .then(this.#onSizeResolved.bind(this))
       .then(this.#watchForSizeSelectionChanges.bind(this));
+
+    on(this.#profileTagsToggler, EVENT_TAG_TOGGLED, this.#onTagToggled.bind(this));
+    on(this.#imageTagsToggler, EVENT_TAG_TOGGLED, this.#onTagToggled.bind(this));
   }
 
   #onLoaded() {
@@ -193,8 +219,8 @@ export class FullscreenViewer extends BaseComponent {
     this.#sizeSelectorElement.addEventListener('input', () => {
       const targetSize = this.#sizeSelectorElement.value;
 
-      if (this.#currentURIs) {
-        void this.show(this.#currentURIs);
+      if (this.#currentMediaBox) {
+        void this.show(this.#currentMediaBox);
       }
 
       if (!targetSize || targetSize === lastActiveSize || !(targetSize in FullscreenViewer.#previewSizes)) {
@@ -206,8 +232,55 @@ export class FullscreenViewer extends BaseComponent {
     });
   }
 
+  #onTagToggled(event: CustomEvent<[string, boolean]>) {
+    const sourceTogglerContainer = event.currentTarget;
+
+    if (!(sourceTogglerContainer instanceof HTMLElement)) {
+      return;
+    }
+
+    if (sourceTogglerContainer !== this.#imageTagsToggler.container) {
+      this.#imageTagsToggler.refreshStateFromChanges();
+    }
+
+    if (sourceTogglerContainer !== this.#profileTagsToggler.container) {
+      this.#imageTagsToggler.refreshStateFromChanges();
+    }
+
+    this.#currentMediaBox?.tools?.popup?.tagsToggler.refreshStateFromChanges();
+  }
+
+  #onActiveProfileChanged(eventOrTaggingProfile: CustomEvent<TaggingProfile | null> | TaggingProfile | null) {
+    let resolvedActiveTaggingProfile: TaggingProfile | null = null;
+
+    if (eventOrTaggingProfile instanceof CustomEvent) {
+      resolvedActiveTaggingProfile = eventOrTaggingProfile.detail;
+    } else {
+      resolvedActiveTaggingProfile = eventOrTaggingProfile;
+    }
+
+    this.#profileTagsToggler.container.classList.toggle('is-hidden', !resolvedActiveTaggingProfile);
+
+    if (!resolvedActiveTaggingProfile) {
+      return;
+    }
+
+    const uniqueTagsSet = this.#currentMediaBox?.uniqueTagsSet;
+
+    this.#profileTagsToggler.replaceTags(resolvedActiveTaggingProfile.settings.tags, uniqueTagsSet ?? new Set());
+  }
+
   #close() {
-    this.#currentURIs = null;
+    const taggingPopup = this.#currentMediaBox?.tools?.popup;
+
+    if (taggingPopup) {
+      this.#activeProfileListenerUnsubscriber?.();
+
+      taggingPopup.tagsToggler.disconnectChangeSet();
+      taggingPopup.toggleSubmissionLock(false);
+    }
+
+    this.#currentMediaBox = null;
 
     this.container.classList.remove(FullscreenViewer.#shownState);
     document.body.style.removeProperty('overflow');
@@ -247,14 +320,21 @@ export class FullscreenViewer extends BaseComponent {
     return imageUris[targetSize as FullscreenViewerSize];
   }
 
-  async show(imageUris: App.ImageURIs): Promise<void> {
-    this.#currentURIs = imageUris;
+  async show(mediaBox: MediaBox): Promise<void> {
+    const isSameMediaBox = this.#currentMediaBox === mediaBox;
+    this.#currentMediaBox = mediaBox;
 
-    const url = await this.#resolveCurrentSelectedSizeUrl(imageUris);
+    const url = await this.#resolveCurrentSelectedSizeUrl(mediaBox.imageLinks);
 
     if (!url) {
       console.warn('Failed to resolve media for the viewer!');
       return;
+    }
+
+    const taggingPopup = mediaBox?.tools?.popup;
+
+    if (taggingPopup && !isSameMediaBox) {
+      this.#connectAndRefreshTagTogglers(taggingPopup, mediaBox);
     }
 
     this.container.classList.add('loading');
@@ -283,6 +363,35 @@ export class FullscreenViewer extends BaseComponent {
     this.#imageElement.src = url;
 
     this.container.append(this.#imageElement);
+  }
+
+  /**
+   * When connecting to the new popup, we need to connect the tag editor inside the fullscreen viewer to the original
+   * popup, since submission is still being sent from the popup inside media box.
+   * @param taggingPopup
+   * @param mediaBox
+   * @private
+   */
+  #connectAndRefreshTagTogglers(taggingPopup: TaggingProfilePopup, mediaBox: MediaBox) {
+    taggingPopup.toggleSubmissionLock(true);
+
+    const sourceToggler = taggingPopup.tagsToggler;
+    sourceToggler.connectChangeSet(this.#profileTagsToggler);
+    sourceToggler.connectChangeSet(this.#imageTagsToggler);
+
+    const uniqueTagsSet = mediaBox.uniqueTagsSet ?? new Set();
+    const uniqueTags = Array.from(uniqueTagsSet);
+
+    this.#imageTagsToggler.replaceTags(uniqueTags, uniqueTagsSet);
+
+    this.#activeProfileListenerUnsubscriber?.();
+    this.#activeProfileListenerUnsubscriber = on(
+      taggingPopup,
+      EVENT_ACTIVE_PROFILE_CHANGED,
+      this.#onActiveProfileChanged.bind(this),
+    );
+
+    this.#onActiveProfileChanged(taggingPopup.activeProfile);
   }
 
   static #isVideoUrl(url: string): boolean {

@@ -19,6 +19,7 @@ export class TaggingProfilePopup extends BaseComponent {
   #tagsListToggler = TagsListToggler.create();
   #activeProfile: TaggingProfile | null = null;
   #mediaBoxTools: MediaBoxTools | null = null;
+  #isSubmissionLocked: boolean = false;
   #isPlanningToSubmit: boolean = false;
   #isSubmitting: boolean = false;
   #tagsSubmissionTimer: Timeout | null = null;
@@ -62,8 +63,29 @@ export class TaggingProfilePopup extends BaseComponent {
       throw new Error('Media box component not found!');
     }
 
-    mediaBox.on('mouseout', this.#onMouseLeftArea.bind(this));
-    mediaBox.on('mouseover', this.#onMouseEnteredArea.bind(this));
+    mediaBox.on('mouseout', this.#maybeEnqueueSubmission.bind(this));
+    mediaBox.on('mouseover', this.#cancelQueuedSubmission.bind(this));
+  }
+
+  get tagsToggler() {
+    return this.#tagsListToggler;
+  }
+
+  get activeProfile() {
+    return this.#activeProfile;
+  }
+
+  toggleSubmissionLock(shouldLockSubmission: boolean) {
+    this.#isSubmissionLocked = shouldLockSubmission;
+
+    if (shouldLockSubmission) {
+      this.#cancelQueuedSubmission();
+      return;
+    }
+
+    // First notify that tags might have changed after submission lock was released and then enqueue it.
+    this.#onTagToggled();
+    this.#maybeEnqueueSubmission();
   }
 
   #onActiveProfileChanged(activeProfile: TaggingProfile | null) {
@@ -116,14 +138,14 @@ export class TaggingProfilePopup extends BaseComponent {
     }
   }
 
-  #onMouseEnteredArea() {
+  #cancelQueuedSubmission() {
     if (this.#tagsSubmissionTimer) {
       clearTimeout(this.#tagsSubmissionTimer);
     }
   }
 
-  #onMouseLeftArea() {
-    if (this.#isPlanningToSubmit && !this.#isSubmitting) {
+  #maybeEnqueueSubmission() {
+    if (this.#isPlanningToSubmit && !this.#isSubmitting && !this.#isSubmissionLocked) {
       this.#tagsSubmissionTimer = setTimeout(
         this.#onSubmissionTimerPassed.bind(this),
         TaggingProfilePopup.#delayBeforeSubmissionMs
@@ -132,7 +154,7 @@ export class TaggingProfilePopup extends BaseComponent {
   }
 
   async #onSubmissionTimerPassed() {
-    if (!this.#isPlanningToSubmit || this.#isSubmitting || !this.#mediaBoxTools?.mediaBox) {
+    if (!this.#isPlanningToSubmit || this.#isSubmitting || !this.#mediaBoxTools?.mediaBox || this.#isSubmissionLocked) {
       return;
     }
 
@@ -171,6 +193,7 @@ export class TaggingProfilePopup extends BaseComponent {
 
     this.#emitter.emit(EVENT_PROFILE_POPUP_STATE_CHANGED, 'complete');
 
+    this.#tagsListToggler.clearChangeSet();
     this.#refreshTagsToggler();
     TaggingProfilePopup.#notifyAboutPendingSubmission(false);
 

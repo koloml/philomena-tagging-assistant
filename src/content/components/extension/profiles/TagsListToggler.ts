@@ -42,10 +42,25 @@ export default class TagsListToggler extends BaseComponent {
     this.#renderAndInsertTags(tags, activeTags, true);
   }
 
+  refreshStateFromChanges() {
+    for (const tagElement of this.#tagsList) {
+      const tagName = tagElement.dataset.name;
+
+      if (!tagName) {
+        throw new Error('Missing tag name!');
+      }
+
+      tagElement.classList.toggle(TagsListToggler.#addedClass, this.#tagsToAdd.has(tagName));
+      tagElement.classList.toggle(TagsListToggler.#removedClass, this.#tagsToRemove.has(tagName));
+    }
+  }
+
   #renderAndInsertTags(toggleableTags: string[], activeTags: Set<string>, shouldPrepend: boolean = false) {
     toggleableTags.sort((a, b) => a.localeCompare(b));
 
     let lastInserted: HTMLElement|null = null;
+
+    const hasStoredChanges = this.hasChanges;
 
     for (let tagIndex = 0; tagIndex < toggleableTags.length; tagIndex++) {
       const tagName = toggleableTags[tagIndex];
@@ -57,6 +72,11 @@ export default class TagsListToggler extends BaseComponent {
 
       tagElement.classList.toggle(TagsListToggler.#missingClass, !isPresent);
       tagElement.classList.toggle(TagsListToggler.#containsClass, isPresent);
+
+      if (hasStoredChanges) {
+        tagElement.classList.toggle(TagsListToggler.#addedClass, !isPresent && this.#tagsToAdd.has(tagName));
+        tagElement.classList.toggle(TagsListToggler.#removedClass, isPresent && this.#tagsToRemove.has(tagName));
+      }
 
       const tagCategory = tagsBlacklist.includes(tagName) && CategoriesEnum.Error
         || resolveTagCategoryFromTagName(tagName)
@@ -106,6 +126,21 @@ export default class TagsListToggler extends BaseComponent {
 
       return tagsList;
     }
+  }
+
+  connectChangeSet(secondaryToggler: TagsListToggler) {
+    secondaryToggler.#tagsToAdd = this.#tagsToAdd;
+    secondaryToggler.#tagsToRemove = this.#tagsToRemove;
+  }
+
+  disconnectChangeSet() {
+    this.#tagsToAdd = new Set(this.#tagsToAdd.values());
+    this.#tagsToRemove = new Set(this.#tagsToRemove.values());
+  }
+
+  clearChangeSet() {
+    this.#tagsToAdd.clear();
+    this.#tagsToRemove.clear();
   }
 
   #handleTagClick(event: MouseEvent) {
