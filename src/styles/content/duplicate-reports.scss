@@ -1,19 +1,15 @@
-%with-margin {
-  margin-left: .5em;
-}
-
 .dr__diff {
   .source-icons {
-    @extend %with-margin;
-
     &__list {
       display: inline-flex;
       gap: .25em;
     }
   }
 
-  .ratings-difference {
-    @extend %with-margin;
+  td {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: .5em;
   }
 }
 
