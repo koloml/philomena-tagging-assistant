@@ -49,6 +49,11 @@ feature is opt-in and should be enabled in the settings first.
 
 ![Fullscreen Viewer Showcase](.github/assets/fullscreen-viewer-showcase.png)
 
+Fullscreen view now also has interface for quick addition and removal of tags. It will show both currently active 
+tagging profile and tags currently assigned to the image.
+
+![Fullscreen Viewer with Tags](.github/assets/fullscreen-viewer-tags.png)
+
 ## Building
 
 Recommendations on environment:
