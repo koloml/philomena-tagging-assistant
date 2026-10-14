@@ -45,15 +45,13 @@ export class ImageShowFullscreenButton extends BaseComponent {
   }
 
   #onButtonClicked() {
-    const imageLinks = this.#mediaBoxTools?.mediaBox?.imageLinks;
+    const mediaBox = this.#mediaBoxTools?.mediaBox;
 
-    if (!imageLinks) {
+    if (!mediaBox) {
       throw new Error('Failed to resolve image links from media box tools!');
     }
 
-    ImageShowFullscreenButton
-      .#resolveViewer()
-      ?.show(imageLinks);
+    ImageShowFullscreenButton.#resolveViewer()?.show(mediaBox);
   }
 
   static create(): HTMLElement {

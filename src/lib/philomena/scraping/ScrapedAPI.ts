@@ -1,6 +1,6 @@
 import PostParser from "$lib/philomena/scraping/parsing/PostParser";
 
-type UpdaterFunction = (tags: Set<string>) => Set<string>;
+export type TagsUpdaterFunction = (tags: Set<string>) => Set<string>;
 
 export default class ScrapedAPI {
   /**
@@ -9,7 +9,7 @@ export default class ScrapedAPI {
    * @param callback Callback to call to change the content.
    * @return Updated tags and aliases list for updating internal cached state.
    */
-  async updateImageTags(imageId: number, callback: UpdaterFunction): Promise<Map<string, string> | null> {
+  async updateImageTags(imageId: number, callback: TagsUpdaterFunction): Promise<Map<string, string> | null> {
     const postParser = new PostParser(imageId);
     const formData = await postParser.resolveTagEditorFormData();
     const tagsFieldValue = formData.get(PostParser.tagsInputName);

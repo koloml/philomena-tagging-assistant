@@ -2,6 +2,38 @@
 @use '$styles/booru-vars';
 @use '$styles/environment';
 
+%box {
+  background: booru-vars.$background-color;
+  padding: 5px;
+}
+
+%tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+
+  .tag {
+    margin: 0;
+  }
+}
+
+%toggleable-tag {
+  cursor: pointer;
+  user-select: none;
+  padding: 0 5px;
+  gap: 0;
+
+  &:hover {
+    background: booru-vars.$resolved-tag-color;
+    color: booru-vars.$resolved-tag-background;
+  }
+
+  &.is-missing:not(.is-added),
+  &.is-present.is-removed {
+    opacity: 0.5;
+  }
+}
+
 // This will fix wierd misplacing of the modified media boxes in the listing.
 .js-resizable-media-container {
   display: flex;
@@ -40,14 +72,14 @@
   }
 
   .maintenance-popup {
+    @extend %box;
+
     display: none;
     position: absolute;
     top: 100%;
-    padding: 5px;
     left: -50%;
     right: -50%;
     z-index: 8;
-    background: booru-vars.$background-color;
     border: {
       left: booru-vars.$media-border;
       right: booru-vars.$media-border;
@@ -55,31 +87,13 @@
     };
 
     .tags-list {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 6px;
+      @extend %tags-list;
 
-      .tag {
-        margin: 0;
-      }
+      justify-content: center;
     }
 
     .tag {
-      cursor: pointer;
-      user-select: none;
-      padding: 0 5px;
-      gap: 0;
-
-      &:hover {
-        background: booru-vars.$resolved-tag-color;
-        color: booru-vars.$resolved-tag-background;
-      }
-
-      &.is-missing:not(.is-added),
-      &.is-present.is-removed {
-        opacity: 0.5;
-      }
+      @extend %toggleable-tag;
     }
   }
 
@@ -242,6 +256,66 @@
 
     .spinner {
       opacity: 1;
+    }
+  }
+
+  .tags-panel {
+    @extend %box;
+
+    display: flex;
+    z-index: 1;
+    width: 96vw;
+    max-width: booru-vars.$limited-layout-width;
+    max-height: 50vh;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    transition: transform .25s ease-in-out;
+    border: {
+      top: booru-vars.$media-border;
+      left: booru-vars.$media-border;
+      right: booru-vars.$media-border;
+    }
+
+    &__toggle {
+      position: absolute;
+      left: -1px;
+      bottom: calc(100% + 1px);
+      border: booru-vars.$border;
+      background: booru-vars.$block-header-light-color;
+      color: booru-vars.$block-header-link-text-color;
+      font-weight: 700;
+      padding: 0 calc(#{booru-vars.$header-spacing} * .5);
+      line-height: booru-vars.$block-header-sub-height;
+      cursor: pointer;
+    }
+
+    &__scroller {
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    &.is-collapsed {
+      transform: translateY(100%);
+    }
+
+    .tags-list {
+      @extend %tags-list;
+
+      &.is-hidden {
+        display: none;
+
+        & + hr {
+          display: none;
+        }
+      }
+    }
+
+    .tag {
+      @extend %toggleable-tag;
     }
   }
 }

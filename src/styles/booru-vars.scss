@@ -5,8 +5,15 @@ $padding-small: var(--padding-small);
 $padding-normal: var(--padding-normal);
 $padding-large: var(--padding-large);
 $block-spacing: var(--block-spacing);
+$block-header-light-color: var(--block-header-light-color);
+$block-header-link-text-color: var(--block-header-link-text-color);
+$border: var(--border);
+$header-spacing: var(--header-spacing);
+$block-header-sub-height: var(--block-header-sub-height);
 
 // These variables are defined dynamically based on the category of the tag
 $resolved-tag-background: var(--tag-background);
 $resolved-tag-border: var(--tag-border);
 $resolved-tag-color: var(--tag-color);
+
+$limited-layout-width: var(--limited-layout-width);

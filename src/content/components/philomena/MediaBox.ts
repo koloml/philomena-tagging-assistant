@@ -4,10 +4,12 @@ import { buildTagsAndAliasesMap } from "$lib/philomena/tag-utils";
 import { on } from "$content/components/events/comms";
 import { EVENT_TAGS_UPDATED } from "$content/components/events/tagging-profile-popup-events";
 import ImageContainer from "$content/components/philomena/ImageContainer";
+import type { MediaBoxTools } from "$content/components/extension/MediaBoxTools";
 
 export class MediaBox extends BaseComponent {
   #imageContainer: ImageContainer | null = null;
   #tagsAndAliases: Map<string, string> | null = null;
+  #mediaBoxTools: MediaBoxTools | null = null;
 
   init() {
     const imageContainerElement = this.container.querySelector('.image-container');
@@ -38,6 +40,16 @@ export class MediaBox extends BaseComponent {
     return buildTagsAndAliasesMap(tagAliases, actualTags);
   }
 
+  get uniqueTagsSet(): Set<string> | null {
+    const tagsAndAliases = this.tagsAndAliases;
+
+    if (tagsAndAliases === null) {
+      return null;
+    }
+
+    return new Set(tagsAndAliases.values());
+  }
+
   get tagsAndAliases(): Map<string, string> | null {
     if (!this.#tagsAndAliases) {
       this.#tagsAndAliases = this.#calculateMediaBoxTags();
@@ -66,17 +78,22 @@ export class MediaBox extends BaseComponent {
     return sourceUrls;
   }
 
+  get tools(): MediaBoxTools | null {
+    return this.#mediaBoxTools;
+  }
+
   /**
    * Wrap the media box element into the special wrapper.
    */
-  static initialize(mediaBoxContainer: HTMLElement, childComponentElements: HTMLElement[]) {
-    new MediaBox(mediaBoxContainer)
-      .initialize();
+  static initialize(mediaBoxContainer: HTMLElement, mediaBoxToolsElement: HTMLElement) {
+    const mediaBox = new MediaBox(mediaBoxContainer);
+    mediaBox.initialize();
 
-    for (let childComponentElement of childComponentElements) {
-      mediaBoxContainer.appendChild(childComponentElement);
-      getComponent(childComponentElement)?.initialize();
-    }
+    mediaBoxContainer.appendChild(mediaBoxToolsElement);
+    const mediaBoxToolsComponent = getComponent<MediaBoxTools>(mediaBoxToolsElement);
+    mediaBoxToolsComponent?.initialize();
+
+    mediaBox.#mediaBoxTools = mediaBoxToolsComponent;
   }
 
   static findElements(): NodeListOf<HTMLElement> {

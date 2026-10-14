@@ -50,6 +50,10 @@ export class MediaBoxTools extends BaseComponent {
     return this.#mediaBox;
   }
 
+  get popup(): TaggingProfilePopup | null {
+    return this.#popup;
+  }
+
   /**
    * Create a maintenance popup element.
    * @param childrenElements List of children elements to append to the component.
