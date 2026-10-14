@@ -10,7 +10,8 @@
                     "none"
                 ]
             }
-        }
+        },
+        "gecko_android": {}
     },
     "icons": {
         "16": "icon16.png",
