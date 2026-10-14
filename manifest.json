@@ -1,7 +1,7 @@
 {
     "name": "Furbooru Tagging Assistant",
     "description": "Small experimental extension for slightly quicker tagging experience. Furbooru Edition.",
-    "version": "0.7.2",
+    "version": "0.8.0",
     "browser_specific_settings": {
         "gecko": {
             "id": "furbooru-tagging-assistant@thecore.city",
@@ -10,7 +10,8 @@
                     "none"
                 ]
             }
-        }
+        },
+        "gecko_android": {}
     },
     "icons": {
         "16": "icon16.png",
@@ -28,7 +29,8 @@
                 "*://*.furbooru.org/*"
             ],
             "js": [
-                "src/content/deps/amd.ts"
+                "src/content/deps/amd.ts",
+                "src/content/user-details.ts"
             ]
         },
         {
@@ -102,6 +104,18 @@
             ],
             "css": [
                 "src/styles/content/tag-presets.scss"
+            ]
+        },
+        {
+            "matches": [
+                "*://*.furbooru.org/duplicate_reports",
+                "*://*.furbooru.org/duplicate_reports?*"
+            ],
+            "js": [
+                "src/content/duplicate-reports.ts"
+            ],
+            "css": [
+                "src/styles/content/duplicate-reports.scss"
             ]
         }
     ],

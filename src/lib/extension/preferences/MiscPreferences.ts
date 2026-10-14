@@ -8,6 +8,7 @@ export type FullscreenViewerSize = keyof App.ImageURIs;
 interface MiscPreferencesFields {
   fullscreenViewer: boolean;
   fullscreenViewerSize: FullscreenViewerSize;
+  fullscreenViewerPopupShown: boolean;
 }
 
 export default class MiscPreferences extends CacheablePreferences<MiscPreferencesFields> implements WithFields<MiscPreferencesFields> {
@@ -23,5 +24,10 @@ export default class MiscPreferences extends CacheablePreferences<MiscPreference
   readonly fullscreenViewerSize = new PreferenceField(this, {
     field: "fullscreenViewerSize",
     defaultValue: "large",
+  });
+
+  readonly fullscreenViewerPopupShown = new PreferenceField(this, {
+    field: "fullscreenViewerPopupShown",
+    defaultValue: true,
   });
 }

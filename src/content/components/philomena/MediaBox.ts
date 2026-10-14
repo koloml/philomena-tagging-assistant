@@ -3,15 +3,22 @@ import { getComponent } from "$content/components/base/component-utils";
 import { buildTagsAndAliasesMap } from "$lib/philomena/tag-utils";
 import { on } from "$content/components/events/comms";
 import { EVENT_TAGS_UPDATED } from "$content/components/events/tagging-profile-popup-events";
+import ImageContainer from "$content/components/philomena/ImageContainer";
+import type { MediaBoxTools } from "$content/components/extension/MediaBoxTools";
 
 export class MediaBox extends BaseComponent {
-  #thumbnailContainer: HTMLElement | null = null;
-  #imageLinkElement: HTMLAnchorElement | null = null;
+  #imageContainer: ImageContainer | null = null;
   #tagsAndAliases: Map<string, string> | null = null;
+  #mediaBoxTools: MediaBoxTools | null = null;
 
   init() {
-    this.#thumbnailContainer = this.container.querySelector('.image-container');
-    this.#imageLinkElement = this.#thumbnailContainer?.querySelector('a') || null;
+    const imageContainerElement = this.container.querySelector('.image-container');
+
+    this.#imageContainer = imageContainerElement instanceof HTMLElement
+      ? new ImageContainer(imageContainerElement)
+      : null;
+
+    this.#imageContainer?.initialize();
 
     on(this, EVENT_TAGS_UPDATED, this.#onTagsUpdatedRefreshTagsAndAliases.bind(this));
   }
@@ -27,10 +34,20 @@ export class MediaBox extends BaseComponent {
   }
 
   #calculateMediaBoxTags() {
-    const tagAliases: string[] = this.#thumbnailContainer?.dataset.imageTagAliases?.split(', ') || [];
-    const actualTags = this.#imageLinkElement?.title.split(' | Tagged: ')[1]?.split(', ') || [];
+    const tagAliases = this.#imageContainer?.extractTagsAndAliases() || [];
+    const actualTags = this.#imageContainer?.extractActualTags() || [];
 
     return buildTagsAndAliasesMap(tagAliases, actualTags);
+  }
+
+  get uniqueTagsSet(): Set<string> | null {
+    const tagsAndAliases = this.tagsAndAliases;
+
+    if (tagsAndAliases === null) {
+      return null;
+    }
+
+    return new Set(tagsAndAliases.values());
   }
 
   get tagsAndAliases(): Map<string, string> | null {
@@ -52,26 +69,31 @@ export class MediaBox extends BaseComponent {
   }
 
   get imageLinks(): App.ImageURIs {
-    const jsonUris = this.#thumbnailContainer?.dataset.uris;
+    const sourceUrls = this.#imageContainer?.extractImageLinks();
 
-    if (!jsonUris) {
-      throw new Error('Missing URIs!');
+    if (!sourceUrls) {
+      throw new Error('Missing image container!');
     }
 
-    return JSON.parse(jsonUris);
+    return sourceUrls;
+  }
+
+  get tools(): MediaBoxTools | null {
+    return this.#mediaBoxTools;
   }
 
   /**
    * Wrap the media box element into the special wrapper.
    */
-  static initialize(mediaBoxContainer: HTMLElement, childComponentElements: HTMLElement[]) {
-    new MediaBox(mediaBoxContainer)
-      .initialize();
+  static initialize(mediaBoxContainer: HTMLElement, mediaBoxToolsElement: HTMLElement) {
+    const mediaBox = new MediaBox(mediaBoxContainer);
+    mediaBox.initialize();
 
-    for (let childComponentElement of childComponentElements) {
-      mediaBoxContainer.appendChild(childComponentElement);
-      getComponent(childComponentElement)?.initialize();
-    }
+    mediaBoxContainer.appendChild(mediaBoxToolsElement);
+    const mediaBoxToolsComponent = getComponent<MediaBoxTools>(mediaBoxToolsElement);
+    mediaBoxToolsComponent?.initialize();
+
+    mediaBox.#mediaBoxTools = mediaBoxToolsComponent;
   }
 
   static findElements(): NodeListOf<HTMLElement> {

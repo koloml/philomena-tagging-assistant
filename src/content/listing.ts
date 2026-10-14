@@ -8,13 +8,11 @@ import { ImageListContainer } from "$content/components/philomena/listing/ImageL
 const mediaBoxes = MediaBox.findElements();
 
 mediaBoxes.forEach(mediaBoxElement => {
-  MediaBox.initialize(mediaBoxElement, [
-    MediaBoxTools.create(
-      TaggingProfilePopup.create(),
-      TaggingProfileStatusIcon.create(),
-      ImageShowFullscreenButton.create(),
-    )
-  ]);
+  MediaBox.initialize(mediaBoxElement, MediaBoxTools.create(
+    TaggingProfilePopup.create(),
+    TaggingProfileStatusIcon.create(),
+    ImageShowFullscreenButton.create(),
+  ));
 
   // Attempt to fix misplacement of media boxes
   requestAnimationFrame(() => {

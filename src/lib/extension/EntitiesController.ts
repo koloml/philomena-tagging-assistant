@@ -2,7 +2,15 @@ import StorageHelper, { type StorageChangeSubscriber } from "$lib/browser/Storag
 import type StorageEntity from "$lib/extension/base/StorageEntity";
 
 export default class EntitiesController {
-  static #storageHelper = new StorageHelper(chrome.storage.local);
+  /**
+   * Instance of storage helper used to store/read/subscribe to storage changes.
+   *
+   * Mainly exposed for the testing purposes. When class is loaded outside of extension context, will hold `null`
+   * instead. Any operations of entities will throw an error in this case.
+   */
+  static storage: StorageHelper | null = typeof chrome !== 'undefined'
+    ? new StorageHelper(chrome.storage.local)
+    : null;
 
   /**
    * Read all entities of the given type from the storage. Build the entities from the raw data and return them.
@@ -14,7 +22,11 @@ export default class EntitiesController {
    * @return List of entities of the given type.
    */
   static async readAllEntities<Type extends StorageEntity<any>>(entityName: string, entityClass: new (...any: any[]) => Type): Promise<Type[]> {
-    const rawEntities = await this.#storageHelper.read(entityName, {});
+    if (!this.storage) {
+      throw new Error('Missing storage!');
+    }
+
+    const rawEntities = await this.storage.read(entityName, {});
 
     if (!rawEntities || Object.keys(rawEntities).length === 0) {
       return [];
@@ -32,10 +44,14 @@ export default class EntitiesController {
    * @param entity Entity to update.
    */
   static async updateEntity(entityName: string, entity: StorageEntity<Object>): Promise<void> {
-    this.#storageHelper.write(
+    if (!this.storage) {
+      throw new Error('Missing storage!');
+    }
+
+    this.storage.write(
       entityName,
       Object.assign(
-        await this.#storageHelper.read(
+        await this.storage.read(
           entityName, {}
         ),
         {
@@ -52,9 +68,13 @@ export default class EntitiesController {
    * @param entityId ID of the entity to delete.
    */
   static async deleteEntity(entityName: string, entityId: string): Promise<void> {
-    const entities = await this.#storageHelper.read(entityName, {});
+    if (!this.storage) {
+      throw new Error('Missing storage!');
+    }
+
+    const entities = await this.storage.read(entityName, {});
     delete entities[entityId];
-    this.#storageHelper.write(entityName, entities);
+    this.storage.write(entityName, entities);
   }
 
   /**
@@ -68,6 +88,12 @@ export default class EntitiesController {
    * @return Unsubscribe function.
    */
   static subscribeToEntity<Type extends StorageEntity<any>>(entityName: string, entityClass: new (...any: any[]) => Type, callback: (entities: Type[]) => void): () => void {
+    if (!this.storage) {
+      throw new Error('Missing storage!');
+    }
+
+    const storage = this.storage;
+
     /**
      * Watch the changes made to the storage and call the callback when the entity changes.
      */
@@ -80,8 +106,8 @@ export default class EntitiesController {
         .then(callback);
     }
 
-    this.#storageHelper.subscribe(subscriber);
+    storage.subscribe(subscriber);
 
-    return () => this.#storageHelper.unsubscribe(subscriber);
+    return () => storage.unsubscribe(subscriber);
   }
 }

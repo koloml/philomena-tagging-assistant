@@ -1,18 +1,13 @@
 import { writable } from "svelte/store";
 import TaggingProfilesPreferences from "$lib/extension/preferences/TaggingProfilesPreferences";
+import { PreferenceSync } from "$lib/store-sync";
 
 export const stripBlacklistedTagsEnabled = writable(true);
 
 const preferences = new TaggingProfilesPreferences();
 
-Promise
-  .all([
-    preferences.stripBlacklistedTags.get().then(v => stripBlacklistedTagsEnabled.set(v ?? true))
-  ])
-  .then(() => {
-    preferences.subscribe(settings => {
-      stripBlacklistedTagsEnabled.set(typeof settings.stripBlacklistedTags === 'boolean' ? settings.stripBlacklistedTags : true);
-    });
-
-    stripBlacklistedTagsEnabled.subscribe(v => preferences.stripBlacklistedTags.set(v));
-  });
+void PreferenceSync.for(preferences)
+  .connect(preferences.stripBlacklistedTags, stripBlacklistedTagsEnabled, {
+    updateToStore: maybeBoolean => typeof maybeBoolean === 'boolean' ? maybeBoolean : true,
+  })
+  .startSync();

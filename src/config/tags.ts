@@ -1,18 +1,24 @@
 /**
+ * Enum-like object with categories used by the Philomena, available for calling in the code. Values are technical
+ * names of these categories.
+ */
+export const CategoriesEnum = {
+  Rating: 'rating',
+  Spoiler: 'spoiler',
+  Origin: 'origin',
+  OC: 'oc',
+  Error: 'error',
+  Character: 'character',
+  ContentOfficial: 'content-official',
+  ContentFanmade: 'content-fanmade',
+  Species: 'species',
+  BodyType: 'body-type',
+}
+
+/**
  * List of categories defined by the sites.
  */
-export const categories: string[] = [
-  'rating',
-  'spoiler',
-  'origin',
-  'oc',
-  'error',
-  'character',
-  'content-official',
-  'content-fanmade',
-  'species',
-  'body-type',
-];
+export const categories: string[] = Object.values(CategoriesEnum);
 
 /**
  * Mapping of namespaces to their respective categories. These namespaces are automatically assigned to them, so we can
@@ -23,21 +29,21 @@ export const categories: string[] = [
  * @see https://github.com/philomena-dev/philomena/blob/6086757b654da8792ae52adb2a2f501ea6c30d12/lib/philomena/tags/tag.ex#L33-L45
  */
 export const namespaceCategories: Map<string, string> = new Map([
-  ['artist', 'origin'],
-  ['art pack', 'content-fanmade'],
-  ['colorist', 'origin'],
-  ['comic', 'content-fanmade'],
-  ['editor', 'origin'],
-  ['fanfic', 'content-fanmade'],
-  ['oc', 'oc'],
-  ['photographer', 'origin'],
-  ['series', 'content-fanmade'],
-  ['spoiler', 'spoiler'],
-  ['video', 'content-fanmade'],
-  ...(__CURRENT_SITE__ === 'tantabus' ? <const> [
-    ["prompter", "origin"],
-    ["creator", "origin"],
-    ["generator", "origin"]
+  ['artist', CategoriesEnum.Origin],
+  ['art pack', CategoriesEnum.ContentFanmade],
+  ['colorist', CategoriesEnum.Origin],
+  ['comic', CategoriesEnum.ContentFanmade],
+  ['editor', CategoriesEnum.Origin],
+  ['fanfic', CategoriesEnum.ContentFanmade],
+  ['oc', CategoriesEnum.OC],
+  ['photographer', CategoriesEnum.Origin],
+  ['series', CategoriesEnum.ContentFanmade],
+  ['spoiler', CategoriesEnum.Spoiler],
+  ['video', CategoriesEnum.ContentFanmade],
+  ...(__CURRENT_SITE__ === 'tantabus' ? <const>[
+    ["prompter", CategoriesEnum.Origin],
+    ["creator", CategoriesEnum.Origin],
+    ["generator", CategoriesEnum.Origin]
   ] : [])
 ]);
 
@@ -128,3 +134,15 @@ export const tagsBlacklist: string[] = (__CURRENT_SITE__ === 'furbooru' ? [
   "solo oc",
   "tag your shit"
 ]);
+
+/**
+ * Core rating tags used in the Philomena. These rarely change, so they're pretty safe to hardcode into the source code.
+ */
+export const ratingTags: string[] = [
+  'safe',
+  'suggestive',
+  'questionable',
+  'explicit',
+  'grimdark',
+  'grotesque',
+];
