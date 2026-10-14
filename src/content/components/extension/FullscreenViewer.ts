@@ -19,6 +19,7 @@ export class FullscreenViewer extends BaseComponent {
   #tagsPopupElement: HTMLElement = document.createElement('div');
   #imageTagsToggler: TagsListToggler = TagsListToggler.create();
   #profileTagsToggler: TagsListToggler = TagsListToggler.create();
+  #tagsPopupHider: HTMLElement = document.createElement('div');
   #activeProfileListenerUnsubscriber: UnsubscribeFunction | null = null;
   #touchId: number | null = null;
   #startX: number | null = null;
@@ -32,11 +33,22 @@ export class FullscreenViewer extends BaseComponent {
     this.#imageTagsToggler.initialize();
     this.#profileTagsToggler.initialize();
 
-    this.#tagsPopupElement.append(
+    const overflowContainer = document.createElement('div');
+    overflowContainer.classList.add('tags-panel__scroller');
+
+    overflowContainer.append(
       this.#profileTagsToggler.container,
       document.createElement('hr'),
       this.#imageTagsToggler.container,
     );
+
+    this.#tagsPopupElement.append(
+      this.#tagsPopupHider,
+      overflowContainer,
+    );
+
+    this.#tagsPopupHider.classList.add('tags-panel__toggle');
+    this.#tagsPopupHider.textContent = 'Toggle Tags';
 
     this.#tagsPopupElement.classList.add('tags-panel');
 
@@ -75,11 +87,16 @@ export class FullscreenViewer extends BaseComponent {
     this.#imageElement.addEventListener('load', this.#onLoaded.bind(this));
     this.#sizeSelectorElement.addEventListener('click', event => event.stopPropagation());
     this.#tagsPopupElement.addEventListener('click', event => event.stopPropagation());
+    this.#tagsPopupHider.addEventListener('click', () => this.#togglePopupVisibility());
 
     FullscreenViewer.#preferences
       .fullscreenViewerSize.get()
       .then(this.#onSizeResolved.bind(this))
       .then(this.#watchForSizeSelectionChanges.bind(this));
+
+    FullscreenViewer.#preferences
+      .fullscreenViewerPopupShown.get()
+      .then(this.#togglePopupVisibility.bind(this));
 
     on(this.#profileTagsToggler, EVENT_TAG_TOGGLED, this.#onTagToggled.bind(this));
     on(this.#imageTagsToggler, EVENT_TAG_TOGGLED, this.#onTagToggled.bind(this));
@@ -394,6 +411,16 @@ export class FullscreenViewer extends BaseComponent {
     this.#onActiveProfileChanged(taggingPopup.activeProfile);
   }
 
+  #togglePopupVisibility(maybeState: boolean | undefined = undefined) {
+    if (typeof maybeState === 'undefined') {
+      const isHidden = this.#tagsPopupElement.classList.toggle(FullscreenViewer.#collapsedPopupState);
+      void FullscreenViewer.#preferences.fullscreenViewerPopupShown.set(!isHidden);
+      return;
+    }
+
+    this.#tagsPopupElement.classList.toggle(FullscreenViewer.#collapsedPopupState, !maybeState);
+  }
+
   static #isVideoUrl(url: string): boolean {
     return url.endsWith('.mp4') || url.endsWith('.webm');
   }
@@ -405,6 +432,7 @@ export class FullscreenViewer extends BaseComponent {
   static #shownState = 'shown';
   static #swipeState = 'swiped';
   static #minRequiredDistance = 50;
+  static #collapsedPopupState = 'is-collapsed';
 
   static #previewSizes: Record<FullscreenViewerSize, string> = {
     full: 'Full',

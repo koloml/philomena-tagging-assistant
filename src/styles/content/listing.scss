@@ -262,18 +262,44 @@
   .tags-panel {
     @extend %box;
 
+    display: flex;
+    z-index: 1;
     width: 96vw;
     max-width: booru-vars.$limited-layout-width;
+    max-height: 50vh;
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
     margin-left: auto;
     margin-right: auto;
+    transition: transform .25s ease-in-out;
     border: {
       top: booru-vars.$media-border;
       left: booru-vars.$media-border;
       right: booru-vars.$media-border;
+    }
+
+    &__toggle {
+      position: absolute;
+      left: -1px;
+      bottom: calc(100% + 1px);
+      border: booru-vars.$border;
+      background: booru-vars.$block-header-light-color;
+      color: booru-vars.$block-header-link-text-color;
+      font-weight: 700;
+      padding: 0 calc(#{booru-vars.$header-spacing} * .5);
+      line-height: booru-vars.$block-header-sub-height;
+      cursor: pointer;
+    }
+
+    &__scroller {
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    &.is-collapsed {
+      transform: translateY(100%);
     }
 
     .tags-list {
