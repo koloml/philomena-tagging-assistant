@@ -194,13 +194,10 @@ export async function buildScriptsAndStyles(buildOptions) {
           dir: buildOptions.outputDir,
           entryFileNames: '[name].js',
           chunkFileNames: 'chunks/[name]-[hash].js',
-          // ManifestV3 doesn't allow to use modern ES modules syntax, so we build all content scripts as AMD modules.
-          format: "amd",
+          // Vite 8 no longer have support for `amd` format extension depends on
+          // TODO Make plugin to live-convert cjs module require/exports into AMD
+          format: "cjs",
           inlineDynamicImports: false,
-          amd: {
-            // amd-lite requires names even for the entry-point scripts, so we should make sure to add those.
-            autoId: true,
-          },
           // All these modules are not intended to be used outside of extension anyway
           minifyInternalExports: true,
         }
