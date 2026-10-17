@@ -7,8 +7,8 @@ import EditorPresetsBlock from "$content/components/extension/presets/EditorPres
 import { EVENT_PRESET_TAG_CHANGE_APPLIED, type PresetTagChange } from "$content/components/events/preset-block-events";
 
 export class TagsForm extends BaseComponent {
-  #togglePresetsButton: HTMLButtonElement = document.createElement('button');
-  #presetsList = EditorPresetsBlock.create();
+  readonly #togglePresetsButton: HTMLButtonElement = document.createElement('button');
+  readonly #presetsList = EditorPresetsBlock.create();
   #plainEditorTextarea: HTMLTextAreaElement | null = null;
   #fancyEditorInput: HTMLInputElement | null = null;
   #tagsSet: Set<string> = new Set();
@@ -127,7 +127,6 @@ export class TagsForm extends BaseComponent {
       const categoryName = tagCategories.get(tagName)!;
 
       tagElement.dataset.tagCategory = categoryName;
-      tagElement.setAttribute('data-tag-category', categoryName);
     }
   }
 

@@ -16,14 +16,14 @@ import { EVENT_TAG_TOGGLED } from "$content/components/events/tags-list-toggler-
 
 
 export class TaggingProfilePopup extends BaseComponent {
-  #tagsListToggler = TagsListToggler.create();
+  readonly #tagsListToggler = TagsListToggler.create();
   #activeProfile: TaggingProfile | null = null;
   #mediaBoxTools: MediaBoxTools | null = null;
   #isSubmissionLocked: boolean = false;
   #isPlanningToSubmit: boolean = false;
   #isSubmitting: boolean = false;
   #tagsSubmissionTimer: Timeout | null = null;
-  #emitter = emitterAt(this);
+  readonly #emitter = emitterAt(this);
 
   /**
    * @protected
@@ -211,7 +211,7 @@ export class TaggingProfilePopup extends BaseComponent {
       return;
     }
 
-    this.#tagsListToggler.prependTags(tagsBlacklist, activeTags);
+    this.#tagsListToggler.prependTags(tagsBlacklist.filter(tagName => activeTags.has(tagName)), activeTags);
   }
 
   static create(): HTMLElement {
@@ -226,7 +226,7 @@ export class TaggingProfilePopup extends BaseComponent {
   /**
    * Controller with maintenance settings.
    */
-  static #preferences = new TaggingProfilesPreferences();
+  static readonly #preferences = new TaggingProfilesPreferences();
 
   /**
    * Subscribe to all necessary feeds to watch for every active profile change. Additionally, will execute the callback
@@ -298,9 +298,9 @@ export class TaggingProfilePopup extends BaseComponent {
     });
   }
 
-  static #scrapedAPI = new ScrapedAPI();
+  static readonly #scrapedAPI = new ScrapedAPI();
 
-  static #delayBeforeSubmissionMs = 500;
+  static readonly #delayBeforeSubmissionMs = 500;
 
   /**
    * Amount of pending submissions or NULL if logic was not yet initialized.

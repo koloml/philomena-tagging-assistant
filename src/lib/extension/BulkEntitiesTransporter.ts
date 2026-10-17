@@ -101,7 +101,7 @@ export default class BulkEntitiesTransporter {
       && Array.isArray(targetObject.elements);
   }
 
-  static #transporters: TransportersMapping = {
+  static readonly #transporters: TransportersMapping = {
     profiles: new EntitiesTransporter(TaggingProfile),
     groups: new EntitiesTransporter(TagGroup),
     presets: new EntitiesTransporter(TagEditorPreset),

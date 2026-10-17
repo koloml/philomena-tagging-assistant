@@ -78,5 +78,5 @@ export default class PostParser extends PageParser {
     );
   }
 
-  static tagsInputName = 'image[tag_input]';
+  static readonly tagsInputName = 'image[tag_input]';
 }

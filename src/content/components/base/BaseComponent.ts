@@ -77,7 +77,7 @@ export class BaseComponent<ContainerType extends HTMLElement = HTMLElement> {
   ): () => void {
     this.#container.addEventListener(event, listener, options);
 
-    return () => void this.#container.removeEventListener(event, listener, options);
+    return () => this.#container.removeEventListener(event, listener, options);
   }
 
   /**

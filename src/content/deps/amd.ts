@@ -38,7 +38,7 @@ amdLite.define = (name, dependencies, originalCallback) => {
 
     // Workaround for the entry script not returning anything causing AMD-Lite to send warning about modules not
     // being loaded/not existing.
-    return typeof callbackResult !== 'undefined' ? callbackResult : {};
+    return callbackResult !== undefined ? callbackResult : {};
   });
 
   // Schedule the auto run on the next available frame. Firefox and Chromium have a lot of differences in how they

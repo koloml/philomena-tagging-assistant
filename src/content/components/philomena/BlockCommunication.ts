@@ -112,14 +112,14 @@ export class BlockCommunication extends BaseComponent {
       );
   }
 
-  static #preferences = new TagsPreferences();
+  static readonly #preferences = new TagsPreferences();
 
   /**
    * Map of links to their original texts. These texts need to be stored here to make them restorable. Keys is a link
    * element and value is a text.
    * @private
    */
-  static #originalTagLinkTexts: WeakMap<HTMLElement, string> = new WeakMap();
+  static readonly #originalTagLinkTexts: WeakMap<HTMLElement, string> = new WeakMap();
 
   static findAndInitializeAll() {
     for (const container of document.querySelectorAll<HTMLElement>('.block.communication')) {

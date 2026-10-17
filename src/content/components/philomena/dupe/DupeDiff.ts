@@ -104,7 +104,7 @@ export default class DupeDiff extends BaseComponent {
    *
    * Keys are the icons and values are the patterns extension should check for each URL.
    */
-  static #iconsToPatternsMap = new Map<string[] | string, string[] | string>([
+  static readonly #iconsToPatternsMap = new Map<string[] | string, string[] | string>([
     [
       ['artstation', brandsSubtype],
       'artstation.com'
