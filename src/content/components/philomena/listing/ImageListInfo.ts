@@ -2,8 +2,8 @@ import { BaseComponent } from "$content/components/base/BaseComponent";
 
 export class ImageListInfo extends BaseComponent {
   #tagElement: HTMLElement | null = null;
-  #impliedTags: string[] = [];
-  #showUntaggedImplicationsButton: HTMLAnchorElement = document.createElement('a');
+  readonly #impliedTags: string[] = [];
+  readonly #showUntaggedImplicationsButton: HTMLAnchorElement = document.createElement('a');
 
   protected build() {
     const sectionAfterImage = this.container.querySelector('.tag-info__image + .flex__grow');
@@ -71,5 +71,5 @@ export class ImageListInfo extends BaseComponent {
     location.assign(url.href);
   }
 
-  static #implicationsStarterText = 'Implies:';
+  static readonly #implicationsStarterText = 'Implies:';
 }

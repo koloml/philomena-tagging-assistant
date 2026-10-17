@@ -11,15 +11,15 @@ import type { TaggingProfilePopup } from "$content/components/extension/profiles
 
 export class FullscreenViewer extends BaseComponent {
   #currentMediaBox: MediaBox | null = null;
-  #videoElement: HTMLVideoElement = document.createElement('video');
-  #imageElement: HTMLImageElement = document.createElement('img');
-  #spinnerElement: HTMLElement = document.createElement('i');
-  #sizeSelectorElement: HTMLSelectElement = document.createElement('select');
-  #closeButtonElement: HTMLElement = document.createElement('i');
-  #tagsPopupElement: HTMLElement = document.createElement('div');
-  #imageTagsToggler: TagsListToggler = TagsListToggler.create();
-  #profileTagsToggler: TagsListToggler = TagsListToggler.create();
-  #tagsPopupHider: HTMLElement = document.createElement('div');
+  readonly #videoElement: HTMLVideoElement = document.createElement('video');
+  readonly #imageElement: HTMLImageElement = document.createElement('img');
+  readonly #spinnerElement: HTMLElement = document.createElement('i');
+  readonly #sizeSelectorElement: HTMLSelectElement = document.createElement('select');
+  readonly #closeButtonElement: HTMLElement = document.createElement('i');
+  readonly #tagsPopupElement: HTMLElement = document.createElement('div');
+  readonly #imageTagsToggler: TagsListToggler = TagsListToggler.create();
+  readonly #profileTagsToggler: TagsListToggler = TagsListToggler.create();
+  readonly #tagsPopupHider: HTMLElement = document.createElement('div');
   #activeProfileListenerUnsubscriber: UnsubscribeFunction | null = null;
   #touchId: number | null = null;
   #startX: number | null = null;
@@ -425,21 +425,21 @@ export class FullscreenViewer extends BaseComponent {
     return url.endsWith('.mp4') || url.endsWith('.webm');
   }
 
-  static #preferences = new MiscPreferences();
+  static readonly #preferences = new MiscPreferences();
 
-  static #offsetProperty = '--offset';
-  static #opacityProperty = '--opacity';
-  static #shownState = 'shown';
-  static #swipeState = 'swiped';
-  static #minRequiredDistance = 50;
-  static #collapsedPopupState = 'is-collapsed';
+  static readonly #offsetProperty = '--offset';
+  static readonly #opacityProperty = '--opacity';
+  static readonly #shownState = 'shown';
+  static readonly #swipeState = 'swiped';
+  static readonly #minRequiredDistance = 50;
+  static readonly #collapsedPopupState = 'is-collapsed';
 
-  static #previewSizes: Record<FullscreenViewerSize, string> = {
+  static readonly #previewSizes: Record<FullscreenViewerSize, string> = {
     full: 'Full',
     large: 'Large',
     medium: 'Medium',
     small: 'Small'
   }
 
-  static #fallbackSize = 'large';
+  static readonly #fallbackSize = 'large';
 }

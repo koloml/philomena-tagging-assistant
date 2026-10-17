@@ -207,6 +207,6 @@ export default class PresetTableRow extends BaseComponent {
     return new this(document.createElement('tr'), preset);
   }
 
-  static #tagMissingClassName = 'is-missing';
-  static #presetWarningClassName = 'has-warning';
+  static readonly #tagMissingClassName = 'is-missing';
+  static readonly #presetWarningClassName = 'has-warning';
 }

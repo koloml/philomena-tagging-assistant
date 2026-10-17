@@ -81,5 +81,5 @@ export class ImageShowFullscreenButton extends BaseComponent {
     return viewer;
   }
 
-  static #preferences = new MiscPreferences();
+  static readonly #preferences = new MiscPreferences();
 }

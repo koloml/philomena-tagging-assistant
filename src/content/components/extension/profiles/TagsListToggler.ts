@@ -222,11 +222,11 @@ export default class TagsListToggler extends BaseComponent {
     return new TagsListToggler(tagsListContainer);
   }
 
-  static #containsClass = 'is-present';
-  static #missingClass = 'is-missing';
+  static readonly #containsClass = 'is-present';
+  static readonly #missingClass = 'is-missing';
 
-  static #addedClass = 'is-added';
-  static #removedClass = 'is-removed';
+  static readonly #addedClass = 'is-added';
+  static readonly #removedClass = 'is-removed';
 }
 
 export class BlackListedTagsEncounteredError extends Error {
