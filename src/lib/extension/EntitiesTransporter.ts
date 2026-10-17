@@ -2,7 +2,6 @@ import { validateImportedEntity } from "$lib/extension/transporting/validators";
 import { exportEntityToObject } from "$lib/extension/transporting/exporters";
 import StorageEntity from "$lib/extension/base/StorageEntity";
 import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from "lz-string";
-import type { ImportableElement } from "$lib/extension/transporting/importables";
 
 /**
  * Status of the last import.
