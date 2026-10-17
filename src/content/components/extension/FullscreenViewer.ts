@@ -412,7 +412,7 @@ export class FullscreenViewer extends BaseComponent {
   }
 
   #togglePopupVisibility(maybeState: boolean | undefined = undefined) {
-    if (typeof maybeState === 'undefined') {
+    if (maybeState === undefined) {
       const isHidden = this.#tagsPopupElement.classList.toggle(FullscreenViewer.#collapsedPopupState);
       void FullscreenViewer.#preferences.fullscreenViewerPopupShown.set(!isHidden);
       return;
