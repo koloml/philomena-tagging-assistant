@@ -38,7 +38,7 @@ function wrapScriptIntoIIFE() {
       Object.keys(bundle).forEach(fileName => {
         const file = bundle[fileName];
 
-        file.code = `(() => {\n${file.code}})();`
+        file.code = `(()=>{${file.code}})();`
       });
     }
   }
@@ -189,7 +189,7 @@ export async function buildScriptsAndStyles(buildOptions) {
     configFile: false,
     publicDir: false,
     build: {
-      rollupOptions: {
+      rolldownOptions: {
         input: amdScriptsInput,
         output: {
           dir: buildOptions.outputDir,
@@ -198,7 +198,7 @@ export async function buildScriptsAndStyles(buildOptions) {
           // Vite 8 no longer have support for `amd` format extension depends on
           // TODO Make plugin to live-convert cjs module require/exports into AMD
           format: "cjs",
-          inlineDynamicImports: false,
+          codeSplitting: true,
           // All these modules are not intended to be used outside of extension anyway
           minifyInternalExports: true,
         }
@@ -227,7 +227,7 @@ export async function buildScriptsAndStyles(buildOptions) {
     configFile: false,
     publicDir: false,
     build: {
-      rollupOptions: {
+      rolldownOptions: {
         input: libsAndStylesInput,
         output: {
           dir: buildOptions.outputDir,
