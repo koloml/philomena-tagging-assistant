@@ -64,9 +64,7 @@ export default class TagsListToggler extends BaseComponent {
 
     const hasStoredChanges = this.hasChanges;
 
-    for (let tagIndex = 0; tagIndex < toggleableTags.length; tagIndex++) {
-      const tagName = toggleableTags[tagIndex];
-
+    for (const tagName of toggleableTags) {
       if (this.#renderedTags.has(tagName)) {
         continue;
       }
@@ -74,7 +72,6 @@ export default class TagsListToggler extends BaseComponent {
       this.#renderedTags.add(tagName);
 
       const tagElement = TagsListToggler.#buildTagElement(tagName);
-
       this.#tagsList.push(tagElement);
 
       const isPresent = activeTags.has(tagName);
