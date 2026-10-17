@@ -211,7 +211,7 @@ export class TaggingProfilePopup extends BaseComponent {
       return;
     }
 
-    this.#tagsListToggler.prependTags(tagsBlacklist, activeTags);
+    this.#tagsListToggler.prependTags(tagsBlacklist.filter(tagName => activeTags.has(tagName)), activeTags);
   }
 
   static create(): HTMLElement {

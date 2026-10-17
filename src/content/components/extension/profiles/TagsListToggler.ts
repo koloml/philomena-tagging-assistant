@@ -10,6 +10,7 @@ export default class TagsListToggler extends BaseComponent {
   #invalidTagsList: Map<string, HTMLElement> = new Map();
   #tagsToAdd: Set<string> = new Set();
   #tagsToRemove: Set<string> = new Set();
+  #renderedTags: Set<string> = new Set();
 
   protected build() {
     this.container.classList.add('tags-list');
@@ -34,6 +35,7 @@ export default class TagsListToggler extends BaseComponent {
 
     this.#tagsList = [];
     this.#invalidTagsList = new Map();
+    this.#renderedTags = new Set();
 
     this.#renderAndInsertTags(tags, activeTags);
   }
@@ -58,12 +60,19 @@ export default class TagsListToggler extends BaseComponent {
   #renderAndInsertTags(toggleableTags: string[], activeTags: Set<string>, shouldPrepend: boolean = false) {
     toggleableTags.sort((a, b) => a.localeCompare(b));
 
-    let lastInserted: HTMLElement|null = null;
+    let lastInserted: HTMLElement | null = null;
 
     const hasStoredChanges = this.hasChanges;
 
     for (let tagIndex = 0; tagIndex < toggleableTags.length; tagIndex++) {
       const tagName = toggleableTags[tagIndex];
+
+      if (this.#renderedTags.has(tagName)) {
+        continue;
+      }
+
+      this.#renderedTags.add(tagName);
+
       const tagElement = TagsListToggler.#buildTagElement(tagName);
 
       this.#tagsList.push(tagElement);
