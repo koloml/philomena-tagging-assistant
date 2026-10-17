@@ -4,6 +4,7 @@ import path from "path";
 import fs from "fs";
 import { SwapDefinedVariablesPlugin } from "../plugins/swap-defined-variables.js";
 import { ScssViteReadEnvVariableFunctionPlugin } from "../plugins/scss-read-env-variable-function.js";
+import { ConvertCjsToAmd } from "../plugins/convert-cjs-to-amd.js";
 
 /**
  * Create the result base file name for the file.
@@ -208,6 +209,7 @@ export async function buildScriptsAndStyles(buildOptions) {
       alias: aliasesSettings,
     },
     plugins: [
+      ConvertCjsToAmd(),
       wrapScriptIntoIIFE(),
       collectDependenciesForManifestBuilding((fileName, dependencies) => {
         pathsReplacementByOutputPath
