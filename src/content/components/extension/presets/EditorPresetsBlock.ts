@@ -5,8 +5,8 @@ import { createFontAwesomeIcon } from "$lib/dom-utils";
 import { sortEntitiesByField } from "$lib/utils";
 
 export default class EditorPresetsBlock extends BaseComponent {
-  #presetsTable = document.createElement('table');
-  #presetBlocks: PresetTableRow[] = [];
+  readonly #presetsTable = document.createElement('table');
+  readonly #presetBlocks: PresetTableRow[] = [];
   #tags: Set<string> = new Set();
 
   protected build() {

@@ -5,9 +5,9 @@ import { emit } from "$content/components/events/comms";
 import { EVENT_TAG_GROUP_RESOLVED } from "$content/components/events/tag-dropdown-events";
 
 export default class CustomCategoriesResolver {
-  #exactGroupMatches = new Map<string, TagGroup>();
-  #regExpGroupMatches = new Map<RegExp, TagGroup>();
-  #tagDropdowns: TagDropdown[] = [];
+  readonly #exactGroupMatches = new Map<string, TagGroup>();
+  readonly #regExpGroupMatches = new Map<RegExp, TagGroup>();
+  readonly #tagDropdowns: TagDropdown[] = [];
   #nextQueuedUpdate: Timeout | null = null;
 
   constructor() {
@@ -125,5 +125,5 @@ export default class CustomCategoriesResolver {
     );
   }
 
-  static #unprocessedTagsTimeout = 0;
+  static readonly #unprocessedTagsTimeout = 0;
 }

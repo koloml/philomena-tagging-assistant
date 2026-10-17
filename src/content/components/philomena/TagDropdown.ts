@@ -88,14 +88,12 @@ export class TagDropdown extends BaseComponent {
     // Make sure original category is properly stored.
     this.originalCategory;
 
-    this.container.dataset.tagCategory = targetCategory;
-
     if (targetCategory) {
-      this.container.setAttribute('data-tag-category', targetCategory);
+      this.container.dataset.tagCategory = targetCategory;
       return;
     }
 
-    this.container.removeAttribute('data-tag-category');
+    delete this.container.dataset.tagCategory;
   }
 
   /**
@@ -203,7 +201,7 @@ export class TagDropdown extends BaseComponent {
     await this.#activeProfile.save();
   }
 
-  static #preferences = new TaggingProfilesPreferences();
+  static readonly #preferences = new TaggingProfilesPreferences();
 
   /**
    * Watch for changes to active profile.
@@ -262,8 +260,8 @@ export class TagDropdown extends BaseComponent {
     return dropdownLink;
   }
 
-  static #categoriesResolver = new CustomCategoriesResolver();
-  static #processedElements: WeakSet<HTMLElement> = new WeakSet();
+  static readonly #categoriesResolver = new CustomCategoriesResolver();
+  static readonly #processedElements: WeakSet<HTMLElement> = new WeakSet();
 
   static #findAll(parentNode: ParentNode = document): NodeListOf<HTMLElement> {
     return parentNode.querySelectorAll('.tag.dropdown');

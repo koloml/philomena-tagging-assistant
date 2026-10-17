@@ -4,9 +4,9 @@ import DupeImage from "$content/components/philomena/dupe/DupeImage";
 import { ratingTags } from "$config/tags";
 
 export default class DupeReportRow extends BaseComponent {
-  #leftImage: DupeImage;
-  #rightImage: DupeImage;
-  #difference: DupeDiff;
+  readonly #leftImage: DupeImage;
+  readonly #rightImage: DupeImage;
+  readonly #difference: DupeDiff;
 
   constructor(leftCell: HTMLElement, rightCell: HTMLElement, diffCell: HTMLElement, reportOptions: HTMLElement) {
     super(reportOptions);
