@@ -4,6 +4,7 @@ import path from "path";
 import fs from "fs";
 import { SwapDefinedVariablesPlugin } from "../plugins/swap-defined-variables.js";
 import { ScssViteReadEnvVariableFunctionPlugin } from "../plugins/scss-read-env-variable-function.js";
+import { ConvertCjsToAmd } from "../plugins/convert-cjs-to-amd.js";
 
 /**
  * Create the result base file name for the file.
@@ -37,7 +38,7 @@ function wrapScriptIntoIIFE() {
       Object.keys(bundle).forEach(fileName => {
         const file = bundle[fileName];
 
-        file.code = `(() => {\n${file.code}})();`
+        file.code = `(()=>{${file.code}})();`
       });
     }
   }
@@ -188,19 +189,16 @@ export async function buildScriptsAndStyles(buildOptions) {
     configFile: false,
     publicDir: false,
     build: {
-      rollupOptions: {
+      rolldownOptions: {
         input: amdScriptsInput,
         output: {
           dir: buildOptions.outputDir,
           entryFileNames: '[name].js',
           chunkFileNames: 'chunks/[name]-[hash].js',
-          // ManifestV3 doesn't allow to use modern ES modules syntax, so we build all content scripts as AMD modules.
-          format: "amd",
-          inlineDynamicImports: false,
-          amd: {
-            // amd-lite requires names even for the entry-point scripts, so we should make sure to add those.
-            autoId: true,
-          },
+          // Vite 8 no longer have support for `amd` format extension depends on
+          // TODO Make plugin to live-convert cjs module require/exports into AMD
+          format: "cjs",
+          codeSplitting: true,
           // All these modules are not intended to be used outside of extension anyway
           minifyInternalExports: true,
         }
@@ -211,6 +209,7 @@ export async function buildScriptsAndStyles(buildOptions) {
       alias: aliasesSettings,
     },
     plugins: [
+      ConvertCjsToAmd(),
       wrapScriptIntoIIFE(),
       collectDependenciesForManifestBuilding((fileName, dependencies) => {
         pathsReplacementByOutputPath
@@ -228,7 +227,7 @@ export async function buildScriptsAndStyles(buildOptions) {
     configFile: false,
     publicDir: false,
     build: {
-      rollupOptions: {
+      rolldownOptions: {
         input: libsAndStylesInput,
         output: {
           dir: buildOptions.outputDir,
