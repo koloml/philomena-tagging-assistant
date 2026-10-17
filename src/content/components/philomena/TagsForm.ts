@@ -127,7 +127,6 @@ export class TagsForm extends BaseComponent {
       const categoryName = tagCategories.get(tagName)!;
 
       tagElement.dataset.tagCategory = categoryName;
-      tagElement.setAttribute('data-tag-category', categoryName);
     }
   }
 

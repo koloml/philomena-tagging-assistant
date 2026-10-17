@@ -215,7 +215,6 @@ export default class TagsListToggler extends BaseComponent {
    */
   static #markTagElementWithCategory(tagElement: HTMLElement, category: string) {
     tagElement.dataset.tagCategory = category;
-    tagElement.setAttribute('data-tag-category', category);
   }
 
   static create(): TagsListToggler {

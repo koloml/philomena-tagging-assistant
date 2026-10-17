@@ -88,14 +88,12 @@ export class TagDropdown extends BaseComponent {
     // Make sure original category is properly stored.
     this.originalCategory;
 
-    this.container.dataset.tagCategory = targetCategory;
-
     if (targetCategory) {
-      this.container.setAttribute('data-tag-category', targetCategory);
+      this.container.dataset.tagCategory = targetCategory;
       return;
     }
 
-    this.container.removeAttribute('data-tag-category');
+    delete this.container.dataset.tagCategory;
   }
 
   /**
