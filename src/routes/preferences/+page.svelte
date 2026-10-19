@@ -11,6 +11,7 @@
   <hr>
   <MenuItem href="/preferences/tags">Tagging</MenuItem>
   <MenuItem href="/preferences/misc">Misc & Tools</MenuItem>
+  <MenuItem href="/preferences/fun">Fun</MenuItem>
   <hr>
   <MenuItem href="/preferences/debug">Debug</MenuItem>
 </Menu>
