@@ -69,6 +69,12 @@ export async function packExtension(settings) {
   })
 
   switch (process.env.SITE) {
+    case 'localhost':
+      manifest.replaceHostTo('localhost');
+      manifest.replaceBooruNameWith('Philomena');
+      manifest.setGeckoIdentifier('philomena-tagging-assistant@thecore.city');
+      break;
+
     case 'derpibooru':
       manifest.replaceHostTo([
         'derpibooru.org',
