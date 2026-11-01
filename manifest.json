@@ -30,7 +30,8 @@
             ],
             "js": [
                 "src/content/deps/amd.ts",
-                "src/content/user-details.ts"
+                "src/content/user-details.ts",
+                "src/content/fun.ts"
             ]
         },
         {
