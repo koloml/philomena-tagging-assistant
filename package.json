@@ -7,6 +7,7 @@
         "build": "npm run build:popup && npm run build:extension",
         "build:derpibooru": "cross-env SITE=derpibooru npm run build",
         "build:tantabus": "cross-env SITE=tantabus npm run build",
+        "build:local": "cross-env SITE=localhost npm run build",
         "build:popup": "vite build",
         "build:extension": "node build-extension.js",
         "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
