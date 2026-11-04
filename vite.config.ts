@@ -1,7 +1,7 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vitest/config';
-import { ScssViteReadEnvVariableFunctionPlugin } from "./.vite/plugins/scss-read-env-variable-function";
-import { SwapDefinedVariablesPlugin } from "./.vite/plugins/swap-defined-variables";
+import { ScssViteReadEnvVariableFunctionPlugin } from "./.vite/plugins/scss-read-env-variable-function.js";
+import { SwapDefinedVariablesPlugin } from "./.vite/plugins/swap-defined-variables.js";
 
 export default defineConfig(() => {
   return {
